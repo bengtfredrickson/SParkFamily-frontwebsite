@@ -1,0 +1,27 @@
+
+#vedio_tumbnail img{
+   object-fit: contain;
+}
+
+.play_Button{
+    color:rgb(237, 50, 50);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+    font-size: 40px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    padding: 17px;
+    background: aliceblue;
+    cursor: pointer;
+}
+
+.cut-button{
+    position: initial;
+    color:rgb(214, 21, 21);
+    top:0%;
+    left:94.5%;
+    font-size:19px;
+    cursor: pointer;
+}
