@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes ,Navigate } from 'react-router-dom'
 import Home from '../components/Home'
 import Coach_Management from '../components/Coach_Management';
 import User_Management from '../components/User_Management';
@@ -19,10 +19,10 @@ export default function AllRoutes() {
     <>
       <Routes>
 
-
+      <Route path="/" element={<Navigate to="/login" />}></Route>
         {/* Login Guard */}
-        <Route exact path='/' element={<GuardedLogin />}>
-          <Route exact path='/' caseSensitive={false} element={<Login />} />
+        <Route exact path='/login' element={<GuardedLogin />}>
+          <Route exact path='/login' caseSensitive={false} element={<Login />} />
         </Route>
         <Route exact path='*' element={<GuardedLogin />}>
           <Route exact path='*' caseSensitive={false} element={<Login />} />

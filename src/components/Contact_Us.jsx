@@ -10,6 +10,8 @@ import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { Loader } from '../components/Helper/Loader';
+import Footer from './Footer';
 
 
 export default function Contact_Us() {
@@ -26,6 +28,7 @@ export default function Contact_Us() {
 
   const [getContactUs, setContactUs] = useState([]);
   const [getMessage, setMessage] = useState(false);
+  const [getLoader, setLoader] = useState(true);
   const [getDetail,setDetail]=useState([]);
   const handleClose = () => {
     setMessage(false);
@@ -113,8 +116,10 @@ export default function Contact_Us() {
             i: index,
           }))
         );
+        setLoader(false);
       })
       .catch((err) => {
+        setLoader(false);
         console.log(err);
       });
   }, []);
@@ -169,7 +174,7 @@ export default function Contact_Us() {
       </style>
       {/* <!-- Main Content --> */}
       <Side_Navigation />
-      <div className="main-content">
+      <div className="main-content" style={{marginBottom:"25px"}}>
         <section className="section">
           <div className="section-header">
             <h1>Contact Us Management</h1>
@@ -184,8 +189,7 @@ export default function Contact_Us() {
                   </div>
                   <div className="card-body">
                     <div className="table-responsive newPc">
-
-                      <Box sx={{ height: 400, width: '100%' }}>
+                    {getLoader === true ? <Loader /> : <Box sx={{ height: 400, width: '100%' }}>
                         {getContactUs.length > 0 && (
                           <>
                             <DataGrid rows={getContactUs}
@@ -195,7 +199,8 @@ export default function Contact_Us() {
 
                             />
                           </> ) }
-                      </Box>
+                      </Box>}
+                   
                     </div>
                   </div>
                 </div>
@@ -225,16 +230,7 @@ export default function Contact_Us() {
        
       </Modal>
       {/* Close Message */}
-
-
-
-      <footer className="main-footer">
-        <div className="footer-left">
-          Copyright &copy; 2021 <div className="bullet"></div> Design By <a href="https://www.webmobril.com/">Webmobril</a>
-        </div>
-        <div className="footer-right">
-        </div>
-      </footer>
+     <Footer/>
 
 
     </>

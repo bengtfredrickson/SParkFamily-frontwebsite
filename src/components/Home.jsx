@@ -2,6 +2,7 @@ import React, { useEffect,useState } from "react";
 import Side_Navigation from "./Side_Navigation";
 import "../components/Helper/Home.css"
 import { get_All_Users ,get_coach, get_course} from "../services/web/webServices";
+import Footer from "./Footer";
 export default function Home() {
   const [getUser,setUser]=useState([]);
   const [getCoach,setCoach]=useState([]);
@@ -47,13 +48,7 @@ export default function Home() {
         <div className="item">{getCourse}</div>
       </div>
       </div>
-      <footer className="main-footer">
-        <div className="footer-left">
-          Copyright &copy; 2021 <div className="bullet"></div> Design By{" "}
-          <a href="https://www.webmobril.com/">Webmobril</a>
-        </div>
-        <div className="footer-right"></div>
-      </footer>
+      <Footer/>
     </>
   );
 }

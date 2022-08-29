@@ -10,6 +10,8 @@ import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { Loader } from '../components/Helper/Loader';
+import Footer from './Footer';
 
 
 export default function Category_Management() {
@@ -20,9 +22,10 @@ export default function Category_Management() {
     `
 
     const [getCategory, setCategory] = useState([]);
+    const [getLoader, setLoader] = useState(true);
     const [select, setSelection] = useState([]);
     const [getDetail, setDetail] = useState([]);
-    const [getbutton,setbutton]=useState(false);
+    const [getbutton, setbutton] = useState(false);
 
     //   Function Starts
 
@@ -34,7 +37,7 @@ export default function Category_Management() {
         setDetail(e.row)
         setShowEditCategory(true);
     };
-    
+
 
     const [showAddCategory, setShowAddCategory] = useState(false);
     const handleClose1 = () => {
@@ -73,11 +76,11 @@ export default function Category_Management() {
                 return (
                     <>
 
-                        <button style={{border: "none" }}  onClick={() => handleShow(params)} ><i className="fas fa-edit" style={{color:"blue"}}></i></button>
+                        <button style={{ border: "none" }} onClick={() => handleShow(params)} ><i className="fas fa-edit" style={{ color: "blue" }}></i></button>
 
-                        <button style={{ margin: "20px" ,border:"none" }} onClick={() => onDelete(params)}><i className="fa fa-trash" aria-hidden="true" style={{color:"red"}}></i></button>
+                        {/* <button style={{ margin: "20px", border: "none" }} onClick={() => onDelete(params)}><i className="fa fa-trash" aria-hidden="true" style={{ color: "red" }}></i></button> */}
 
-                       
+
                         {/* onClick={onDelete(params)} */}
 
                     </>
@@ -101,51 +104,64 @@ export default function Category_Management() {
                         i: index,
                     }))
                 );
+                setLoader(false);
             })
             .catch((err) => {
-               console.log(err);
+                setLoader(false);
+                console.log(err);
             });
     }, []);
 
-    const onDelete = (params) => {
-        if (window.confirm("are your sure?")) {
-            delete_category(params.row._id)
-                .then((res) => {
-                    // setButton(true);
+    // const onDelete = (params) => {
+    //     if (window.confirm("are your sure?")) {
+    //         delete_category(params.row._id)
+    //             .then((res) => {
+    //                 // setButton(true);
 
-                    Store.addNotification({
-                        title: "Success",
-                        message: res?.data?.message,
-                        type: "success",
-                        insert: "top",
-                        container: "top-right",
-                        animationIn: ["animate__animated", "animate__fadeIn"],
-                        animationOut: ["animate__animated", "animate__fadeOut"],
-                        dismiss: {
-                            duration: 5000,
-                            onScreen: true,
-                        },
-                    });
-                    get_category()
-                        .then((res) => {
-                            // console.log("Res=====>", res.data.response);
-                            setCategory(
-                                res.data.response.map((el, index) => ({
-                                    ...el,
-                                    id: el._id,
-                                    i: index,
-                                }))
-                            );
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    }
+    //                 Store.addNotification({
+    //                     title: "Success",
+    //                     message: res?.data?.message,
+    //                     type: "success",
+    //                     insert: "top",
+    //                     container: "top-right",
+    //                     animationIn: ["animate__animated", "animate__fadeIn"],
+    //                     animationOut: ["animate__animated", "animate__fadeOut"],
+    //                     dismiss: {
+    //                         duration: 5000,
+    //                         onScreen: true,
+    //                     },
+    //                 });
+    //                 get_category()
+    //                     .then((res) => {
+    //                         console.log('res')
+
+
+    //                         if (!res.data.response) {
+    //                             console.log('Helloo this is delted all====>')
+    //                             setCategory('');
+    //                         }
+    //                         if (res.data.response) {
+    //                             console.log('Not Deleterd this is delted all====>')
+    //                             setCategory(
+    //                                 res.data.response.map((el, index) => ({
+    //                                     ...el,
+    //                                     id: el._id,
+    //                                     i: index,
+    //                                 }))
+    //                             );
+    //                         }
+
+    //                     })
+    //                     .catch((err) => {
+    //                         // window.location.reload(true);
+    //                         console.log(err);
+    //                     });
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+    // }
 
 
     return (
@@ -155,7 +171,7 @@ export default function Category_Management() {
             </style>
             {/* <!-- Main Content --> */}
             <Side_Navigation />
-            <div className="main-content">
+            <div className="main-content" style={{marginBottom:"17px"}}>
                 <section className="section">
                     <div className="section-header">
                         <h1>Category Management</h1>
@@ -170,34 +186,27 @@ export default function Category_Management() {
                                 <div className="card">
                                     <div className="card-header d-Fle">
                                         <h4>Data Table</h4>
-                                        <a onClick={handleShow1}   style={{ cursor: "pointer" }}>Add Category</a>
+                                        <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Category</a>
                                     </div>
                                     <div className="card-body">
                                         <div className="table-responsive newPc">
+                                        {getLoader === true ? <Loader />:
 
                                             <Box sx={{ height: 400, width: '100%' }}>
-                                                {getCategory.length > 0 && (
-                                                    <>
-                                                        <h2>{select.map((val) => val._id)}</h2>
+                                                {getCategory.length > 0 ? <DataGrid
 
-                                                        <DataGrid
+                                                    rows={getCategory}
 
-                                                            rows={getCategory}
+                                                    columns={columns}
+                                                    pageSize={5}
+                                                    rowsPerPageOptions={[5]}
 
-                                                            columns={columns}
-                                                            pageSize={5}
-                                                            rowsPerPageOptions={[5]}
+                                                    onSelectionChange={(newSelection) => {
+                                                        setSelection(newSelection.rows);
+                                                    }}
+                                                /> : "No Data Found"}
 
-                                                            onSelectionChange={(newSelection) => {
-                                                                setSelection(newSelection.rows);
-                                                            }}
-                                                        />
-                                                    </>
-                                                )
-
-                                                }
-
-                                            </Box>
+                                            </Box>}
 
 
 
@@ -295,14 +304,14 @@ export default function Category_Management() {
 
                                     <div className="col-lg-12 col-md-12 col-sm-12">
 
-                                   
 
-                                        {!getbutton?  <Button type="submit" style={{
+
+                                        {!getbutton ? <Button type="submit" style={{
                                             background: "blue", width: "96px",
                                             height: "43px"
                                         }}  >
                                             Submit
-                                        </Button>:<Button  style={{
+                                        </Button> : <Button style={{
                                             background: "blue", width: "130px",
                                             height: "43px"
                                         }}  >
@@ -319,8 +328,8 @@ export default function Category_Management() {
 
             </Modal>
 
-          {/* Add Model */}
-          <Modal show={showAddCategory} onHide={handleClose1} keyboard={false}>
+            {/* Add Model */}
+            <Modal show={showAddCategory} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Category</Modal.Title>
                     <i
@@ -343,7 +352,7 @@ export default function Category_Management() {
                         onSubmit={(values) => {
                             setbutton(true);
 
-                            
+
                             add_category(values)
 
                                 .then((res) => {
@@ -364,10 +373,10 @@ export default function Category_Management() {
                                             duration: 5000,
                                             onScreen: true,
                                         },
-                                       
+
 
                                     }
-                                   
+
                                     );
                                     setbutton(false);
                                     get_category().
@@ -381,7 +390,7 @@ export default function Category_Management() {
                                             console.log(err);
                                         })
 
-                                        setShowAddCategory(false)
+                                    setShowAddCategory(false)
                                 })
                                 .catch((err) => {
 
@@ -408,12 +417,12 @@ export default function Category_Management() {
 
                                     <div className="col-lg-12 col-md-12 col-sm-12">
 
-                                        {!getbutton? <Button type="submit" style={{
+                                        {!getbutton ? <Button type="submit" style={{
                                             background: "blue", width: "96px",
                                             height: "43px"
                                         }}  >
                                             Submit
-                                        </Button>:<Button  style={{
+                                        </Button> : <Button style={{
                                             background: "blue", width: "130px",
                                             height: "43px"
                                         }}  >
@@ -429,20 +438,8 @@ export default function Category_Management() {
                 </Modal.Body>
 
             </Modal>
-          {/* ends */}
-
-
-
-
-
-
-            <footer className="main-footer">
-                <div className="footer-left">
-                    Copyright &copy; 2021 <div className="bullet"></div> Design By <a href="https://www.webmobril.com/">Webmobril</a>
-                </div>
-                <div className="footer-right">
-                </div>
-            </footer>
+            {/* ends */}
+           <Footer/>
 
 
         </>

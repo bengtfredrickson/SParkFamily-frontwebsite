@@ -6,22 +6,20 @@ import { add_user, delete_user, get_All_Users, update_user } from '../services/w
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
-import { Form, Formik } from 'formik';
+import { Form, Formik,Field } from 'formik';
 import Modal from "react-bootstrap/Modal";
 import { MyTextInput } from '../services/web/inputServices';
 import * as Yup from 'yup';
-
-
+import { Loader } from '../components/Helper/Loader';
+import Footer from './Footer';
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
         background:coral;
     }
     `
-
-
 export default function User_Management() {
-
+    const [getLoader, setLoader] = useState(true);
     const location = useLocation();
     const [select, setSelection] = useState([]);
     const [users, setUsers] = useState([]);
@@ -29,7 +27,7 @@ export default function User_Management() {
     const [getDetail, setDetail] = useState([]);
     const [getImageUrl, setImageUrl] = useState({});
     const [getState, setState] = useState(true);
-    const [getbutton,setbutton]=useState(false);
+    const [getbutton, setbutton] = useState(false);
 
     // Edit User Model
     const [showEditUser, setShowEditUser] = useState(false);
@@ -61,15 +59,16 @@ export default function User_Management() {
     };
     // Ends
     // let index1=0;
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     //   Function Hnadle
 
-    const selectPic = (e) => {
-        setImage({
-            pictureAsFile: e.target.files[0],
-
-        });
-    }
+    function validate_pic(value) {
+        let error;
+        if (!value) {
+          error = 'Required!';
+          return error;
+        } 
+      }
 
     const onDelete = (params) => () => {
         if (window.confirm("are your sure?")) {
@@ -98,8 +97,13 @@ export default function User_Management() {
             get_All_Users().
                 then((res) => {
                     console.log(res.data.response)
+                    if (!res.data.response) {
+                        setUsers([]);
+                    }
+                    if (res.data.response) {
+                        setUsers(res.data.response.map((el, index) => ({ ...el, id: el._id, i: index })))
+                    }
 
-                    setUsers(res.data.response.map((el, index) => ({ ...el, id: el._id, i: index })))
 
 
                 }).catch((err) => {
@@ -117,13 +121,10 @@ export default function User_Management() {
                     console.log(res.data.response)
 
                     setUsers(res.data.response.map((el, index) => ({ ...el, id: el._id, i: index })))
-                    // res.data.response.map((intem,index)=>{
-                    //     console.log("index-====>",index)
-                    //     setLength(index);
-                    // })
-
+                    setLoader(false);
 
                 }).catch((err) => {
+                    setLoader(false);
                     console.log(err);
                 })
         }
@@ -140,21 +141,20 @@ export default function User_Management() {
             field: 'name',
             headerName: 'Name',
             width: 200,
-            editable: true,
+
         },
         {
             field: 'email',
             headerName: 'Email_Id',
             width: 200,
-            editable: true,
+            valueGetter: (params) =>
+                `${params.row.email || ''} ${params.row.father_email || ''}`,
         },
         {
             field: 'phone',
             headerName: 'Phone Number',
             type: 'text',
             width: 200,
-
-            editable: true,
         },
         {
             field: 'profile_pic',
@@ -205,7 +205,7 @@ export default function User_Management() {
         <>
             <style>{css}</style>
             <Side_Navigation />
-            <div className="main-content">
+            <div className="main-content" style={{ marginBottom: "9px" }}>
                 <section className="section">
                     <div className="section-header">
                         <h1>User Management</h1>
@@ -224,7 +224,9 @@ export default function User_Management() {
                                     </div>
                                     <div className="card-body">
                                         <div className="table-responsive newPc">
-                                            <Box sx={{ height: 400, width: '100%' }}>
+
+
+                                            {getLoader === true ? <Loader /> : <Box sx={{ height: 400, width: '100%' }}>
                                                 {users.length > 0 && (
                                                     <>
                                                         <h2>{select.map((val) => val._id)}</h2>
@@ -247,7 +249,8 @@ export default function User_Management() {
 
                                                 }
 
-                                            </Box>
+                                            </Box>}
+
                                         </div>
                                     </div>
 
@@ -391,7 +394,7 @@ export default function User_Management() {
                                         </div>
                                     </div>
 
-                                    <div className="col-lg-7 col-md-12 col-sm-12">
+                                    <div className="col-lg-6 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Image</label>
                                             {/* <img  className=" w-50 p-3" src={getDetail.coach_image}/> */}
@@ -422,10 +425,10 @@ export default function User_Management() {
 
                                     <div className="col-lg-12 col-md-12 col-sm-12">
 
-                                   
-                                    {!getbutton? <Button type="submit" variant="contained"  >
+
+                                        {!getbutton ? <Button type="submit" variant="contained"  >
                                             Submit
-                                        </Button>:<Button  variant="contained" style={{backgroundColor:'blue',color:"white"}}  disabled>Wait Please!</Button>}
+                                        </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
                                     </div>
                                 </div>
                             </div>
@@ -467,23 +470,18 @@ export default function User_Management() {
                         })}
 
                         onSubmit={(values, { resetForm }) => {
+
+                            console.log(values);
                             setbutton(true);
-                            // console.log(values)
-
                             let formData = new FormData();
-
-                            if (getImage.pictureAsFile) {
-                                formData.append("profile_pic", getImage.pictureAsFile);
-                            }
+                            formData.append("profile_pic", values.profile_pic);
                             formData.append("name", values.name);
                             formData.append('email', values.email);
                             formData.append("phone", values.phone);
 
                             add_user(formData)
-
                                 .then((res) => {
-
-                                    console.log("Res=====>", res);
+                                    // console.log("Res=====>", res);
                                     Store.addNotification({
                                         title: "Success",
                                         message: res?.data?.message,
@@ -501,7 +499,7 @@ export default function User_Management() {
                                         },
                                     });
                                     resetForm({ formData: "" });
-                                   
+
                                     get_All_Users().
                                         then((res) => {
                                             console.log(res.data.response)
@@ -541,58 +539,71 @@ export default function User_Management() {
 
 
                     >
-                        <Form>
-                            <div className="modal-body">
-                                <div className="row">
+                        {props => (
+                            <Form>
+                                <div className="modal-body">
+                                    <div className="row">
 
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Name</label>
-                                            <MyTextInput type="text" className="form-control" name="name" />
+                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Name</label>
+                                                <MyTextInput type="text" className="form-control" name="name" />
+                                            </div>
+
+
+                                        </div>
+                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                            <div className="form-group spo">
+                                                <label>Email Id</label>
+                                                <MyTextInput type="text" className="form-control" name="email" />
+                                            </div>
+
+
+
+                                        </div><div className="col-lg-4 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Phone Number</label>
+                                                <MyTextInput type="text" className="form-control" name="phone" />
+                                            </div>
+
+
+
+                                        </div>
+                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Profile Picture</label>
+                                                <img src={getImageUrl} className=" w-50 p-3" style={{ marginLeft: "70px" }} alt="" />
+                                                {/* <input type="file" className="form-control" accept="image/*"
+                                                name="profile_pic" onChange={selectPic} required /> */}
+                                                <Field type="file"
+                                                    className="form-control"
+                                                    accept="image/*"
+                                                    name="profile_pic"
+                                                    onChange={(e) => {
+                                                        props.values.profile_pic = e.target.files[0]
+                                                    }}
+                                                    validate={() => validate_pic(props.values.profile_pic)}
+                                                    value={props.values.value}
+                                                />
+                                                  {props.errors.profile_pic && props.touched.profile_pic && <div style={{color:"red"}}>{props.errors.profile_pic}</div>}
+                                            </div>
+
+
+
                                         </div>
 
 
-                                    </div>
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group spo">
-                                            <label>Email Id</label>
-                                            <MyTextInput type="text" className="form-control" name="email" />
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            {!getbutton ? <Button type="submit" variant="contained"  >
+                                                Submit
+                                            </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
                                         </div>
 
-
-
-                                    </div><div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Phone Number</label>
-                                            <MyTextInput type="text" className="form-control" name="phone" />
-                                        </div>
-
-
-
                                     </div>
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Profile Picture</label>
-                                            <img src={getImageUrl} className=" w-50 p-3" style={{ marginLeft: "70px" }} alt="" />
-                                            <input type="file" className="form-control" accept="image/*"
-                                                name="profile_pic" onChange={selectPic} required />
-                                        </div>
-
-
-
-                                    </div>
-                                   
-
-                                    <div className="col-lg-12 col-md-12 col-sm-12">
-                                       {!getbutton? <Button type="submit" variant="contained"  >
-                                            Submit
-                                        </Button>:<Button  variant="contained" style={{backgroundColor:'blue',color:"white"}}  disabled>Wait Please!</Button>}
-                                       
-                                    </div>
-
                                 </div>
-                            </div>
-                        </Form>
+                            </Form>
+                        )}
                     </Formik>
 
                 </Modal.Body>
@@ -601,13 +612,7 @@ export default function User_Management() {
             {/* Ends Add User */}
 
 
-            <footer className="main-footer">
-                <div className="footer-left">
-                    Copyright &copy; 2021 <div className="bullet"></div> Design By <a href="https://www.webmobril.com/">Webmobril</a>
-                </div>
-                <div className="footer-right">
-                </div>
-            </footer>
+            <Footer />
 
 
 

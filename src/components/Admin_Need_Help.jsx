@@ -6,6 +6,8 @@ import {  delete_admin__need_help, get_all_admin__need_help } from "../services/
 import { Store } from "react-notifications-component";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
+import { Loader } from '../components/Helper/Loader';
+import Footer from './Footer';
 
 
 export default function Admin_Need_Help() {
@@ -21,6 +23,7 @@ export default function Admin_Need_Help() {
     `
 
   const [getAdminNeedHelpData, setAdminNeedHelpData] = useState([]);
+  const [getLoader, setLoader] = useState(true);
   const [getMessage, setMessage] = useState(false);
   const [getDetail,setDetail]=useState([]);
   const handleClose = () => {
@@ -109,8 +112,10 @@ export default function Admin_Need_Help() {
             i: index,
           }))
         );
+        setLoader(false);
       })
       .catch((err) => {
+        setLoader(false);
         console.log(err);
       });
   }, []);
@@ -163,7 +168,7 @@ export default function Admin_Need_Help() {
       </style>
       {/* <!-- Main Content --> */}
       <Side_Navigation />
-      <div className="main-content">
+      <div className="main-content" style={{marginBottom:"25px"}}>
         <section className="section">
           <div className="section-header">
             <h1>Admin Need Help Management</h1>
@@ -176,9 +181,10 @@ export default function Admin_Need_Help() {
                     <h4>Data Table</h4>
                     {/* <a style={{ cursor: "pointer" }}>Add Need Help</a> */}
                   </div>
+                  
                   <div className="card-body">
                     <div className="table-responsive newPc">
-
+                    {getLoader === true ? <Loader /> :
                       <Box sx={{ height: 400, width: '100%' }}>
                         {getAdminNeedHelpData.length > 0 && (
                           <>
@@ -189,7 +195,7 @@ export default function Admin_Need_Help() {
 
                             />
                           </> ) }
-                      </Box>
+                      </Box>}
                     </div>
                   </div>
                 </div>
@@ -221,18 +227,7 @@ export default function Admin_Need_Help() {
        
       </Modal>
       {/* Close Message */}
-
-
-
-      <footer className="main-footer">
-        <div className="footer-left">
-          Copyright &copy; 2021 <div className="bullet"></div> Design By <a href="https://www.webmobril.com/">Webmobril</a>
-        </div>
-        <div className="footer-right">
-        </div>
-      </footer>
-
-
+      <Footer/>
     </>
 
   )

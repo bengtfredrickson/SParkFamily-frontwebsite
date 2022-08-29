@@ -6255,13 +6255,13 @@ a.close.disabled {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 160%;
     pointer-events: auto;
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, .2);
     border-radius: .3rem;
-    outline: 0
+    outline: 0;
 }
 
 .modal-backdrop {
@@ -6333,7 +6333,7 @@ a.close.disabled {
 
 @media(min-width:576px) {
     .modal-dialog {
-        max-width: 891px;
+        max-width: 500px;
         margin: 1.75rem auto
     }
 

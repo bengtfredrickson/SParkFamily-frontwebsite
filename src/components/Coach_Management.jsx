@@ -3,15 +3,16 @@ import Side_Navigation from "./Side_Navigation";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import Modal from "react-bootstrap/Modal";
+import { Loader } from '../components/Helper/Loader';
+import Footer from './Footer';
 import {
   add_coach,
-  // delete_coach,
   get_coach,
   update_coach,
 } from "../services/web/webServices";
 import { Store } from "react-notifications-component";
 import { Button } from "@mui/material";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import { MyTextInput, MyTextArea } from "../services/web/inputServices";
 import * as Yup from "yup";
 import ChipInput from 'material-ui-chip-input'
@@ -24,6 +25,7 @@ const css = `
     `
 // Ends
 export default function Coach_Management() {
+  const [getLoader, setLoader] = useState(true);
   const [getCoach, setCoach] = useState([]);
   const [getImageUrl, setImageUrl] = useState({});
   const [select, setSelection] = useState([]);
@@ -98,6 +100,13 @@ export default function Coach_Management() {
     setState(false);
     setImageUrl(URL.createObjectURL(e.target.files[0]));
   };
+  function validate_pic(value) {
+    let error;
+    if (!value) {
+      error = 'Required!';
+      return error;
+    }
+  }
 
 
 
@@ -191,8 +200,11 @@ export default function Coach_Management() {
             i: index,
           }))
         );
+        setLoader(false);
+
       })
       .catch((err) => {
+        setLoader(false);
         console.log(err);
       });
   }, []);
@@ -261,7 +273,7 @@ export default function Coach_Management() {
       renderCell: (params) => {
         return (
           <div>
-            {params?.row?.coach_image == " " ? (
+            {!params?.row?.coach_image ? (
               <img
                 className="circular_image"
                 style={{ width: "62px" }}
@@ -309,7 +321,7 @@ export default function Coach_Management() {
     <>
       <style>{css}</style>
       <Side_Navigation />
-      <div className="main-content">
+      <div className="main-content" style={{ marginBottom: "9px" }}>
         <section className="section">
           <div className="section-header">
             <h1>Coach Management</h1>
@@ -332,7 +344,8 @@ export default function Coach_Management() {
                   </div>
                   <div className="card-body">
                     <div className="table-responsive newPc">
-                      <Box sx={{ height: 400, width: "100%" }}>
+
+                      {getLoader === true ? <Loader /> : <Box sx={{ height: 400, width: "100%" }}>
                         {getCoach.length > 0 && (
                           <>
                             <h2>{select.map((val) => val._id)}</h2>
@@ -348,7 +361,8 @@ export default function Coach_Management() {
                             />
                           </>
                         )}
-                      </Box>
+                      </Box>}
+
                     </div>
                   </div>
                 </div>
@@ -628,34 +642,34 @@ export default function Coach_Management() {
                     </div>
                   </div>
 
-                  <div className="col-lg-6 col-md-12 col-sm-12">
+                  <div className="col-lg-12 col-md-12 col-sm-12">
                     <div className="form-group">
                       <label>Grade</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="grade" onChange={(value) => setGarde(value)} defaultValue={getDetail.grade} />
+                      <ChipInput fullWidth name="grade" onChange={(value) => setGarde(value)} defaultValue={getDetail.grade} />
                     </div>
                   </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
+                  <div className="col-lg-12 col-md-12 col-sm-12">
                     <div className="form-group">
                       <label>Subject</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="subject_of_teacher" onChange={(value) => setSubject(value)} defaultValue={getDetail.service_offered} />
+                      <ChipInput fullWidth name="subject_of_teacher" onChange={(value) => setSubject(value)} defaultValue={getDetail.service_offered} />
                     </div>
                   </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
+                  <div className="col-lg-12 col-md-12 col-sm-12">
                     <div className="form-group">
                       <label>Service Offered</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="service_offered" onChange={(value) => setOffered(value)} defaultValue={getDetail.service_offered} />
+                      <ChipInput fullWidth name="service_offered" onChange={(value) => setOffered(value)} defaultValue={getDetail.service_offered} />
                     </div>
                   </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
+                  <div className="col-lg-12 col-md-12 col-sm-12">
                     <div className="form-group">
                       <label>Offline Time Slot</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="offline_time_slot" onChange={(value) => setOfflineTimeSlot(value)} defaultValue={getDetail.offline_time_slot} />
+                      <ChipInput fullWidth name="offline_time_slot" onChange={(value) => setOfflineTimeSlot(value)} defaultValue={getDetail.offline_time_slot} />
                     </div>
                   </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
+                  <div className="col-lg-12 col-md-12 col-sm-12">
                     <div className="form-group">
                       <label>Online Time Slot</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="online_time_slot" onChange={(value) => setOnlineTimeSlot(value)} defaultValue={getDetail.online_time_slot} />
+                      <ChipInput fullWidth name="online_time_slot" onChange={(value) => setOnlineTimeSlot(value)} defaultValue={getDetail.online_time_slot} />
                     </div>
                   </div>
                   <div className="col-lg-6 col-md-12 col-sm-12">
@@ -689,7 +703,7 @@ export default function Coach_Management() {
                     </div>
                   </div>
 
-                  <div className="col-lg-7 col-md-12 col-sm-12">
+                  <div className="col-lg-6 col-md-12 col-sm-12">
                     <div className="form-group">
                       <label>Image</label>
                       {/* <img  className=" w-50 p-3" src={getDetail.coach_image}/> */}
@@ -775,16 +789,35 @@ export default function Coach_Management() {
             initialValues={{
               coach_name: "",
               coach_email: "",
-              grade: "",
-              subject_of_teacher: "",
-              service_offered: "",
-              offline_time_slot: "",
-              online_time_slot: "",
+              grade: [],
+              subject_of_teacher: [],
+              service_offered: [],
+              offline_time_slot: [],
+              online_time_slot: [],
               facebook_profile_url: "",
               twitter_profile_url: "",
               linkedin_profile_url: "",
               short_bio: "",
               coach_image: "",
+            }}
+            validate={(values) => {
+              const errors = {};
+              if (values.grade == '') {
+                errors.grade = 'Required';
+              }
+              if (values.subject_of_teacher == '') {
+                errors.subject_of_teacher = 'Required';
+              }
+              if (values.service_offered == '') {
+                errors.service_offered = 'Required';
+              }
+              if (values.offline_time_slot == '') {
+                errors.offline_time_slot = 'Required';
+              }
+              if (values.online_time_slot == '') {
+                errors.online_time_slot = 'Required';
+              }
+              return errors;
             }}
             validationSchema={Yup.object({
               coach_email: Yup.string().email("Invalid email address").required(),
@@ -800,19 +833,15 @@ export default function Coach_Management() {
             onSubmit={(values, { resetForm }) => {
               setbutton(true);
               let formData = new FormData();
-              if (getImage.pictureAsFile) {
-                formData.append("coach_image", getImage.pictureAsFile);
-              }
+              formData.append("coach_image", values.coach_image);
               formData.append("coach_name", values.coach_name);
               formData.append("coach_email", values.coach_email);
-              formData.append("grade", getGrade);
-              formData.append("subject_of_teacher", getSubject);
-              formData.append("service_offered", getOffered);
-              formData.append("offline_time_slot", getOfflineTimeSlot);
-              formData.append("online_time_slot", getOnlineTimeSlot);
-              formData.append(
-                "facebook_profile_url",
-                values.facebook_profile_url
+              formData.append("grade", values.grade);
+              formData.append("subject_of_teacher", values.subject_of_teacher);
+              formData.append("service_offered", values.service_offered);
+              formData.append("offline_time_slot", values.offline_time_slot);
+              formData.append("online_time_slot", values.online_time_slot);
+              formData.append("facebook_profile_url", values.facebook_profile_url
               );
               formData.append(
                 "twitter_profile_url",
@@ -870,152 +899,205 @@ export default function Coach_Management() {
 
             }}
           >
-            <Form>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Coach Name</label>
-                      <MyTextInput
-                        type="text"
-                        className="form-control"
-                        name="coach_name"
-                        placeholder="Name"
-                      />
+            {props => (
+              <Form>
+                <div className="modal-body">
+                  <div className="row">
+                    <div className="col-lg-6 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Coach Name</label>
+                        <MyTextInput
+                          type="text"
+                          className="form-control"
+                          name="coach_name"
+                          placeholder="Name"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Coach Email</label>
-                      <MyTextInput
-                        type="email"
-                        className="form-control"
-                        name="coach_email"
-                        placeholder="email@gmail.com"
-                      />
+                    <div className="col-lg-6 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Coach Email</label>
+                        <MyTextInput
+                          type="email"
+                          className="form-control"
+                          name="coach_email"
+                          placeholder="email@gmail.com"
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Facebook</label>
-                      <MyTextInput
-                        type="text"
-                        className="form-control"
-                        name="facebook_profile_url"
-                        placeholder="Facebook"
-                      />
+                    <div className="col-lg-6 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Facebook</label>
+                        <MyTextInput
+                          type="text"
+                          className="form-control"
+                          name="facebook_profile_url"
+                          placeholder="Facebook"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Linkedin</label>
-                      <MyTextInput
-                        type="text"
-                        className="form-control"
-                        name="twitter_profile_url"
-                        placeholder="Linkedin"
-                      />
+                    <div className="col-lg-6 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Linkedin</label>
+                        <MyTextInput
+                          type="text"
+                          className="form-control"
+                          name="linkedin_profile_url"
+                          
+                          placeholder="Linkedin"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>twitter</label>
-                      <MyTextInput
-                        type="text"
-                        className="form-control"
-                        name="linkedin_profile_url"
-                        placeholder="Twitter"
-                      />
+                    <div className="col-lg-6 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>twitter</label>
+                        <MyTextInput
+                          type="text"
+                          className="form-control"
+                          name="twitter_profile_url"
+                          placeholder="Twitter"
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="col-lg-7 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Coach Image</label>
-                      <img
-                        src={getImageUrl}
-                        className=" w-50 p-3"
+                    <div className="col-lg-6 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Coach Image</label>
+                        <img
+                          src={getImageUrl}
+                          className=" w-50 p-3"
 
-                        alt=""
-                      />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="form-control"
-                        name="coach_image"
-                        onChange={onHandle}
-                        required
-                      />
+                          alt=""
+                        />
+                        <Field type="file"
+                          className="form-control"
+                          accept="image/*"
+                          name="coach_image"
+                          onChange={(e) => {
+                            props.values.coach_image = e.target.files[0]
+                          }}
+                          validate={() => validate_pic(props.values.coach_image)}
+                          value={props.values.value}
+                        />
+                        {props.errors.coach_image && props.touched.coach_image && <div style={{ color: "red" }}>{props.errors.coach_image}</div>}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6  col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Select Grade</label>
+                    <div className="col-lg-12  col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Select Grade</label>
+                        <ChipInput
+                          name="grade"
+                          onChange={(e) => {
+                            const l = e.length;
+                            const h = e[l - 1];
+                            props.values.grade = [...props.values.grade, h]
+                          }}
 
-                      <ChipInput name="grade" onChange={(value) => setGarde(value)} style={{ marginLeft: "20px" }} />
+                          fullWidth
+                          value={props.values.value}
+                        />
+                        {props.errors.grade && props.touched.grade && <div style={{ color: "red" }}>{props.errors.grade}</div>}
+                      </div>
+                    </div>
+                    <div className="col-lg-12 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Subject</label>
+                        <ChipInput
+                          name="subject_of_teacher"
+                          onChange={(e) => {
+                            const l = e.length;
+                            const h = e[l - 1];
+                            props.values.subject_of_teacher = [...props.values.subject_of_teacher, h]
+                          }}
 
+                          fullWidth
+                          value={props.values.value}
+                        />
+                        {props.errors.subject_of_teacher && props.touched.subject_of_teacher && <div style={{ color: "red" }}>{props.errors.subject_of_teacher}</div>}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Subject</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="subject_of_teacher" onChange={(value) => setSubject(value)} />
-                    </div>
-                  </div>
 
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Service Offered</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="service_offered" onChange={(value) => setOffered(value)} />
-                    </div>
-                  </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Offline Time Slot</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="offline_time_slot" onChange={(value) => setOfflineTimeSlot(value)} />
-                    </div>
-                  </div>
-                  <div className="col-lg-6 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Online Time Slot</label>
-                      <ChipInput style={{ marginLeft: "20px" }} name="online_time_slot" onChange={(value) => setOnlineTimeSlot(value)} />
-                    </div>
-                  </div>
-                  <div className="col-lg-12 col-md-12 col-sm-12">
-                    <div className="form-group">
-                      <label>Short Bio</label>
+                    <div className="col-lg-12 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Service Offered</label>
+                        <ChipInput
+                          name="service_offered"
+                          onChange={(e) => {
+                            const l = e.length;
+                            const h = e[l - 1];
+                            props.values.service_offered = [...props.values.service_offered, h]
+                          }}
 
-                      <MyTextArea
-                        type="textarea"
-                        className="form-control"
-                        name="short_bio"
-                        placeholder="Summary"
-                      />
+                          fullWidth
+                          value={props.values.value}
+                        />
+                        {props.errors.service_offered && props.touched.service_offered && <div style={{ color: "red" }}>{props.errors.service_offered}</div>}
+                      </div>
                     </div>
-                  </div>
+                    <div className="col-lg-12 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Offline Time Slot</label>
+                        <ChipInput
+                          name="offline_time_slot"
+                          onChange={(e) => {
+                            const l = e.length;
+                            const h = e[l - 1];
+                            props.values.offline_time_slot = [...props.values.offline_time_slot, h]
+                          }}
 
-                  <div className="col-lg-12 col-md-12 col-sm-12">
+                          fullWidth
+                          value={props.values.value}
+                        />
+                        {props.errors.offline_time_slot && props.touched.offline_time_slot && <div style={{ color: "red" }}>{props.errors.offline_time_slot}</div>}
+                      </div>
+                    </div>
+                    <div className="col-lg-12 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Online Time Slot</label>
+                        <ChipInput
+                          name="online_time_slot"
+                          onChange={(e) => {
+                            const l = e.length;
+                            const h = e[l - 1];
+                            props.values.online_time_slot = [...props.values.online_time_slot, h]
+                          }}
 
-                    {!getbutton ? <button type="submit" style={{ backgroundColor: "blue", color: "white", border: "none", height: "40px", width: "80px" }}  >Submit</button> : 
-                    <button  style={{ backgroundColor: "blue", color: "white", border: "none", height: "40px", width: "120px" }}  >Wait Please!!</button> }
+                          fullWidth
+                          value={props.values.value}
+                        />
+                        {props.errors.online_time_slot && props.touched.online_time_slot && <div style={{ color: "red" }}>{props.errors.online_time_slot}</div>}
+                      </div>
+                    </div>
+                    <div className="col-lg-12 col-md-12 col-sm-12">
+                      <div className="form-group">
+                        <label>Short Bio</label>
+
+                        <MyTextArea
+                          type="textarea"
+                          className="form-control"
+                          name="short_bio"
+                          placeholder="Summary"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-lg-12 col-md-12 col-sm-12">
+
+                      {!getbutton ? <button type="submit" style={{ backgroundColor: "blue", color: "white", border: "none", height: "40px", width: "80px" }}  >Submit</button> :
+                        <button style={{ backgroundColor: "blue", color: "white", border: "none", height: "40px", width: "120px" }}  >Wait Please!!</button>}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Form>
+              </Form>
+            )}
           </Formik>
         </Modal.Body>
 
       </Modal>
 
       {/* ends */}
-      <footer className="main-footer">
-        <div className="footer-left">
-          Copyright &copy; 2021 <div className="bullet"></div> Design By
-          <a href="https://www.webmobril.com/">Webmobril</a>
-        </div>
-        <div className="footer-right"></div>
-      </footer>
+      <Footer />
     </>
   );
 }

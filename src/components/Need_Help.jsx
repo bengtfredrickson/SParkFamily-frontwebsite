@@ -7,8 +7,8 @@ import {deleteNeedHelp, getNeedHelp} from "../services/web/webServices";
 import { Store } from "react-notifications-component";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
-
-
+import { Loader } from '../components/Helper/Loader';
+import Footer from './Footer';
 export default function Need_Help() {
   const css = `
   
@@ -20,7 +20,7 @@ export default function Need_Help() {
   }
     
     `
-
+    const [getLoader, setLoader] = useState(true);
   const [getNeedHelpData, setNeedHelpData] = useState([]);
   const [getMessage, setMessage] = useState(false);
   const [getDetail,setDetail]=useState([]);
@@ -114,8 +114,10 @@ export default function Need_Help() {
             i: index,
           }))
         );
+        setLoader(false);
       })
       .catch((err) => {
+        setLoader(false);
         console.log(err);
       });
   }, []);
@@ -169,7 +171,7 @@ export default function Need_Help() {
       </style>
       {/* <!-- Main Content --> */}
       <Side_Navigation />
-      <div className="main-content">
+      <div className="main-content" style={{marginBottom:"25px"}}>
         <section className="section">
           <div className="section-header">
             <h1>Need Help Management</h1>
@@ -184,7 +186,7 @@ export default function Need_Help() {
                   </div>
                   <div className="card-body">
                     <div className="table-responsive newPc">
-
+                    {getLoader === true ? <Loader /> :
                       <Box sx={{ height: 400, width: '100%' }}>
                         {getNeedHelpData.length > 0 && (
                           <>
@@ -195,7 +197,7 @@ export default function Need_Help() {
 
                             />
                           </> ) }
-                      </Box>
+                      </Box>}
                     </div>
                   </div>
                 </div>
@@ -220,18 +222,7 @@ export default function Need_Help() {
        
       </Modal>
       {/* Close Message */}
-
-
-
-      <footer className="main-footer">
-        <div className="footer-left">
-          Copyright &copy; 2021 <div className="bullet"></div> Design By <a href="https://www.webmobril.com/">Webmobril</a>
-        </div>
-        <div className="footer-right">
-        </div>
-      </footer>
-
-
+      <Footer/>
     </>
 
   )

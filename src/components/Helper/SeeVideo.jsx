@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
+import Footer from '../Footer';
+import Side_Navigation from '../Side_Navigation';
+import '../Helper/seevideo.css';
 import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom'
-import '../Helper/seevideo.css'
-import Side_Navigation from '../Side_Navigation';
+import { useLocation } from 'react-router-dom';
 import { Store } from 'react-notifications-component';
 import { add_video, deleteVideo, get_course, upload_vedio } from '../../services/web/webServices';
 import { Formik, Form, FieldArray } from 'formik';
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import ReactPlayer from 'react-player';
-// import { MyTextInput } from '../../services/web/inputServices';
-export default function SeeVedio() {
+import { Loader } from '../Helper/Loader';
+export default function SeeVideo() {
     const { state } = useLocation();
+    const [getLoader, setLoader] = useState(true);
     const { video } = state;
     const [getVideoUrl, setVideoUrl] = useState([]);
     const [getData, setData] = useState([]);
@@ -22,13 +24,14 @@ export default function SeeVedio() {
     const [getCourseVideoThumbnail, setCourseVideoThumbnail] = useState([]);
     const [getVideo, setVideo] = useState([]);
     const [open, setOpen] = React.useState();
-    // const []
 
     useEffect(() => {
         get_course().then((res) => {
             setData(res.data.response[video.i])
+            setLoader(false);
         }).catch((err) => {
             console.log(err);
+            setLoader(false);
         })
     }, [])
     const handleClose = () => {
@@ -68,7 +71,6 @@ export default function SeeVedio() {
                 };
 
                 setVideo((getVideo) => [...getVideo, videoData]);
-                // {getVideo.map(entry=>console.log(entry))}
                 Store.addNotification({
                     title: "Success",
                     message: res?.data?.message,
@@ -95,12 +97,7 @@ export default function SeeVedio() {
             });
 
     }
-
-
-
-
     const delete_video = (index) => {
-        console.log("data===>", video)
 
         deleteVideo(getData._id, getData?.videos[index]?._id).
             then((res) => {
@@ -146,32 +143,65 @@ export default function SeeVedio() {
     }
     return (
         <>
+
             <Side_Navigation />
+            <div className="main-content">
 
-            <section className=" my_section" style={{ width: "84%", height: "87vh", marginLeft: '250px' }} >
+                <section className="section">
+                    <div className="section-header">
+                        <h1>Welcome To Video  </h1>
 
-                <div className="container-fluid pt-5">
-                    <Button onClick={addVideo} style={{ marginTop: "30px", marginLeft: "1180px", backgroundColor: "blue" }}>Add More Video</Button>
-                    <div className="row pt-5" >
-
-                        {getData?.videos?.length > 0 ? getData?.videos?.map((item, index) => {
-                            return (
-                                <>
-
-                                    <div className="col-md-3 " id='vedio_tumbnail' key={index}>
-
-                                        <img src={item?.video_thumbnail} className="img-fluid images" />
-                                        <h6 style={{ cursor: "pointer" }} onClick={() => showVideo(index)} >{item?.video_name} </h6>
-                                        <i className="fa fa-play play_Button" onClick={() => showVideo(index)} ></i>
-                                        <i className="fas fa-trash-alt cut-button" onClick={() => delete_video(index)}></i>
-                                        {/* <i class="fas fa-trash-alt"></i> */}
-                                    </div>
-                                </>
-                            )
-                        }) : ""}
+                        <Button onClick={addVideo} style={{marginLeft:"70%",backgroundColor:"blue"}} >Add More Video</Button>
                     </div>
-                </div>
-            </section>
+
+                    <div className="col-md-12 pad0" >
+                        <div className="card" style={{marginBottom:"18.8%"}}>
+                            <div className="card-header">
+                                <div className="filterHeaderWrapper">
+                                    <h4>Video Management</h4>
+                                </div>
+                            </div>
+                            <div className="card-body">
+                                <div className="row">
+                                    <div className="col-12 col-sm-12 col-md-12">
+                                        <div className="video-manage-grid">
+                                            {getLoader === true ? <Loader /> : getData?.videos?.length > 0 ? getData?.videos?.map((item, index) => {
+                                                return (
+                                                    <>
+
+                                                        <div className="video-grid-box" key={index}>
+                                                            <i className="fas fa-trash-alt cut-button" onClick={() => delete_video(index)} style={{ cursor: "pointer" ,marginLeft:"100%",color:"red"}}></i>
+                                                            <div className="imgPos-iWrap">
+                                                                <div className="imgPos">
+                                                                    <img src={item?.video_thumbnail} className="img-fluid images" />
+                                                                </div>
+                                                                <a > <i className="fa fa-play" onClick={() => showVideo(index)} style={{ cursor: "pointer" }}></i></a>
+                                                            </div>
+                                                            <div className="video-title-st-wrap">
+                                                                {/* <h2>5 Secret Tips To Crack SSC </h2> */}
+                                                                {/* <p> Government Jobs Official </p> */}
+                                                                <h6 style={{ cursor: "pointer" }} onClick={() => showVideo(index)}>{item?.video_name} </h6>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )
+                                            }) : "Not Found"}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+
+
+
+
+            </div>
+            <Footer />
 
             {/* Model start */}
 
@@ -186,15 +216,15 @@ export default function SeeVedio() {
                     ></i>
                 </Modal.Header>
                 <Modal.Body >
-                   
-                    <ReactPlayer 
-                         height={400}
-                         width="700"
-                         controls
-                         config={{ file: { attributes: { controlsList: 'nodownload' } } }}
-                         onContextMenu={e => e.preventDefault()}
-                         className="react-player"
-                         url={getVideoUrl}
+
+                    <ReactPlayer
+                        height={400}
+                        width="700"
+                        controls
+                        config={{ file: { attributes: { controlsList: 'nodownload' } } }}
+                        onContextMenu={e => e.preventDefault()}
+                        className="react-player"
+                        url={getVideoUrl}
                     />
                 </Modal.Body>
                 <Modal.Footer >
@@ -266,21 +296,7 @@ export default function SeeVedio() {
 
                                 })
                                 .catch((err) => {
-                                    if (err) {
-                                        Store.addNotification({
-                                            title: "Error!",
-                                            message: err?.response?.data?.message,
-                                            type: "danger",
-                                            insert: "top",
-                                            container: "top-right",
-                                            animationIn: ["animate__animated", "animate__fadeIn"],
-                                            animationOut: ["animate__animated", "animate__fadeOut"],
-                                            dismiss: {
-                                                duration: 5000,
-                                                onScreen: true,
-                                            },
-                                        });
-                                    }
+                                    console.log(err);
                                     setRequestToShow(false);
                                 });
 
@@ -391,15 +407,8 @@ export default function SeeVedio() {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-            <footer className="main-footer">
-                <div className="footer-left">
-                    Copyright &copy; 2021 <div className="bullet"></div> Design By <a href="https://www.webmobril.com/">Webmobril</a>
-                </div>
-                <div className="footer-right">
-                </div>
-            </footer>
-
 
         </>
+
     )
 }

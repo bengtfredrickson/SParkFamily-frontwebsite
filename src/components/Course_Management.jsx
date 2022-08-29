@@ -20,6 +20,8 @@ import { MyTextArea, MyTextInput } from "../services/web/inputServices";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import ChipInput from "material-ui-chip-input";
+import { Loader } from '../components/Helper/Loader';
+import Footer from './Footer';
 const css = `
   .sidebar-menu li:nth-child(5) a {
       background:coral;
@@ -27,11 +29,12 @@ const css = `
   
   `;
 export default function Course_Management() {
+  const [getLoader, setLoader] = useState(true);
   const navigate = useNavigate();
   const [getCourse, setCourse] = useState([]);
   const [select, setSelection] = useState([]);
   const [getCourseDetail, setCourseDetail] = useState([]);
-  const [getbutton,setbutton]=useState(false);
+  const [getbutton, setbutton] = useState(false);
   let getImage;
 
   // let vedioUrl;
@@ -86,10 +89,9 @@ export default function Course_Management() {
     setAddCourse(true);
   };
   //   X===========================Ends of Modal Function==============================X
-
   //Handle Image
   const handleImage = (e) => {
-    getImage = e.target.files[0];
+    getImage = e.target.files[0]
     let formData = new FormData();
     if (getImage) {
       formData.append("course_images", getImage);
@@ -99,7 +101,6 @@ export default function Course_Management() {
     setOpenImage(!getOpenImage);
     upload_vedio(formData)
       .then((res) => {
-        console.log("Formdata Response=====>", res.data.response[0].location);
         setCourseImage(res.data.response[0].location);
 
         setData(true);
@@ -166,45 +167,45 @@ export default function Course_Management() {
   };
 
   // Delete Function
-  const onDelete = (params) => {
-    console.log(params.row);
-    if (window.confirm("are your sure?")) {
-      delete_course(params.row._id)
-        .then((res) => {
-          Store.addNotification({
-            title: "Success",
-            message: res?.data?.message,
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-            },
-          });
+  // const onDelete = (params) => {
+  //   console.log(params.row);
+  //   if (window.confirm("are your sure?")) {
+  //     delete_course(params.row._id)
+  //       .then((res) => {
+  //         Store.addNotification({
+  //           title: "Success",
+  //           message: res?.data?.message,
+  //           type: "success",
+  //           insert: "top",
+  //           container: "top-right",
+  //           animationIn: ["animate__animated", "animate__fadeIn"],
+  //           animationOut: ["animate__animated", "animate__fadeOut"],
+  //           dismiss: {
+  //             duration: 5000,
+  //             onScreen: true,
+  //           },
+  //         });
 
-          get_course()
-            .then((res) => {
-              console.log("Res=====>", res.data.response);
-              setCourse(
-                res.data.response.map((el, index) => ({
-                  ...el,
-                  id: el._id,
-                  i: index,
-                }))
-              );
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
+  //         get_course()
+  //           .then((res) => {
+  //             console.log("Res=====>", res.data.response);
+  //             setCourse(
+  //               res.data.response.map((el, index) => ({
+  //                 ...el,
+  //                 id: el._id,
+  //                 i: index,
+  //               }))
+  //             );
+  //           })
+  //           .catch((err) => {
+  //             console.log(err);
+  //           });
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // };
 
   // Ends
 
@@ -223,22 +224,12 @@ export default function Course_Management() {
             i: index,
           }))
         );
+        setLoader(false);
       })
       .catch((err) => {
         if (err) {
-          Store.addNotification({
-            title: "Error!",
-            message: err?.response?.data?.message,
-            type: "danger",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-            },
-          });
+          setLoader(false);
+          console.log(err);
         }
       });
 
@@ -289,7 +280,7 @@ export default function Course_Management() {
         return (
           <>
             <div>
-              {params?.row?.coach?.coach_image === " " ? (
+              {!params?.row?.coach?.coach_image ? (
                 <img
                   className="circular_image"
                   style={{ width: "62px" }}
@@ -389,14 +380,14 @@ export default function Course_Management() {
               ></i>
             </button>
 
-            <button style={{ margin: "20px", border: "none" }}>
+            {/* <button style={{ margin: "20px", border: "none" }}>
               <i
                 className="fa fa-trash"
                 aria-hidden="true"
                 style={{ color: "red" }}
                 onClick={() => onDelete(params)}
               ></i>
-            </button>
+            </button> */}
           </>
         );
       },
@@ -407,7 +398,7 @@ export default function Course_Management() {
       <style>{css}</style>
       <Side_Navigation />
 
-      <div className="main-content">
+      <div className="main-content" style={{ marginBottom: "9px" }}>
         <section className="section">
           <div className="section-header">
             <h1>Course Management</h1>
@@ -428,7 +419,7 @@ export default function Course_Management() {
                   </div>
                   <div className="card-body">
                     <div className="table-responsive newPc">
-                      <Box sx={{ height: 400, width: "100%" }}>
+                      {getLoader === true ? <Loader /> : <Box sx={{ height: 400, width: "100%" }}>
                         {getCourse.length > 0 && (
                           <>
                             <h2>{select.map((val) => val._id)}</h2>
@@ -444,7 +435,8 @@ export default function Course_Management() {
                             />
                           </>
                         )}
-                      </Box>
+                      </Box>}
+
                     </div>
                   </div>
                 </div>
@@ -612,7 +604,7 @@ export default function Course_Management() {
             })}
 
             onSubmit={(values) => {
-                setbutton(true);
+              setbutton(true);
               if (getWhatYouWillLearn == '') {
                 values.what_you_will_learn = getCourseDetail.what_you_will_learn.toString();
               }
@@ -709,27 +701,27 @@ export default function Course_Management() {
                         />
                       </div>
                     </div>
-                    <div className="col-lg-8 col-md-12 col-sm-12">
+                    <div className="col-lg-12 col-md-12 col-sm-12">
                       <div className="form-group">
                         <label>What you will learn</label>
                         <ChipInput
                           name="what_you_will_learn"
                           onChange={(value) => setWhatYouWillLearn(value)}
                           defaultValue={getCourseDetail.what_you_will_learn}
-                          style={{ marginLeft: "20px" }}
+                          fullWidth
                         />
 
 
                       </div>
                     </div>
-                    <div className="col-lg-6 col-md-12 col-sm-12">
+                    <div className="col-lg-12 col-md-12 col-sm-12">
                       <div className="form-group">
                         <label>Course Content</label>
                         <ChipInput
                           name="course_content"
                           onChange={(value) => setContent(value)}
                           defaultValue={getCourseDetail.course_content}
-                          style={{ marginLeft: "20px" }}
+                          fullWidth
                         />
                       </div>
                     </div>
@@ -841,7 +833,7 @@ export default function Course_Management() {
                     />
 
                     <div className="col-lg-12 col-md-12 col-sm-12">
-                      
+
                       {!getbutton ? <Button
                         type="submit"
                         style={{
@@ -851,8 +843,8 @@ export default function Course_Management() {
                         }}
                       >
                         Submit
-                      </Button>: <Button
-                        
+                      </Button> : <Button
+
                         style={{
                           background: "blue",
                           width: "96px",
@@ -889,8 +881,8 @@ export default function Course_Management() {
               course_title: "",
               course_description: "",
               course_overview: "",
-              what_you_will_learn: "",
-              course_content: "",
+              what_you_will_learn: [],
+              course_content: [],
               price: "",
               currency_type: "",
               faq: [
@@ -925,39 +917,32 @@ export default function Course_Management() {
                   answer: Yup.string().required("required!"),
                 })
               ),
-              // language: Yup.string().required().required("language is required"),
-              // duration: Yup.string().required().required("duaration is required"),
+              course_images:Yup.mixed().required("required!"),
             })}
+            validate={(values) => {
+              const errors = {};
+              if (values.what_you_will_learn == '') {
+                errors.what_you_will_learn = 'Required';
+              }
+              if (values.course_content == '') {
+                errors.course_content = 'Required';
+              }
+             
+              return errors;
+            }}
             onSubmit={(values) => {
               setbutton(true);
-              values.what_you_will_learn = getWhatYouWillLearn.toString();
               values.coach = getCoachId.toString();
               values.course_images = getCourseImage.toString();
-              values.course_content = getContent.toString();
               values.videos = (getVideo || []).map((q) => ({
                 video_url: q.video_url,
                 video_name: q.video_name,
                 video_thumbnail: q.video_thumbnail,
               }));
+              values.what_you_will_learn=values.what_you_will_learn.toString();
+              values.course_content=values.course_content.toString();
+    
 
-
-
-              if (!values.course_content) {
-                submitted = true;
-              }
-
-
-              if (!values.what_you_will_learn) {
-                validationWhatYouWillLearn = true;
-              }
-
-
-              if (values.course_images == {}) {
-                courseImageValidation = true;
-              }
-
-              if (values.what_you_will_learn && values.course_content) {
-               
                 add_course(values)
                   .then((res) => {
                     // setButton(true);
@@ -1010,10 +995,11 @@ export default function Course_Management() {
                       setbutton(false);
                     }
                   });
-              }
+              
             }}
+            >
 
-            render={({ values }) => (
+           {props=>(
               <Form>
                 <div className="modal-body">
                   <div className="row">
@@ -1059,18 +1045,6 @@ export default function Course_Management() {
                       </div>
                     </div>
 
-                    {/* <div className="col-lg-4 col-md-12 col-sm-12">
-                      <div className="form-group">
-                        <label>Course Language</label>
-                        <MyTextInput
-                          type="text"
-                          className="form-control"
-                          name="language"
-                        />
-                      </div>
-                    </div> */}
-
-
                     <div className="col-lg-4 col-md-12 col-sm-12">
                       <div className="form-group">
                         <label>Course Overview</label>
@@ -1081,17 +1055,6 @@ export default function Course_Management() {
                         />
                       </div>
                     </div>
-                    {/* <div className="col-lg-4 col-md-12 col-sm-12">
-                      <div className="form-group">
-                        <label>Course Duration</label>
-                        <MyTextInput
-                          type="text"
-                          className="form-control"
-                          name="duration"
-                          placeholder="8hr"
-                        />
-                      </div>
-                    </div> */}
                     <div className="col-lg-4 col-md-12 col-sm-12">
                       <div className="form-group">
                         <label>Course Price</label>
@@ -1112,57 +1075,58 @@ export default function Course_Management() {
                         />
                       </div>
                     </div>
-                    <div className="col-lg-6 col-md-12 col-sm-12">
+                    <div className="col-lg-12 col-md-12 col-sm-12">
                       <div className="form-group">
                         <label>What You will Learn</label>
+                       
                         <ChipInput
                           name="what_you_will_learn"
-                          onChange={(value) => setWhatYouWillLearn(value)}
-                          style={{ marginLeft: "20px" }}
+                          onChange={(e) => {
+                            const l = e.length;
+                            const h = e[l - 1];
+                            props.values.what_you_will_learn = [...props.values.what_you_will_learn, h]
+                          }}
+
+                          fullWidth
+                          // value={props.values.value}
                         />
-                        {!validationWhatYouWillLearn ? (
-                          ""
-                        ) : (
-                          <p >
-                            Course what You Will learn is required!
-                          </p>
-                        )}
+                        {props.errors.what_you_will_learn && props.touched.what_you_will_learn && <div style={{ color: "red" }}>{props.errors.what_you_will_learn}</div>}
                       </div>
                     </div>
-                    <div className="col-lg-6 col-md-12 col-sm-12">
+                    <div className="col-lg-12 col-md-12 col-sm-12">
                       <div className="form-group">
                         <label>Course Content</label>
+                       
                         <ChipInput
                           name="course_content"
-                          onChange={(value) => setContent(value)}
-                          style={{ marginLeft: "20px" }}
+                          onChange={(e) => {
+                            const l = e.length;
+                            const h = e[l - 1];
+                            props.values.course_content = [...props.values.course_content, h]
+                          }}
+
+                          fullWidth
+                          // value={props.values.value}
                         />
-                        {!submitted ? (
-                          ""
-                        ) : (
-                          <p >
-                            Course Content is required!
-                          </p>
-                        )}
+                        {props.errors.course_content && props.touched.course_content && <div style={{ color: "red" }}>{props.errors.course_content}</div>}
                       </div>
                     </div>
                     <div className="col-lg-4 col-md-12 col-sm-12">
                       <div className="form-group">
                         <label>Course Image</label>
-                        <input
-                          type="file"
-                          accept="image/*"
+                        <input type="file"
                           className="form-control"
+                          accept="image/*"
                           name="course_images"
-                          onChange={handleImage}
+                          onChange={(e) => {
+                            props.values.course_images = e.target.files[0]
+
+                            handleImage(e)
+                          }}
+                          // value={props.values.value}
                         />
-                        {!courseImageValidation ? (
-                          ""
-                        ) : (
-                          <p>
-                            Course Image is required!
-                          </p>
-                        )}
+                        {props.errors.course_images && props.touched.course_images && <div style={{ color: "red" }}>{props.errors.course_images}</div>}
+                       
                       </div>
                     </div>
                     <FieldArray
@@ -1171,8 +1135,8 @@ export default function Course_Management() {
                         <div className="col-lg-12 col-md-12 col-sm-12">
                           <div className="form-group">
                             <label> Course Faq</label>
-                            {values.faq && values.faq.length > 0 ? (
-                              values.faq.map((item, index) => (
+                            {props.values.faq && props.values.faq.length > 0 ? (
+                              props.values.faq.map((item, index) => (
                                 <div key={index}>
                                   <label style={{ marginRight: "11px" }}>
                                     Question{" "}
@@ -1231,8 +1195,8 @@ export default function Course_Management() {
                         <div className="col-lg-12 col-md-12 col-sm-12">
                           <div className="form-group">
                             <label> Course Video</label>
-                            {values.videos && values.videos.length > 0 ? (
-                              values.videos.map((item, index) => (
+                            {props.values.videos && props.values.videos.length > 0 ? (
+                              props.values.videos.map((item, index) => (
                                 <div key={index}>
                                   <label style={{ marginRight: "11px" }}>
                                     Select Video
@@ -1246,7 +1210,10 @@ export default function Course_Management() {
                                     onChange={(e) =>
                                       setCourseVideo(e.target.files[0])
                                     }
+
                                   />
+
+                                  
                                   <label
                                     style={{
                                       marginRight: "11px",
@@ -1300,7 +1267,7 @@ export default function Course_Management() {
                     />
 
                     <div className="col-lg-12 col-md-12 col-sm-12">
-                      
+
                       {!getbutton ? <Button
                         type="submit"
                         style={{
@@ -1310,8 +1277,8 @@ export default function Course_Management() {
                         }}
                       >
                         Submit
-                      </Button>: <Button
-                        
+                      </Button> : <Button
+
                         style={{
                           background: "blue",
                           width: "120px",
@@ -1319,14 +1286,14 @@ export default function Course_Management() {
                         }}
                         disabled
                       >
-                       Wait Please !
+                        Wait Please !
                       </Button>}
                     </div>
                   </div>
                 </div>
               </Form>
             )}
-          />
+            </Formik>
         </Modal.Body>
       </Modal>
       {/* Add Ends */}
@@ -1347,13 +1314,7 @@ export default function Course_Management() {
         <CircularProgress color="inherit" />
       </Backdrop>
       {/* Ends */}
-      <footer className="main-footer">
-        <div className="footer-left">
-          Copyright &copy; 2021 <div className="bullet"></div> Design By{" "}
-          <a href="https://www.webmobril.com/">Webmobril</a>
-        </div>
-        <div className="footer-right"></div>
-      </footer>
+      <Footer />
     </>
   );
 }
