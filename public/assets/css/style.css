@@ -2516,7 +2516,7 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fas,
 a:not(.btn-social-icon):not(.btn-social):not(.page-link) .far,
 a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fal,
 a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fab {
-	margin-left: 4px
+	/* margin-left: 4px */
 }
 
 .bg-primary {
@@ -2681,7 +2681,7 @@ select.form-control:not([size]):not([multiple]),
 }
 
 textarea.form-control {
-	height: 64px!important
+	height: 120px!important
 }
 
 .custom-control {
@@ -7085,9 +7085,10 @@ body.layout-3 .main-footer {
 }
 
 .main-content {
-	padding-left: 280px;
+	padding-left: 30px;
 	padding-right: 30px;
-	padding-top: 80px;
+	padding-top: 30px;
+	padding-bottom: 30px;
 	width: 100%;
 	position: relative
 }
@@ -12425,7 +12426,7 @@ td.EmailID a {
 }
 
 .card-header.d-Fle a {
-    background: #1846b9;
+    background: #48aee114;
     padding: 2px 20px;
     display: block;
     color: #fff;
@@ -12490,6 +12491,16 @@ div#tableExport_filter {
 div#tableExport_paginate {
     display: flex;
     justify-content: end;
+}
+
+
+
+
+
+
+.rnc__notification-container--top-right{
+	right: 110px !important;
+	top: 20px !important;
 }
 
 
