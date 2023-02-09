@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { get_modules } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -13,33 +12,34 @@ import * as Yup from 'yup';
 import { Loader } from './Helper/Loader';
 import Footer from './Footer';
 import moment from 'moment/moment';
+import { get_module_files } from '../services/web/webServices';
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
         background:coral;
     }
     `
-export default function Module() {
+export default function ModuleFiles() {
     const navigate = useNavigate();
 
     const [getLoader, setLoader] = useState(true);
     const location = useLocation();
     const [select, setSelection] = useState([]);
-    const [Module, setModule] = useState([]);
+    const [ModuleFiles, setModuleFiles] = useState([]);
     const [getImage, setImage] = useState({});
     const [getDetail, setDetail] = useState([]);
     const [getImageUrl, setImageUrl] = useState({});
     const [getState, setState] = useState(true);
     const [getbutton, setbutton] = useState(false);
 
-    // Edit Module Model
-    const [showEditModule, setShowEditModule] = useState(false);
+    // Edit ModuleFiles Model
+    const [showEditModuleFiles, setShowEditModuleFiles] = useState(false);
     const handleClose = () => {
-        setShowEditModule(false);
+        setShowEditModuleFiles(false);
     };
     const handleShow = (e) => {
         setDetail(e.row)
-        setShowEditModule(true);
+        setShowEditModuleFiles(true);
     };
     const onHandle = (e) => {
         setImage({
@@ -51,14 +51,14 @@ export default function Module() {
     // ends
 
 
-    // Add Module Model Function
+    // Add ModuleFiles Model Function
 
-    const [showAddModule, setShowAddModule] = useState(false);
+    const [showAddModuleFiles, setShowAddModuleFiles] = useState(false);
     const handleClose1 = () => {
-        setShowAddModule(false);
+        setShowAddModuleFiles(false);
     };
     const handleShow1 = () => {
-        setShowAddModule(true);
+        setShowAddModuleFiles(true);
     };
     // Ends
     // let index1=0;
@@ -76,10 +76,10 @@ export default function Module() {
     // const onDelete = (params) => () => {
     //     if (window.confirm("are your sure?")) {
     //         let data = {
-    //             Module_id: params.row.Module_id,
+    //             ModuleFiles_id: params.row.ModuleFiles_id,
     //             name: params.row.name
     //         }
-    //         delete_Module(data).then((res) => {
+    //         delete_ModuleFiles(data).then((res) => {
 
     //             Store.addNotification({
     //                 title: "Success",
@@ -98,10 +98,10 @@ export default function Module() {
     //                     onScreen: true,
     //                 },
     //             });
-    //             get_all_Modules().
+    //             get_all_ModuleFiless().
     //                 then((res) => {
 
-    //                     setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
+    //                     setModuleFiles(res.data.result.map((el, index) => ({ ...el, id: el.ModuleFiles_id, i: index })))
 
     //                 }).catch((err) => {
     //                     console.log(err);
@@ -117,12 +117,12 @@ export default function Module() {
     // };
     // ends
     useEffect(() => {
-        if (Module.length === 0 || location?.state?.reloadModule) {
-            get_modules(location.state.id).
+        if (ModuleFiles.length === 0 || location?.state?.reloadModuleFiles) {
+            get_module_files(location.state.id).
                 then((res) => {
                     console.log(res.data.result)
 
-                    setModule(res.data.result.map((el, index) => ({ ...el, id: el.MODULE_ID, i: index })))
+                    setModuleFiles(res.data.result.map((el, index) => ({ ...el, id: el.MODULE_FILE_ID, i: index })))
                     setLoader(false);
 
                 }).catch((err) => {
@@ -152,7 +152,7 @@ export default function Module() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/module_files', { state: { id: params.row.MODULE_ID } })}>Files</Button>
+
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error" 
                         // onClick={onDelete(params)}
@@ -184,7 +184,7 @@ export default function Module() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>Module</h1>
+                                <h1>ModuleFiles</h1>
                             </div>
 
                             <div className="section-body">
@@ -193,20 +193,20 @@ export default function Module() {
                                         <div className="card">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Module</a>
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add ModuleFiles</a>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                        {Module.length > 0 && (
+                                                        {ModuleFiles.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
 
                                                                 <DataGrid
 
-                                                                    rows={Module}
+                                                                    rows={ModuleFiles}
 
                                                                     columns={columns}
                                                                     pageSize={10}
@@ -239,7 +239,7 @@ export default function Module() {
             {/*  Modal Edit*/}
 
 
-            {/* <Modal show={showEditModule} onHide={handleClose} keyboard={false}>
+            {/* <Modal show={showEditModuleFiles} onHide={handleClose} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -252,7 +252,7 @@ export default function Module() {
                     <Formik
                         enableReinitialize={true}
                         initialValues={{
-                            Module_id: getDetail.Module_id,
+                            ModuleFiles_id: getDetail.ModuleFiles_id,
                             nav_text: getDetail.nav_text,
                             body_text: getDetail.body_text,
                             primary_color: getDetail.primary_color,
@@ -261,7 +261,7 @@ export default function Module() {
                         }}
 
                         validationSchema={Yup.object({
-                            Module_id: Yup.number().required(),
+                            ModuleFiles_id: Yup.number().required(),
                             nav_text: Yup.string().required(),
                             body_text: Yup.string().required(),
                             primary_color: Yup.string().required(),
@@ -273,7 +273,7 @@ export default function Module() {
                             console.log(values);
 
 
-                            update_Module(values)
+                            update_ModuleFiles(values)
                                 .then((res) => {
                                     resetForm({ values: "" });
                                     Store.addNotification({
@@ -290,17 +290,17 @@ export default function Module() {
                                             onScreen: true,
                                         },
                                     });
-                                    get_all_Modules().
+                                    get_all_ModuleFiless().
                                         then((res) => {
                                             console.log(res.data.result)
 
-                                            setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
+                                            setModuleFiles(res.data.result.map((el, index) => ({ ...el, id: el.ModuleFiles_id, i: index })))
 
 
                                         }).catch((err) => {
                                             console.log(err);
                                         })
-                                    setShowEditModule(false)
+                                    setShowEditModuleFiles(false)
                                     setbutton(false);
 
                                 }
@@ -383,10 +383,10 @@ export default function Module() {
 
 
 
-            {/* Modal Add Module */}
-            {/* <Modal show={showAddModule} onHide={handleClose1} keyboard={false}>
+            {/* Modal Add ModuleFiles */}
+            {/* <Modal show={showAddModuleFiles} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Module</Modal.Title>
+                    <Modal.Title>Add ModuleFiles</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}
@@ -420,7 +420,7 @@ export default function Module() {
                             setbutton(true);
 
 
-                            add_Module(values)
+                            add_ModuleFiles(values)
                                 .then((res) => {
                                     Store.addNotification({
                                         title: "Success",
@@ -441,18 +441,18 @@ export default function Module() {
                                     });
                                     resetForm({ values: "" });
 
-                                    get_all_Modules().
+                                    get_all_ModuleFiless().
                                         then((res) => {
                                             console.log(res.data.result)
 
-                                            setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
+                                            setModuleFiles(res.data.result.map((el, index) => ({ ...el, id: el.ModuleFiles_id, i: index })))
 
 
                                         }).catch((err) => {
                                             console.log(err);
                                         })
 
-                                    setShowAddModule(false);
+                                    setShowAddModuleFiles(false);
                                     setbutton(false);
 
                                 })
@@ -541,7 +541,7 @@ export default function Module() {
                 </Modal.Body>
 
             </Modal> */}
-            {/* Ends Add Module */}
+            {/* Ends Add ModuleFiles */}
 
 
             <Footer />

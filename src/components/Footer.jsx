@@ -101,22 +101,22 @@ export default function Footer() {
       <style>{css}</style>
       <div>
         <footer className="footer-distributed">
-          <div className="footer-right">
+          {/* <div className="footer-right">
             <a href="#"><i class="fa-brands fa-twitter"></i></a>
             <a href="#"><i className="fa-brands fa-twitter" /></a>
             <a href="#"><i className="fa-brands fa-linkedin" /></a>
             <a href="#"><i className="fa-brands fa-github" /></a>
-          </div>
+          </div> */}
           <div className="footer-left">
             <p className="footer-links">
-              <Link to="/home" className="link-1" >Home</Link>
+              {/* <Link to="/home" className="link-1" >Home</Link>
               <Link to="#">Blog</Link>
               <Link to="#">Pricing</Link>
               <Link to="#">About</Link>
               <Link to="#">Faq</Link>
-              <Link to="#">Contact</Link>
+              <Link to="#">Contact</Link> */}
             </p>
-            <p>Company Name © 2015</p>
+            <p>Valere Labs © 2019</p>
           </div>
         </footer>
       </div>

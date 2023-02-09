@@ -427,20 +427,18 @@ export default function Side_Navigation() {
                     <i className="bx bx-book nav__icon" />
                     <span className="nav__name">Curriculum</span>
                   </Link>
-                  {/* <div className="nav__dropdown"> */}
-                    {/* <Link to="/curriculum" className="nav__link">
-                                            <i className="bx bx-book nav__icon" />
-                                            <span className="nav__name">Curriculum</span> */}
-                    {/* <i className="bx bx-chevron-down nav__icon nav__dropdown-icon" /> */}
-                    {/* </Link> */}
-                    {/* <div className="nav__dropdown-collapse">
-                                            <div className="nav__dropdown-content">
-                                                <Link to="#" className="nav__dropdown-item">Passwords</Link>
-                                                <Link to="#" className="nav__dropdown-item">Mail</Link>
-                                                <Link to="#" className="nav__dropdown-item">Accounts</Link>
-                                            </div>
-                                        </div> */}
-                  {/* </div> */}
+                  <Link to="/all_modules" className="nav__link ">
+                    <i className="bx bx-book-content nav__icon" />
+                    <span className="nav__name">Modules</span>
+                  </Link>
+                  <Link to="/all_units" className="nav__link ">
+                    <i className="bx bx-book-open nav__icon" />
+                    <span className="nav__name">Units</span>
+                  </Link>
+                  <Link to="/all_sub_units" className="nav__link ">
+                    <i className="bx bx-bookmarks nav__icon" />
+                    <span className="nav__name">Sub-Units</span>
+                  </Link>
                 </div>
               </div>
             </div>

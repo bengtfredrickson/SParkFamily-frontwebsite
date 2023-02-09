@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { get_modules } from '../services/web/webServices';
+import { get_all_modules, get_modules } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -19,7 +19,7 @@ const css = `
         background:coral;
     }
     `
-export default function Module() {
+export default function AllModules() {
     const navigate = useNavigate();
 
     const [getLoader, setLoader] = useState(true);
@@ -118,7 +118,7 @@ export default function Module() {
     // ends
     useEffect(() => {
         if (Module.length === 0 || location?.state?.reloadModule) {
-            get_modules(location.state.id).
+            get_all_modules().
                 then((res) => {
                     console.log(res.data.result)
 

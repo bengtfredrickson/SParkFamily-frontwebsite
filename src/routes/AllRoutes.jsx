@@ -5,6 +5,10 @@ import Login from '../components/Login';
 import { GuardedRoute, GuardedLogin } from '../services/authentication/authentication/GuardedRoute';
 import Curriculum from '../components/curriculum';
 import Module from '../components/modules';
+import ModuleFiles from '../components/modules_files';
+import AllModules from '../components/allModules';
+import AllUnits from '../components/allUnits';
+import AllSubUnits from '../components/allSubUnits';
 
 
 export default function AllRoutes() {
@@ -37,6 +41,18 @@ export default function AllRoutes() {
         </Route>
         <Route exact path='/module' element={<GuardedRoute />}>
           <Route exact path='/module' caseSensitive={false} element={<Module />} />
+        </Route>
+        <Route exact path='/module_files' element={<GuardedRoute />}>
+          <Route exact path='/module_files' caseSensitive={false} element={<ModuleFiles />} />
+        </Route>
+        <Route exact path='/all_modules' element={<GuardedRoute />}>
+          <Route exact path='/all_modules' caseSensitive={false} element={<AllModules />} />
+        </Route>
+        <Route exact path='/all_sub_units' element={<GuardedRoute />}>
+          <Route exact path='/all_sub_units' caseSensitive={false} element={<AllSubUnits />} />
+        </Route>
+        <Route exact path='/all_units' element={<GuardedRoute />}>
+          <Route exact path='/all_units' caseSensitive={false} element={<AllUnits />} />
         </Route>
 
 

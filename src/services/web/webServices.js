@@ -83,3 +83,55 @@ export const get_modules = (id) => {
 
   })
 }
+export const get_module_files = (id) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'get',
+    url: `${base_uri.base_uri_admin}/admin/getModuleData/${id}`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+
+  })
+}
+export const get_all_modules = () => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'get',
+    url: `${base_uri.base_uri_admin}/admin/getAllModuleList`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+
+  })
+}
+export const get_all_units = () => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'get',
+    url: `${base_uri.base_uri_admin}/admin/getAllUnits`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+
+  })
+}
+export const get_all_subunits = () => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'get',
+    url: `${base_uri.base_uri_admin}/admin/getAllSubunit`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+
+  })
+}
