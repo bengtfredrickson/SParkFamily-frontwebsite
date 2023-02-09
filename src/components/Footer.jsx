@@ -116,7 +116,7 @@ export default function Footer() {
               <Link to="#">Faq</Link>
               <Link to="#">Contact</Link> */}
             </p>
-            <p>Valere Labs © 2019</p>
+            <p></p>
           </div>
         </footer>
       </div>
