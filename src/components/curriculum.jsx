@@ -40,6 +40,7 @@ export default function Curriculum() {
     const handleShow = (e) => {
         setDetail(e.row)
         setShowEditCurriculum(true);
+        setImageUrl(e.row.banner_link);
     };
     const onHandle = (e) => {
         setImage({
@@ -56,6 +57,8 @@ export default function Curriculum() {
     const [showAddCurriculum, setShowAddCurriculum] = useState(false);
     const handleClose1 = () => {
         setShowAddCurriculum(false);
+        setImage({})
+        setImageUrl({})
     };
     const handleShow1 = () => {
         setShowAddCurriculum(true);
@@ -292,6 +295,7 @@ export default function Curriculum() {
                         enableReinitialize={true}
                         initialValues={{
                             curriculum_id: getDetail.curriculum_id,
+                            name: getDetail.name,
                             nav_text: getDetail.nav_text,
                             body_text: getDetail.body_text,
                             primary_color: getDetail.primary_color,
@@ -301,18 +305,29 @@ export default function Curriculum() {
 
                         validationSchema={Yup.object({
                             curriculum_id: Yup.number().required(),
+                            name: Yup.string().required(),
                             nav_text: Yup.string().required(),
                             body_text: Yup.string().required(),
                             primary_color: Yup.string().required(),
                             secondary_color: Yup.string().required(),
-                            banner_link: Yup.string().required(),
                         })}
                         onSubmit={(values, { resetForm }) => {
                             setbutton(true);
                             console.log(values);
+                            let formData = new FormData();
+                            formData.append("curriculum_id", values.curriculum_id)
+                            formData.append("name", values.name)
+                            formData.append("nav_text", values.nav_text)
+                            formData.append("body_text", values.body_text)
+                            formData.append("primary_color", values.primary_color)
+                            formData.append("secondary_color", values.secondary_color)
+
+                            if (getImage.pictureAsFile) {
+                                formData.append("banner_link", getImage.pictureAsFile)
+                            }
 
 
-                            update_curriculum(values)
+                            update_curriculum(formData)
                                 .then((res) => {
                                     resetForm({ values: "" });
                                     Store.addNotification({
@@ -341,6 +356,8 @@ export default function Curriculum() {
                                         })
                                     setShowEditCurriculum(false)
                                     setbutton(false);
+                                    setImageUrl({})
+                                    setImage({})
 
                                 }
 
@@ -362,19 +379,27 @@ export default function Curriculum() {
                                                 onScreen: true,
                                             },
                                         });
-
                                     }
+                                    setImageUrl({})
+                                    setImage({})
+                                    setbutton(false);
+
                                 });
                         }}
                     >
                         <Form>
                             <div className="modal-body">
                                 <div className="row">
-
+                                    <div className="col-lg-4 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Name</label>
+                                            <MyTextInput type="text" className="form-control" name="name" />
+                                        </div>
+                                    </div>
                                     <div className="col-lg-4 col-md-12 col-sm-12">
                                         <div className="form-group spo">
                                             <label>Nav Text</label>
-                                            <MyTextInput type="number" className="form-control" name="nav_text" />
+                                            <MyTextInput type="text" className="form-control" name="nav_text" />
                                         </div>
                                     </div>
                                     <div className="col-lg-4 col-md-12 col-sm-12">
@@ -391,14 +416,22 @@ export default function Curriculum() {
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
-                                            <label>Banner Link</label>
-                                            <MyTextInput type="text" className="form-control" name="banner_link" />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-sm-12">
-                                        <div className="form-group">
                                             <label>Body Text</label>
                                             <MyTextArea type="text" className="form-control" name="body_text" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-6 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Banner</label>
+
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="form-control"
+                                                name="banner_link"
+                                                onChange={(e) => onHandle(e)}
+                                            />
+                                            {getImageUrl ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
                                         </div>
                                     </div>
 
@@ -445,21 +478,30 @@ export default function Curriculum() {
                         }}
 
                         validationSchema={Yup.object({
-                            name: Yup.string().required(),
-                            nav_text: Yup.string().required(),
-                            body_text: Yup.string().required(),
-                            primary_color: Yup.string().required(),
-                            secondary_color: Yup.string().required(),
-                            banner_link: Yup.string().required(),
+                            name: Yup.string().required("Required"),
+                            nav_text: Yup.string().required("Required"),
+                            body_text: Yup.string().required("Required"),
+                            primary_color: Yup.string().required("Required"),
+                            secondary_color: Yup.string().required("Required"),
                         })}
 
                         onSubmit={(values, { resetForm }) => {
+                            let formData = new FormData();
+                            formData.append("name", values.name)
+                            formData.append("nav_text", values.nav_text)
+                            formData.append("body_text", values.body_text)
+                            formData.append("primary_color", values.primary_color)
+                            formData.append("secondary_color", values.secondary_color)
 
-                            console.log(values);
+                            if (getImage.pictureAsFile) {
+                                formData.append("banner_link", getImage.pictureAsFile)
+                            }
+
+                            console.log("=========>", getImage.pictureAsFile);
                             setbutton(true);
 
 
-                            add_curriculum(values)
+                            add_curriculum(formData)
                                 .then((res) => {
                                     Store.addNotification({
                                         title: "Success",
@@ -490,7 +532,8 @@ export default function Curriculum() {
                                         }).catch((err) => {
                                             console.log(err);
                                         })
-
+                                    setImageUrl({})
+                                    setImage({})
                                     setShowAddCurriculum(false);
                                     setbutton(false);
 
@@ -513,7 +556,8 @@ export default function Curriculum() {
                                             },
                                         });
                                         setbutton(false);
-
+                                        setImageUrl({})
+                                        setImage({})
                                     }
                                 });
                         }}
@@ -551,16 +595,27 @@ export default function Curriculum() {
                                                 <MyTextInput type="text" className="form-control" name="secondary_color" />
                                             </div>
                                         </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Banner Link</label>
-                                                <MyTextInput type="text" className="form-control" name="banner_link" />
-                                            </div>
-                                        </div>
+
+
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Body Text</label>
                                                 <MyTextArea type="text" className="form-control" name="body_text" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Banner</label>
+
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="form-control"
+                                                    name="banner_link"
+                                                    onChange={(e) => onHandle(e)}
+                                                    required
+                                                />
+                                                {getImageUrl ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
                                             </div>
                                         </div>
 
