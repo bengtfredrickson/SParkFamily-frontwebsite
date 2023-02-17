@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { get_all_modules, get_modules } from '../services/web/webServices';
+import { add_units, delete_units, get_units, update_units } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -19,27 +19,27 @@ const css = `
         background:coral;
     }
     `
-export default function AllModules() {
+export default function CurriculumUnits() {
     const navigate = useNavigate();
 
     const [getLoader, setLoader] = useState(true);
     const location = useLocation();
     const [select, setSelection] = useState([]);
-    const [Module, setModule] = useState([]);
+    const [Units, setUnits] = useState([]);
     const [getImage, setImage] = useState({});
     const [getDetail, setDetail] = useState([]);
     const [getImageUrl, setImageUrl] = useState({});
     const [getState, setState] = useState(true);
     const [getbutton, setbutton] = useState(false);
 
-    // Edit Module Model
-    const [showEditModule, setShowEditModule] = useState(false);
+    // Edit Units Model
+    const [showEditUnits, setShowEditUnits] = useState(false);
     const handleClose = () => {
-        setShowEditModule(false);
+        setShowEditUnits(false);
     };
     const handleShow = (e) => {
         setDetail(e.row)
-        setShowEditModule(true);
+        setShowEditUnits(true);
     };
     const onHandle = (e) => {
         setImage({
@@ -51,14 +51,14 @@ export default function AllModules() {
     // ends
 
 
-    // Add Module Model Function
+    // Add Units Model Function
 
-    const [showAddModule, setShowAddModule] = useState(false);
+    const [showAddUnits, setShowAddUnits] = useState(false);
     const handleClose1 = () => {
-        setShowAddModule(false);
+        setShowAddUnits(false);
     };
     const handleShow1 = () => {
-        setShowAddModule(true);
+        setShowAddUnits(true);
     };
     // Ends
     // let index1=0;
@@ -73,56 +73,57 @@ export default function AllModules() {
         }
     }
 
-    // const onDelete = (params) => () => {
-    //     if (window.confirm("are your sure?")) {
-    //         let data = {
-    //             Module_id: params.row.Module_id,
-    //             name: params.row.name
-    //         }
-    //         delete_Module(data).then((res) => {
+    const onDelete = (params) => () => {
+        if (window.confirm("Are your sure? You want to delete this unit?")) {
+            let data = {
+                unit_id: params.row.unit_id,
+            }
+            delete_units(data).then((res) => {
 
-    //             Store.addNotification({
-    //                 title: "Success",
-    //                 message: res?.data?.message,
-    //                 type: "success",
-    //                 insert: "top",
-    //                 container: "top-right",
-    //                 className: "rnc__notification-container--top-right",
-    //                 animationIn: ["animate__animated", "animate__fadeIn"],
-    //                 animationOut: [
-    //                     "animate__animated",
-    //                     "animate__fadeOut",
-    //                 ],
-    //                 dismiss: {
-    //                     duration: 5000,
-    //                     onScreen: true,
-    //                 },
-    //             });
-    //             get_all_Modules().
-    //                 then((res) => {
+                Store.addNotification({
+                    title: "Success",
+                    message: "Record Deleted Successfully",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    className: "rnc__notification-container--top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: [
+                        "animate__animated",
+                        "animate__fadeOut",
+                    ],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                    },
+                });
+                get_units({ curriculum_id: location.state.id }).
+                    then((res) => {
+                        console.log(res.data.result)
 
-    //                     setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
-
-    //                 }).catch((err) => {
-    //                     console.log(err);
-    //                 })
-
-    //         }).catch((err) => {
-    //             console.log(err)
-    //         })
-
-    //     }
+                        setUnits(res.data.result.map((el, index) => ({ ...el, id: el.unit_id, i: index })))
 
 
-    // };
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+
+            }).catch((err) => {
+                console.log(err)
+            })
+
+        }
+
+
+    };
     // ends
     useEffect(() => {
-        if (Module.length === 0 || location?.state?.reloadModule) {
-            get_all_modules().
+        if (Units.length === 0 || location?.state?.reloadUnits) {
+            get_units({ curriculum_id: location.state.id }).
                 then((res) => {
-                    console.log(res.data.result)
+                    console.log("=======>", res.data.result)
 
-                    setModule(res.data.result.map((el, index) => ({ ...el, id: el.MODULE_ID, i: index })))
+                    setUnits(res.data.result.map((el, index) => ({ ...el, id: el.unit_id, i: index })))
                     setLoader(false);
 
                 }).catch((err) => {
@@ -140,31 +141,31 @@ export default function AllModules() {
             renderCell: (index) => `${(index.row.i) + 1}`
         },
         {
-            field: 'NAV_TEXT',
+            field: 'unit_name',
             headerName: 'Name',
             width: 500,
 
         },
-        // {
-        //     field: 'action',
-        //     headerName: "Action",
-        //     width: 450,
-        //     renderCell: (params) => {
-        //         return (
-        //             <>
-        //                 <Button onClick={() => navigate('/module_files', { state: { id: params.row.MODULE_ID } })}>Files</Button>
-        //                 <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
-        //                 <Button color="error" 
-        //                 // onClick={onDelete(params)}
-        //                 >
-        //                     <i className="fa fa-trash" aria-hidden="true"></i>
-        //                 </Button>
+        {
+            field: 'action',
+            headerName: "Action",
+            width: 450,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Button onClick={() => navigate('/curriculum_sub_units', { state: { curriculum_id:location.state.id, unit_id: params.row.curriculum_id,  } })}>Sub Units</Button>
+                        <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
+                        <Button color="error"
+                            onClick={onDelete(params)}
+                        >
+                            <i className="fa fa-trash" aria-hidden="true"></i>
+                        </Button>
 
 
-        //             </>
-        //         );
-        //     },
-        // }
+                    </>
+                );
+            },
+        }
     ];
 
 
@@ -191,22 +192,22 @@ export default function AllModules() {
                                 <div className="row">
                                     <div className="col-12">
                                         <div className="card">
-                                            {/* <div className="card-header d-Fle">
+                                            <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Unit</a>
-                                            </div> */}
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Units</a>
+                                            </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                        {Module.length > 0 && (
+                                                        {Units.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
 
                                                                 <DataGrid
 
-                                                                    rows={Module}
+                                                                    rows={Units}
 
                                                                     columns={columns}
                                                                     pageSize={10}
@@ -239,7 +240,7 @@ export default function AllModules() {
             {/*  Modal Edit*/}
 
 
-            {/* <Modal show={showEditModule} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditUnits} onHide={handleClose} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -252,28 +253,20 @@ export default function AllModules() {
                     <Formik
                         enableReinitialize={true}
                         initialValues={{
-                            Module_id: getDetail.Module_id,
-                            nav_text: getDetail.nav_text,
-                            body_text: getDetail.body_text,
-                            primary_color: getDetail.primary_color,
-                            secondary_color: getDetail.secondary_color,
-                            banner_link: getDetail.banner_link,
+                            curriculum_id: location.state.id,
+                            unit_name: getDetail.unit_name,
+                            unit_id: getDetail.unit_id
                         }}
 
                         validationSchema={Yup.object({
-                            Module_id: Yup.number().required(),
-                            nav_text: Yup.string().required(),
-                            body_text: Yup.string().required(),
-                            primary_color: Yup.string().required(),
-                            secondary_color: Yup.string().required(),
-                            banner_link: Yup.string().required(),
+                            unit_name: Yup.string().required("Required")
+
                         })}
                         onSubmit={(values, { resetForm }) => {
                             setbutton(true);
                             console.log(values);
 
-
-                            update_Module(values)
+                            update_units(values)
                                 .then((res) => {
                                     resetForm({ values: "" });
                                     Store.addNotification({
@@ -290,17 +283,17 @@ export default function AllModules() {
                                             onScreen: true,
                                         },
                                     });
-                                    get_all_Modules().
+                                    get_units({ curriculum_id: location.state.id }).
                                         then((res) => {
                                             console.log(res.data.result)
 
-                                            setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
+                                            setUnits(res.data.result.map((el, index) => ({ ...el, id: el.unit_id, i: index })))
 
 
                                         }).catch((err) => {
                                             console.log(err);
                                         })
-                                    setShowEditModule(false)
+                                    setShowEditUnits(false)
                                     setbutton(false);
 
                                 }
@@ -325,6 +318,8 @@ export default function AllModules() {
                                         });
 
                                     }
+                                    setbutton(false);
+
                                 });
                         }}
                     >
@@ -332,35 +327,14 @@ export default function AllModules() {
                             <div className="modal-body">
                                 <div className="row">
 
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group spo">
-                                            <label>Nav Text</label>
-                                            <MyTextInput type="text" className="form-control" name="nav_text" />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Primary Colour</label>
-                                            <MyTextInput type="text" className="form-control" name="primary_color" />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Secondary Colour</label>
-                                            <MyTextInput type="text" className="form-control" name="secondary_color" />
-                                        </div>
-                                    </div>
+
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
-                                            <label>Banner Link</label>
-                                            <MyTextInput type="text" className="form-control" name="banner_link" />
+                                            <label>Name</label>
+                                            <MyTextInput type="text" className="form-control" name="unit_name" />
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Body Text</label>
-                                            <MyTextArea type="text" className="form-control" name="body_text" />
-                                        </div>
+
+
                                     </div>
 
 
@@ -378,15 +352,15 @@ export default function AllModules() {
 
                 </Modal.Body>
 
-            </Modal> */}
+            </Modal>
             {/* Ends */}
 
 
 
-            {/* Modal Add Module */}
-            {/* <Modal show={showAddModule} onHide={handleClose1} keyboard={false}>
+            {/* Modal Add Units */}
+            <Modal show={showAddUnits} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Module</Modal.Title>
+                    <Modal.Title>Add Units</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}
@@ -397,21 +371,12 @@ export default function AllModules() {
                     <Formik
 
                         initialValues={{
-                            name: "",
-                            nav_text: "",
-                            body_text: "",
-                            primary_color: "",
-                            secondary_color: "",
-                            banner_link: "",
+                            curriculum_id: location.state.id,
+                            unit_name: "",
                         }}
 
                         validationSchema={Yup.object({
-                            name: Yup.string().required(),
-                            nav_text: Yup.string().required(),
-                            body_text: Yup.string().required(),
-                            primary_color: Yup.string().required(),
-                            secondary_color: Yup.string().required(),
-                            banner_link: Yup.string().required(),
+                            unit_name: Yup.string().required("Required")
                         })}
 
                         onSubmit={(values, { resetForm }) => {
@@ -420,7 +385,7 @@ export default function AllModules() {
                             setbutton(true);
 
 
-                            add_Module(values)
+                            add_units(values)
                                 .then((res) => {
                                     Store.addNotification({
                                         title: "Success",
@@ -441,18 +406,18 @@ export default function AllModules() {
                                     });
                                     resetForm({ values: "" });
 
-                                    get_all_Modules().
+                                    get_units({ curriculum_id: location.state.id }).
                                         then((res) => {
                                             console.log(res.data.result)
 
-                                            setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
+                                            setUnits(res.data.result.map((el, index) => ({ ...el, id: el.unit_id, i: index })))
 
 
                                         }).catch((err) => {
                                             console.log(err);
                                         })
 
-                                    setShowAddModule(false);
+                                    setShowAddUnits(false);
                                     setbutton(false);
 
                                 })
@@ -486,45 +451,14 @@ export default function AllModules() {
                                 <div className="modal-body">
                                     <div className="row">
 
-                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Name</label>
-                                                <MyTextInput type="text" className="form-control" name="name" />
+                                                <MyTextInput type="text" className="form-control" name="unit_name" />
                                             </div>
 
 
                                         </div>
-                                        <div className="col-lg-4 col-md-12 col-sm-12">
-                                            <div className="form-group spo">
-                                                <label>Nav Text</label>
-                                                <MyTextInput type="text" className="form-control" name="nav_text" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-4 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Primary Colour</label>
-                                                <MyTextInput type="text" className="form-control" name="primary_color" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-4 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Secondary Colour</label>
-                                                <MyTextInput type="text" className="form-control" name="secondary_color" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Banner Link</label>
-                                                <MyTextInput type="text" className="form-control" name="banner_link" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Body Text</label>
-                                                <MyTextArea type="text" className="form-control" name="body_text" />
-                                            </div>
-                                        </div>
-
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             {!getbutton ? <Button type="submit" variant="contained"  >
                                                 Submit
@@ -540,8 +474,8 @@ export default function AllModules() {
 
                 </Modal.Body>
 
-            </Modal> */}
-            {/* Ends Add Module */}
+            </Modal>
+            {/* Ends Add Units */}
 
 
             <Footer />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { get_all_modules, get_modules } from '../services/web/webServices';
+import { get_options } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -19,27 +19,27 @@ const css = `
         background:coral;
     }
     `
-export default function AllModules() {
+export default function CurriculumoOptions() {
     const navigate = useNavigate();
 
     const [getLoader, setLoader] = useState(true);
     const location = useLocation();
     const [select, setSelection] = useState([]);
-    const [Module, setModule] = useState([]);
+    const [Options, setOptions] = useState([]);
     const [getImage, setImage] = useState({});
     const [getDetail, setDetail] = useState([]);
     const [getImageUrl, setImageUrl] = useState({});
     const [getState, setState] = useState(true);
     const [getbutton, setbutton] = useState(false);
 
-    // Edit Module Model
-    const [showEditModule, setShowEditModule] = useState(false);
+    // Edit Options Model
+    const [showEditOptions, setShowEditOptions] = useState(false);
     const handleClose = () => {
-        setShowEditModule(false);
+        setShowEditOptions(false);
     };
     const handleShow = (e) => {
         setDetail(e.row)
-        setShowEditModule(true);
+        setShowEditOptions(true);
     };
     const onHandle = (e) => {
         setImage({
@@ -51,14 +51,14 @@ export default function AllModules() {
     // ends
 
 
-    // Add Module Model Function
+    // Add Options Model Function
 
-    const [showAddModule, setShowAddModule] = useState(false);
+    const [showAddOptions, setShowAddOptions] = useState(false);
     const handleClose1 = () => {
-        setShowAddModule(false);
+        setShowAddOptions(false);
     };
     const handleShow1 = () => {
-        setShowAddModule(true);
+        setShowAddOptions(true);
     };
     // Ends
     // let index1=0;
@@ -74,16 +74,15 @@ export default function AllModules() {
     }
 
     // const onDelete = (params) => () => {
-    //     if (window.confirm("are your sure?")) {
+    //     if (window.confirm("Are your sure? You want to delete this?")) {
     //         let data = {
-    //             Module_id: params.row.Module_id,
-    //             name: params.row.name
+    //             subunit_id: params.row.subunit_id,
     //         }
-    //         delete_Module(data).then((res) => {
+    //         delete_Options(data).then((res) => {
 
     //             Store.addNotification({
     //                 title: "Success",
-    //                 message: res?.data?.message,
+    //                 message: "Record Deleted Successfully",
     //                 type: "success",
     //                 insert: "top",
     //                 container: "top-right",
@@ -98,10 +97,12 @@ export default function AllModules() {
     //                     onScreen: true,
     //                 },
     //             });
-    //             get_all_Modules().
-    //                 then((res) => {
+    //             get_Options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
+    //             then((res) => {
+    //                     console.log(res.data.result)
 
-    //                     setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
+    //                     setOptions(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+
 
     //                 }).catch((err) => {
     //                     console.log(err);
@@ -117,12 +118,12 @@ export default function AllModules() {
     // };
     // ends
     useEffect(() => {
-        if (Module.length === 0 || location?.state?.reloadModule) {
-            get_all_modules().
+        if (Options.length === 0 || location?.state?.reloadOptions) {
+            get_options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id }).
                 then((res) => {
-                    console.log(res.data.result)
-
-                    setModule(res.data.result.map((el, index) => ({ ...el, id: el.MODULE_ID, i: index })))
+                    console.log("=======>", res.data.result)
+                   
+                    setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
                     setLoader(false);
 
                 }).catch((err) => {
@@ -140,31 +141,31 @@ export default function AllModules() {
             renderCell: (index) => `${(index.row.i) + 1}`
         },
         {
-            field: 'NAV_TEXT',
+            field: 'option_name',
             headerName: 'Name',
             width: 500,
 
         },
-        // {
-        //     field: 'action',
-        //     headerName: "Action",
-        //     width: 450,
-        //     renderCell: (params) => {
-        //         return (
-        //             <>
-        //                 <Button onClick={() => navigate('/module_files', { state: { id: params.row.MODULE_ID } })}>Files</Button>
-        //                 <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
-        //                 <Button color="error" 
-        //                 // onClick={onDelete(params)}
-        //                 >
-        //                     <i className="fa fa-trash" aria-hidden="true"></i>
-        //                 </Button>
+        {
+            field: 'action',
+            headerName: "Action",
+            width: 450,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id:location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params.row.option_id } })}>Sub-Options</Button>
+                        {/* <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
+                        <Button color="error"
+                            onClick={onDelete(params)}
+                        >
+                            <i className="fa fa-trash" aria-hidden="true"></i>
+                        </Button> */}
 
 
-        //             </>
-        //         );
-        //     },
-        // }
+                    </>
+                );
+            },
+        }
     ];
 
 
@@ -184,29 +185,30 @@ export default function AllModules() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>Units</h1>
+                                <h1>Options</h1>
                             </div>
 
                             <div className="section-body">
                                 <div className="row">
                                     <div className="col-12">
                                         <div className="card">
-                                            {/* <div className="card-header d-Fle">
+                                            <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Unit</a>
-                                            </div> */}
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Options</a>
+                                            </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                        {Module.length > 0 && (
+                                                        {!Options.length? <h3>No Data Found!</h3>: null}
+                                                        {Options.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
 
                                                                 <DataGrid
 
-                                                                    rows={Module}
+                                                                    rows={Options}
 
                                                                     columns={columns}
                                                                     pageSize={10}
@@ -239,7 +241,7 @@ export default function AllModules() {
             {/*  Modal Edit*/}
 
 
-            {/* <Modal show={showEditModule} onHide={handleClose} keyboard={false}>
+            {/* <Modal show={showEditOptions} onHide={handleClose} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -252,28 +254,21 @@ export default function AllModules() {
                     <Formik
                         enableReinitialize={true}
                         initialValues={{
-                            Module_id: getDetail.Module_id,
-                            nav_text: getDetail.nav_text,
-                            body_text: getDetail.body_text,
-                            primary_color: getDetail.primary_color,
-                            secondary_color: getDetail.secondary_color,
-                            banner_link: getDetail.banner_link,
+                            curriculum_id: location.state.curriculum_id,
+                            unit_id: location.state.unit_id,
+                            subunit_id: getDetail.subunit_id,
+                            subunit_name: getDetail.subunit_name,
                         }}
 
                         validationSchema={Yup.object({
-                            Module_id: Yup.number().required(),
-                            nav_text: Yup.string().required(),
-                            body_text: Yup.string().required(),
-                            primary_color: Yup.string().required(),
-                            secondary_color: Yup.string().required(),
-                            banner_link: Yup.string().required(),
+                            subunit_name: Yup.string().required("Required")
+
                         })}
                         onSubmit={(values, { resetForm }) => {
                             setbutton(true);
                             console.log(values);
 
-
-                            update_Module(values)
+                            update_Options(values)
                                 .then((res) => {
                                     resetForm({ values: "" });
                                     Store.addNotification({
@@ -290,17 +285,17 @@ export default function AllModules() {
                                             onScreen: true,
                                         },
                                     });
-                                    get_all_Modules().
+                                    get_Options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
                                         then((res) => {
                                             console.log(res.data.result)
 
-                                            setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
+                                            setOptions(res.data.result.map((el, index) => ({ ...el, id: el.subunit_name, i: index })))
 
 
                                         }).catch((err) => {
                                             console.log(err);
                                         })
-                                    setShowEditModule(false)
+                                    setShowEditOptions(false)
                                     setbutton(false);
 
                                 }
@@ -325,6 +320,8 @@ export default function AllModules() {
                                         });
 
                                     }
+                                    setbutton(false);
+
                                 });
                         }}
                     >
@@ -332,35 +329,14 @@ export default function AllModules() {
                             <div className="modal-body">
                                 <div className="row">
 
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group spo">
-                                            <label>Nav Text</label>
-                                            <MyTextInput type="text" className="form-control" name="nav_text" />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Primary Colour</label>
-                                            <MyTextInput type="text" className="form-control" name="primary_color" />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Secondary Colour</label>
-                                            <MyTextInput type="text" className="form-control" name="secondary_color" />
-                                        </div>
-                                    </div>
+
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
-                                            <label>Banner Link</label>
-                                            <MyTextInput type="text" className="form-control" name="banner_link" />
+                                            <label>Name</label>
+                                            <MyTextInput type="text" className="form-control" name="subunit_name" />
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Body Text</label>
-                                            <MyTextArea type="text" className="form-control" name="body_text" />
-                                        </div>
+
+
                                     </div>
 
 
@@ -383,10 +359,10 @@ export default function AllModules() {
 
 
 
-            {/* Modal Add Module */}
-            {/* <Modal show={showAddModule} onHide={handleClose1} keyboard={false}>
+            {/* Modal Add Options */}
+            {/* <Modal show={showAddOptions} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Module</Modal.Title>
+                    <Modal.Title>Add Options</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}
@@ -397,21 +373,13 @@ export default function AllModules() {
                     <Formik
 
                         initialValues={{
-                            name: "",
-                            nav_text: "",
-                            body_text: "",
-                            primary_color: "",
-                            secondary_color: "",
-                            banner_link: "",
+                            curriculum_id: location.state.curriculum_id,
+                            unit_id: location.state.unit_id,
+                            subunit_name: "",
                         }}
 
                         validationSchema={Yup.object({
-                            name: Yup.string().required(),
-                            nav_text: Yup.string().required(),
-                            body_text: Yup.string().required(),
-                            primary_color: Yup.string().required(),
-                            secondary_color: Yup.string().required(),
-                            banner_link: Yup.string().required(),
+                            subunit_name: Yup.string().required("Required")
                         })}
 
                         onSubmit={(values, { resetForm }) => {
@@ -420,7 +388,7 @@ export default function AllModules() {
                             setbutton(true);
 
 
-                            add_Module(values)
+                            add_Options(values)
                                 .then((res) => {
                                     Store.addNotification({
                                         title: "Success",
@@ -441,18 +409,18 @@ export default function AllModules() {
                                     });
                                     resetForm({ values: "" });
 
-                                    get_all_Modules().
+                                    get_Options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
                                         then((res) => {
                                             console.log(res.data.result)
 
-                                            setModule(res.data.result.map((el, index) => ({ ...el, id: el.Module_id, i: index })))
+                                            setOptions(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
 
 
                                         }).catch((err) => {
                                             console.log(err);
                                         })
 
-                                    setShowAddModule(false);
+                                    setShowAddOptions(false);
                                     setbutton(false);
 
                                 })
@@ -486,45 +454,14 @@ export default function AllModules() {
                                 <div className="modal-body">
                                     <div className="row">
 
-                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Name</label>
-                                                <MyTextInput type="text" className="form-control" name="name" />
+                                                <MyTextInput type="text" className="form-control" name="subunit_name" />
                                             </div>
 
 
                                         </div>
-                                        <div className="col-lg-4 col-md-12 col-sm-12">
-                                            <div className="form-group spo">
-                                                <label>Nav Text</label>
-                                                <MyTextInput type="text" className="form-control" name="nav_text" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-4 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Primary Colour</label>
-                                                <MyTextInput type="text" className="form-control" name="primary_color" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-4 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Secondary Colour</label>
-                                                <MyTextInput type="text" className="form-control" name="secondary_color" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Banner Link</label>
-                                                <MyTextInput type="text" className="form-control" name="banner_link" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Body Text</label>
-                                                <MyTextArea type="text" className="form-control" name="body_text" />
-                                            </div>
-                                        </div>
-
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             {!getbutton ? <Button type="submit" variant="contained"  >
                                                 Submit
@@ -541,7 +478,7 @@ export default function AllModules() {
                 </Modal.Body>
 
             </Modal> */}
-            {/* Ends Add Module */}
+            {/* Ends Add Options */}
 
 
             <Footer />

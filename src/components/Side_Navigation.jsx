@@ -429,15 +429,7 @@ export default function Side_Navigation() {
                   </Link>
                   <Link to="/all_modules" className="nav__link ">
                     <i className="bx bx-book-content nav__icon" />
-                    <span className="nav__name">Modules</span>
-                  </Link>
-                  <Link to="/all_units" className="nav__link ">
-                    <i className="bx bx-book-open nav__icon" />
                     <span className="nav__name">Units</span>
-                  </Link>
-                  <Link to="/all_sub_units" className="nav__link ">
-                    <i className="bx bx-bookmarks nav__icon" />
-                    <span className="nav__name">Sub-Units</span>
                   </Link>
                 </div>
               </div>

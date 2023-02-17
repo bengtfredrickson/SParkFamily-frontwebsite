@@ -196,7 +196,7 @@ export default function Curriculum() {
                 return (
                     <>
 
-                        <Button onClick={() => navigate('/module', { state: { id: params.row.curriculum_id } })}>Modules</Button>
+                        {params.row.nav_text === "3-6 PE" ? <Button>Modules</Button> : <Button onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id } })}>Units</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error" onClick={onDelete(params)}>
                             <i className="fa fa-trash" aria-hidden="true"></i>
@@ -304,12 +304,12 @@ export default function Curriculum() {
                         }}
 
                         validationSchema={Yup.object({
-                            curriculum_id: Yup.number().required(),
-                            name: Yup.string().required(),
-                            nav_text: Yup.string().required(),
-                            body_text: Yup.string().required(),
-                            primary_color: Yup.string().required(),
-                            secondary_color: Yup.string().required(),
+                            curriculum_id: Yup.number().required("Required"),
+                            name: Yup.string().required("Required"),
+                            nav_text: Yup.string().required("Required"),
+                            body_text: Yup.string().required("Required"),
+                            primary_color: Yup.string().required("Required"),
+                            secondary_color: Yup.string().required("Required"),
                         })}
                         onSubmit={(values, { resetForm }) => {
                             setbutton(true);

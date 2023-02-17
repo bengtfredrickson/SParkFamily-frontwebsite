@@ -122,6 +122,118 @@ export const get_all_units = () => {
 
   })
 }
+export const get_units = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/getUnitsList`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+
+  })
+}
+export const add_units = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/postUnit`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+
+  })
+}
+export const update_units = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateUnit`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+
+  })
+}
+export const delete_units = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/deleteUnit`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+
+  })
+}
+export const get_subunits = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/getSubunitsList`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+
+  })
+}
+export const add_subunits = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/postSubunit`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+
+  })
+}
+export const update_subunits = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateSubunit`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+
+  })
+}
+export const delete_subunits = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/deleteSubunit`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+
+  })
+}
 export const get_all_subunits = () => {
   const token = localStorage.getItem("auth_token");
   return axios({
@@ -133,5 +245,43 @@ export const get_all_subunits = () => {
 
     },
 
+  })
+}
+export const get_options = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/getOptionsList`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+  })
+}
+export const get_suboptions = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/getSuboptionsList`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
+    },
+    data
+  })
+}
+export const get_lessons = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/getLessonPlans`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
   })
 }
