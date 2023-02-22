@@ -36,6 +36,8 @@ export default function Curriculum() {
     const [showEditCurriculum, setShowEditCurriculum] = useState(false);
     const handleClose = () => {
         setShowEditCurriculum(false);
+        setImage({})
+        setImageUrl({})
     };
     const handleShow = (e) => {
         setDetail(e.row)
@@ -242,6 +244,8 @@ export default function Curriculum() {
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
+                                                    {!Curriculum.length? <h3>No Data Found!</h3>: null}
+
                                                         {curriculum.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>

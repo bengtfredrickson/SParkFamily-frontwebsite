@@ -285,3 +285,75 @@ export const get_lessons = (data) => {
     data
   })
 }
+export const add_option = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/addOptions`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const delete_option = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/deleteOptions`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const edit_option = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateOptions`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const add_suboption = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/addSubOptions`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const delete_suboption = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/deleteSubOptions`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const edit_suboption = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateSubOptions`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}

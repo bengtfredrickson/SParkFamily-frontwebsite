@@ -201,6 +201,8 @@ export default function CurriculumSubUnits() {
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
+                                                    {!Subunits.length? <h3>No Data Found!</h3>: null}
+
                                                         {Subunits.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>

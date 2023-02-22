@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { get_options } from '../services/web/webServices';
+import { add_option, delete_option, edit_option, get_options } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -13,6 +13,10 @@ import * as Yup from 'yup';
 import { Loader } from './Helper/Loader';
 import Footer from './Footer';
 import moment from 'moment/moment';
+import ReactPlayer from 'react-player/lazy'
+import ReactAudioPlayer from 'react-audio-player';
+
+
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
@@ -26,9 +30,11 @@ export default function CurriculumoOptions() {
     const location = useLocation();
     const [select, setSelection] = useState([]);
     const [Options, setOptions] = useState([]);
-    const [getImage, setImage] = useState({});
+    const [getPdf, setPdf] = useState({});
     const [getDetail, setDetail] = useState([]);
-    const [getImageUrl, setImageUrl] = useState({});
+    const [getPdfUrl, setPdfUrl] = useState("");
+    const [Preview, setPreview] = useState("")
+    const [PreviewFlag, setPreviewFlag] = useState(0)
     const [getState, setState] = useState(true);
     const [getbutton, setbutton] = useState(false);
 
@@ -36,17 +42,21 @@ export default function CurriculumoOptions() {
     const [showEditOptions, setShowEditOptions] = useState(false);
     const handleClose = () => {
         setShowEditOptions(false);
+        setPdf({})
+        setPdfUrl("")
     };
     const handleShow = (e) => {
         setDetail(e.row)
         setShowEditOptions(true);
+        setPdfUrl(e.row.pdf_url);
+
     };
     const onHandle = (e) => {
-        setImage({
+        setPdf({
             pictureAsFile: e.target.files[0],
         });
         setState(false);
-        setImageUrl(URL.createObjectURL(e.target.files[0]));
+        setPdfUrl(URL.createObjectURL(e.target.files[0]));
     };
     // ends
 
@@ -54,8 +64,28 @@ export default function CurriculumoOptions() {
     // Add Options Model Function
 
     const [showAddOptions, setShowAddOptions] = useState(false);
+    const [showPreview, setshowPreview] = useState(false);
+    const handleClose2 = () => {
+        setshowPreview(false);
+    };
+    const handleShow2 = (e, flag) => {
+        setshowPreview(true);
+        setPreviewFlag(flag.flag)
+        if (flag.flag === 0) {
+            setPreview(e.row.pdf_url)
+        }
+        else if (flag.flag === 1) {
+            setPreview(e.row.video_url)
+        } else {
+            setPreview(e.row.audio_url)
+        }
+
+
+    };
     const handleClose1 = () => {
         setShowAddOptions(false);
+        setPdf({})
+        setPdfUrl("")
     };
     const handleShow1 = () => {
         setShowAddOptions(true);
@@ -73,56 +103,56 @@ export default function CurriculumoOptions() {
         }
     }
 
-    // const onDelete = (params) => () => {
-    //     if (window.confirm("Are your sure? You want to delete this?")) {
-    //         let data = {
-    //             subunit_id: params.row.subunit_id,
-    //         }
-    //         delete_Options(data).then((res) => {
+    const onDelete = (params) => () => {
+        if (window.confirm("Are your sure? You want to delete this?")) {
+            let data = {
+                option_id: params.row.option_id,
+            }
+            delete_option(data).then((res) => {
 
-    //             Store.addNotification({
-    //                 title: "Success",
-    //                 message: "Record Deleted Successfully",
-    //                 type: "success",
-    //                 insert: "top",
-    //                 container: "top-right",
-    //                 className: "rnc__notification-container--top-right",
-    //                 animationIn: ["animate__animated", "animate__fadeIn"],
-    //                 animationOut: [
-    //                     "animate__animated",
-    //                     "animate__fadeOut",
-    //                 ],
-    //                 dismiss: {
-    //                     duration: 5000,
-    //                     onScreen: true,
-    //                 },
-    //             });
-    //             get_Options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
-    //             then((res) => {
-    //                     console.log(res.data.result)
+                Store.addNotification({
+                    title: "Success",
+                    message: "Record Deleted Successfully",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    className: "rnc__notification-container--top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: [
+                        "animate__animated",
+                        "animate__fadeOut",
+                    ],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                    },
+                });
+                get_options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id }).
+                    then((res) => {
+                        console.log(res.data.result)
 
-    //                     setOptions(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
-
-
-    //                 }).catch((err) => {
-    //                     console.log(err);
-    //                 })
-
-    //         }).catch((err) => {
-    //             console.log(err)
-    //         })
-
-    //     }
+                        setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
 
 
-    // };
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+
+            }).catch((err) => {
+                console.log(err)
+            })
+
+        }
+
+
+    };
     // ends
     useEffect(() => {
         if (Options.length === 0 || location?.state?.reloadOptions) {
             get_options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id }).
                 then((res) => {
                     console.log("=======>", res.data.result)
-                   
+
                     setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
                     setLoader(false);
 
@@ -147,19 +177,55 @@ export default function CurriculumoOptions() {
 
         },
         {
+            field: 'pdf_url',
+            headerName: "Pdf",
+            width: 200,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>
+                    </>
+                );
+            },
+        },
+        {
+            field: 'video_url',
+            headerName: "Video",
+            width: 200,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>
+                    </>
+                );
+            },
+        },
+        {
+            field: 'audio_url',
+            headerName: "Audio",
+            width: 200,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>
+                    </>
+                );
+            },
+        },
+        {
             field: 'action',
             headerName: "Action",
             width: 450,
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id:location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params.row.option_id } })}>Sub-Options</Button>
-                        {/* <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
+                        <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params.row.option_id } })}>Sub-Options</Button>
+                        <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
                         >
                             <i className="fa fa-trash" aria-hidden="true"></i>
-                        </Button> */}
+                        </Button>
 
 
                     </>
@@ -201,7 +267,7 @@ export default function CurriculumoOptions() {
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                        {!Options.length? <h3>No Data Found!</h3>: null}
+                                                        {!Options.length ? <h3>No Data Found!</h3> : null}
                                                         {Options.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
@@ -241,7 +307,7 @@ export default function CurriculumoOptions() {
             {/*  Modal Edit*/}
 
 
-            {/* <Modal show={showEditOptions} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditOptions} onHide={handleClose} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -254,21 +320,44 @@ export default function CurriculumoOptions() {
                     <Formik
                         enableReinitialize={true}
                         initialValues={{
-                            curriculum_id: location.state.curriculum_id,
-                            unit_id: location.state.unit_id,
+                            curriculum_id: getDetail.curriculum_id,
+                            unit_id: getDetail.unit_id,
                             subunit_id: getDetail.subunit_id,
-                            subunit_name: getDetail.subunit_name,
+                            is_files: getDetail.is_files,
+                            audio_url: getDetail.audio_url,
+                            video_url: getDetail.video_url,
+                            option_name: getDetail.option_name,
+                            option_id: getDetail.option_id
                         }}
 
                         validationSchema={Yup.object({
-                            subunit_name: Yup.string().required("Required")
-
+                            option_name: Yup.string().required("Required"),
+                            audio_url: Yup.string().matches(
+                                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                                'Enter correct url!'
+                            ),
+                            video_url: Yup.string().matches(
+                                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                                'Enter correct url!'
+                            )
                         })}
-                        onSubmit={(values, { resetForm }) => {
-                            setbutton(true);
-                            console.log(values);
 
-                            update_Options(values)
+                        onSubmit={(values, { resetForm }) => {
+                            let formData = new FormData();
+                            formData.append("curriculum_id", values.curriculum_id)
+                            formData.append("unit_id", values.unit_id)
+                            formData.append("subunit_id", values.subunit_id)
+                            formData.append("is_files", values.is_files)
+                            formData.append("audio_url", values.audio_url)
+                            formData.append("video_url", values.video_url)
+                            formData.append("option_name", values.option_name)
+                            formData.append("option_id", values.option_id)
+                            if (getPdf.pictureAsFile) {
+                                formData.append("pdf_url", getPdf.pictureAsFile)
+                            }
+                            setbutton(true);
+
+                            edit_option(values)
                                 .then((res) => {
                                     resetForm({ values: "" });
                                     Store.addNotification({
@@ -285,11 +374,11 @@ export default function CurriculumoOptions() {
                                             onScreen: true,
                                         },
                                     });
-                                    get_Options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
+                                    get_options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id }).
                                         then((res) => {
                                             console.log(res.data.result)
 
-                                            setOptions(res.data.result.map((el, index) => ({ ...el, id: el.subunit_name, i: index })))
+                                            setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
 
 
                                         }).catch((err) => {
@@ -297,6 +386,8 @@ export default function CurriculumoOptions() {
                                         })
                                     setShowEditOptions(false)
                                     setbutton(false);
+                                    setPdfUrl("")
+                                    setPdf({})
 
                                 }
 
@@ -321,6 +412,8 @@ export default function CurriculumoOptions() {
 
                                     }
                                     setbutton(false);
+                                    setPdfUrl("")
+                                    setPdf({})
 
                                 });
                         }}
@@ -331,9 +424,41 @@ export default function CurriculumoOptions() {
 
 
                                     <div className="col-lg-12 col-md-12 col-sm-12">
-                                        <div className="form-group">
-                                            <label>Name</label>
-                                            <MyTextInput type="text" className="form-control" name="subunit_name" />
+                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Name</label>
+                                                <MyTextInput type="text" className="form-control" name="option_name" />
+                                            </div>
+
+
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group spo">
+                                                <label>Audio link</label>
+                                                <MyTextInput type="text" className="form-control" name="audio_url" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Video Link</label>
+                                                <MyTextInput type="text" className="form-control" name="video_url" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>PDF</label>
+
+                                                <input
+                                                    type="file"
+                                                    accept="application/pdf"
+                                                    className="form-control"
+                                                    name="banner_link"
+                                                    onChange={(e) => onHandle(e)}
+                                                />
+                                            </div>
+                                            {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
+
+
                                         </div>
 
 
@@ -354,13 +479,13 @@ export default function CurriculumoOptions() {
 
                 </Modal.Body>
 
-            </Modal> */}
+            </Modal>
             {/* Ends */}
 
 
 
             {/* Modal Add Options */}
-            {/* <Modal show={showAddOptions} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddOptions} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Options</Modal.Title>
                     <i
@@ -375,20 +500,41 @@ export default function CurriculumoOptions() {
                         initialValues={{
                             curriculum_id: location.state.curriculum_id,
                             unit_id: location.state.unit_id,
-                            subunit_name: "",
+                            subunit_id: location.state.subunit_id,
+                            is_files: 1,
+                            audio_url: "",
+                            video_url: "",
+                            option_name: ""
                         }}
 
                         validationSchema={Yup.object({
-                            subunit_name: Yup.string().required("Required")
+                            option_name: Yup.string().required("Required"),
+                            audio_url: Yup.string().matches(
+                                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                                'Enter correct url!'
+                            ),
+                            video_url: Yup.string().matches(
+                                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                                'Enter correct url!'
+                            )
                         })}
 
                         onSubmit={(values, { resetForm }) => {
-
-                            console.log(values);
+                            let formData = new FormData();
+                            formData.append("curriculum_id", values.curriculum_id)
+                            formData.append("unit_id", values.unit_id)
+                            formData.append("subunit_id", values.subunit_id)
+                            formData.append("is_files", values.is_files)
+                            formData.append("audio_url", values.audio_url)
+                            formData.append("video_url", values.video_url)
+                            formData.append("option_name", values.option_name)
+                            if (getPdf.pictureAsFile) {
+                                formData.append("pdf_url", getPdf.pictureAsFile)
+                            }
                             setbutton(true);
 
 
-                            add_Options(values)
+                            add_option(formData)
                                 .then((res) => {
                                     Store.addNotification({
                                         title: "Success",
@@ -409,11 +555,11 @@ export default function CurriculumoOptions() {
                                     });
                                     resetForm({ values: "" });
 
-                                    get_Options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
+                                    get_options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id }).
                                         then((res) => {
                                             console.log(res.data.result)
 
-                                            setOptions(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+                                            setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
 
 
                                         }).catch((err) => {
@@ -422,6 +568,8 @@ export default function CurriculumoOptions() {
 
                                     setShowAddOptions(false);
                                     setbutton(false);
+                                    setPdfUrl("")
+                                    setPdf({})
 
                                 })
                                 .catch((err) => {
@@ -442,6 +590,8 @@ export default function CurriculumoOptions() {
                                             },
                                         });
                                         setbutton(false);
+                                        setPdfUrl("")
+                                        setPdf({})
 
                                     }
                                 });
@@ -454,14 +604,42 @@ export default function CurriculumoOptions() {
                                 <div className="modal-body">
                                     <div className="row">
 
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="col-lg-4 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Name</label>
-                                                <MyTextInput type="text" className="form-control" name="subunit_name" />
+                                                <MyTextInput type="text" className="form-control" name="option_name" />
                                             </div>
 
 
                                         </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group spo">
+                                                <label>Audio link</label>
+                                                <MyTextInput type="text" className="form-control" name="audio_url" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Video Link</label>
+                                                <MyTextInput type="text" className="form-control" name="video_url" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>PDF</label>
+
+                                                <input
+                                                    type="file"
+                                                    accept="application/pdf"
+                                                    className="form-control"
+                                                    name="banner_link"
+                                                    onChange={(e) => onHandle(e)}
+                                                    required
+                                                />
+                                            </div>
+                                            {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
+                                        </div>
+
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             {!getbutton ? <Button type="submit" variant="contained"  >
                                                 Submit
@@ -477,7 +655,33 @@ export default function CurriculumoOptions() {
 
                 </Modal.Body>
 
-            </Modal> */}
+            </Modal>
+            {/* Ends Add Options */}
+
+            {/* Modal Add Options */}
+            <Modal show={showPreview} onHide={handleClose2} keyboard={false}>
+                <Modal.Header>
+                    <i
+                        className="fas fa-cut"
+                        style={{ cursor: "pointer" }}
+                        onClick={handleClose2}
+                    ></i>
+                </Modal.Header>
+                <Modal.Body>
+                    {console.log("===============>", Preview, PreviewFlag)
+                    }                    {
+                        PreviewFlag === 0 ? Preview === "" | Preview === null ? <p>No PDF Available</p> : <object width="100%" height="400" data={Preview} type="application/pdf" alt="" /> : PreviewFlag === 1 ? Preview === "" | Preview === null ? <p>No Video Available</p> : <ReactPlayer url={Preview} />
+                            : PreviewFlag === 2 ? Preview === "" | Preview === null ? <p>No Audio Available</p> : <ReactAudioPlayer
+                                src={Preview}
+                                autoPlay
+                                controls
+                            /> : null
+                    }
+                    { }
+
+                </Modal.Body>
+
+            </Modal>
             {/* Ends Add Options */}
 
 

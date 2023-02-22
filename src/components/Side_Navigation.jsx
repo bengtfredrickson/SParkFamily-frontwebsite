@@ -396,7 +396,7 @@ export default function Side_Navigation() {
         {/*========== HEADER ==========*/}
         <header className="header">
           <div className="header__container">
-            <img src="images/splash.png" alt className="header__img" />
+            <img src="images/profile.png" alt className="header__img" />
             <Link to="#" className="header__logo"><img src="images/splash.png" alt="No Logo" /></Link>
             <div className="header__search">
               <input type="search" placeholder="Search" className="header__input" />
@@ -426,10 +426,6 @@ export default function Side_Navigation() {
                   <Link to="/curriculum" className="nav__link ">
                     <i className="bx bx-book nav__icon" />
                     <span className="nav__name">Curriculum</span>
-                  </Link>
-                  <Link to="/all_modules" className="nav__link ">
-                    <i className="bx bx-book-content nav__icon" />
-                    <span className="nav__name">Units</span>
                   </Link>
                 </div>
               </div>

@@ -201,6 +201,7 @@ export default function CurriculumUnits() {
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
+                                                    {!Units.length? <h3>No Data Found!</h3>: null}
                                                         {Units.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
