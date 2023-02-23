@@ -244,7 +244,7 @@ export default function Curriculum() {
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                    {!Curriculum.length? <h3>No Data Found!</h3>: null}
+                                                    {!curriculum.length? <h3>No Data Found!</h3>: null}
 
                                                         {curriculum.length > 0 && (
                                                             <>
