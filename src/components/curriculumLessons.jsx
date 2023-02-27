@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { get_lessons } from '../services/web/webServices';
+import { add_lesson, edit_lesson, get_lessons } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -28,7 +28,7 @@ export default function CurriculumoLessonPlans() {
     const [LessonPlans, setLessonPlans] = useState([]);
     const [getImage, setImage] = useState({});
     const [getDetail, setDetail] = useState([]);
-    const [getImageUrl, setImageUrl] = useState({});
+    const [getImageUrl, setImageUrl] = useState("");
     const [getState, setState] = useState(true);
     const [getbutton, setbutton] = useState(false);
 
@@ -36,10 +36,13 @@ export default function CurriculumoLessonPlans() {
     const [showEditLessonPlans, setShowEditLessonPlans] = useState(false);
     const handleClose = () => {
         setShowEditLessonPlans(false);
+        setImage({})
+        setImageUrl("")
     };
     const handleShow = (e) => {
         setDetail(e.row)
         setShowEditLessonPlans(true);
+        setImageUrl(e.row.image_url);
     };
     const onHandle = (e) => {
         setImage({
@@ -56,6 +59,8 @@ export default function CurriculumoLessonPlans() {
     const [showAddLessonPlans, setShowAddLessonPlans] = useState(false);
     const handleClose1 = () => {
         setShowAddLessonPlans(false);
+        setImage({})
+        setImageUrl("")
     };
     const handleShow1 = () => {
         setShowAddLessonPlans(true);
@@ -119,10 +124,10 @@ export default function CurriculumoLessonPlans() {
     // ends
     useEffect(() => {
         if (LessonPlans.length === 0 || location?.state?.reloadLessonPlans) {
-            get_lessons({ curriculum_id: location.state.curriculum_id,suboption_id: location.state.suboption_id }).
+            get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
                 then((res) => {
                     console.log("=======>", res.data.result)
-                   
+
                     setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
                     setLoader(false);
 
@@ -226,27 +231,26 @@ export default function CurriculumoLessonPlans() {
             headerName: 'Vocabulary',
             width: 120,
         },
-        
-        // {
-        //     field: 'action',
-        //     headerName: "Action",
-        //     width: 450,
-        //     renderCell: (params) => {
-        //         return (
-        //             <>
-        //                 {/* <Button onClick={() => navigate('/curriculum_LessonPlans', { state: { curriculum_id:location.state.curriculum_id, suboption_id: params.row.suboption_id } })}>Lesson Plans</Button> */}
-        //                 {/* <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
-        //                 <Button color="error"
-        //                     onClick={onDelete(params)}
-        //                 >
-        //                     <i className="fa fa-trash" aria-hidden="true"></i>
-        //                 </Button> */}
+
+        {
+            field: 'action',
+            headerName: "Action",
+            width: 450,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
+                        {/* <Button color="error"
+                            onClick={onDelete(params)}
+                        >
+                            <i className="fa fa-trash" aria-hidden="true"></i>
+                        </Button> */}
 
 
-        //             </>
-        //         );
-        //     },
-        // }
+                    </>
+                );
+            },
+        }
     ];
 
 
@@ -266,7 +270,7 @@ export default function CurriculumoLessonPlans() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>LessonPlans</h1>
+                                <h1>Lesson</h1>
                             </div>
 
                             <div className="section-body">
@@ -275,14 +279,14 @@ export default function CurriculumoLessonPlans() {
                                         <div className="card">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add LessonPlans</a>
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Lesson</a>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                        {!LessonPlans.length? <h3>No Data Found!</h3>: null}
+                                                        {!LessonPlans.length ? <h3>No Data Found!</h3> : null}
                                                         {LessonPlans.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
@@ -322,7 +326,7 @@ export default function CurriculumoLessonPlans() {
             {/*  Modal Edit*/}
 
 
-            {/* <Modal show={showEditLessonPlans} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditLessonPlans} onHide={handleClose} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -336,20 +340,67 @@ export default function CurriculumoLessonPlans() {
                         enableReinitialize={true}
                         initialValues={{
                             curriculum_id: location.state.curriculum_id,
-                            unit_id: location.state.unit_id,
-                            subunit_id: getDetail.subunit_id,
-                            subunit_name: getDetail.subunit_name,
+                            suboption_id: location.state.suboption_id,
+                            lesson_id: getDetail.id,
+                            lesson_name: getDetail.lesson_name,
+                            integration: getDetail.integration,
+                            lesson_objective: getDetail.lesson_objective,
+                            lesson_target: getDetail.lesson_target,
+                            prep: getDetail.prep,
+                            reflection_question: getDetail.reflection_question,
+                            sel_compentencies: getDetail.sel_compentencies,
+                            lesson_set: getDetail.lesson_set,
+                            spark_it_up: getDetail.spark_it_up,
+                            standards_alignment: getDetail.standards_alignment,
+                            teach: getDetail.teach,
+                            teaching_cues: getDetail.teaching_cues,
+                            teaching_suggestions: getDetail.teaching_suggestions,
+                            vocabulary: getDetail.vocabulary,
                         }}
 
                         validationSchema={Yup.object({
-                            subunit_name: Yup.string().required("Required")
-
+                            lesson_name: Yup.string().required("Required"),
+                            integration: Yup.string().required("Required"),
+                            lesson_objective: Yup.string().required("Required"),
+                            lesson_target: Yup.string().required("Required"),
+                            prep: Yup.string().required("Required"),
+                            reflection_question: Yup.string().required("Required"),
+                            sel_compentencies: Yup.string().required("Required"),
+                            lesson_set: Yup.string().required("Required"),
+                            spark_it_up: Yup.string().required("Required"),
+                            standards_alignment: Yup.string().required("Required"),
+                            teach: Yup.string().required("Required"),
+                            teaching_cues: Yup.string().required("Required"),
+                            teaching_suggestions: Yup.string().required("Required"),
+                            vocabulary: Yup.string().required("Required"),
                         })}
                         onSubmit={(values, { resetForm }) => {
+                            let formData = new FormData();
+
+                            formData.append("curriculum_id", values.curriculum_id)
+                            formData.append("suboption_id", values.suboption_id)
+                            formData.append("lesson_id", values.lesson_id)
+                            formData.append("lesson_name", values.lesson_name)
+                            formData.append("integration", values.integration)
+                            formData.append("lesson_objective", values.lesson_objective)
+                            formData.append("lesson_target", values.lesson_target)
+                            formData.append("prep", values.prep)
+                            formData.append("reflection_question", values.reflection_question)
+                            formData.append("sel_compentencies", values.sel_compentencies)
+                            formData.append("lesson_set", values.lesson_set)
+                            formData.append("spark_it_up", values.spark_it_up)
+                            formData.append("standards_alignment", values.standards_alignment)
+                            formData.append("teach", values.teach)
+                            formData.append("teaching_cues", values.teaching_cues)
+                            formData.append("teaching_suggestions", values.teaching_suggestions)
+                            formData.append("vocabulary", values.vocabulary)
+                            if (getImage.pictureAsFile) {
+                                formData.append("image_url", getImage.pictureAsFile)
+                            }
                             setbutton(true);
                             console.log(values);
 
-                            update_LessonPlans(values)
+                            edit_lesson(formData)
                                 .then((res) => {
                                     resetForm({ values: "" });
                                     Store.addNotification({
@@ -366,16 +417,18 @@ export default function CurriculumoLessonPlans() {
                                             onScreen: true,
                                         },
                                     });
-                                    get_LessonPlans({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
+                                    get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
                                         then((res) => {
-                                            console.log(res.data.result)
+                                            console.log("=======>", res.data.result)
 
-                                            setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.subunit_name, i: index })))
-
+                                            setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
+                                            setLoader(false);
 
                                         }).catch((err) => {
                                             console.log(err);
                                         })
+                                    setImage({})
+                                    setImageUrl("")
                                     setShowEditLessonPlans(false)
                                     setbutton(false);
 
@@ -401,6 +454,8 @@ export default function CurriculumoLessonPlans() {
                                         });
 
                                     }
+                                    setImage({})
+                                    setImageUrl("")
                                     setbutton(false);
 
                                 });
@@ -410,24 +465,111 @@ export default function CurriculumoLessonPlans() {
                             <div className="modal-body">
                                 <div className="row">
 
-
-                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                    <div className="col-lg-4 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Name</label>
-                                            <MyTextInput type="text" className="form-control" name="subunit_name" />
+                                            <MyTextInput type="text" className="form-control" name="lesson_name" />
                                         </div>
-
-
                                     </div>
-
-
                                     <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group spo">
+                                            <label>Integration</label>
+                                            <MyTextArea type="text" className="form-control" name="integration" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Lesson Objective</label>
+                                            <MyTextArea type="text" className="form-control" name="lesson_objective" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Lesson Target</label>
+                                            <MyTextArea type="text" className="form-control" name="lesson_target" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Prep</label>
+                                            <MyTextArea type="text" className="form-control" name="prep" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Reflection Question</label>
+                                            <MyTextArea type="text" className="form-control" name="reflection_question" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Competencies</label>
+                                            <MyTextArea type="text" className="form-control" name="sel_compentencies" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Lesson Set</label>
+                                            <MyTextArea type="text" className="form-control" name="lesson_set" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Spark It Up</label>
+                                            <MyTextArea type="text" className="form-control" name="spark_it_up" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Standard Alignment</label>
+                                            <MyTextArea type="text" className="form-control" name="standards_alignment" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Teach</label>
+                                            <MyTextArea type="text" className="form-control" name="teach" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Teaching Cues</label>
+                                            <MyTextArea type="text" className="form-control" name="teaching_cues" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Teaching Suggestions</label>
+                                            <MyTextArea type="text" className="form-control" name="teaching_suggestions" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Vocabulary</label>
+                                            <MyTextArea type="text" className="form-control" name="vocabulary" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-6 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Image</label>
 
-
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="form-control"
+                                                name="image_url"
+                                                onChange={(e) => onHandle(e)}
+                                            />
+                                            {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
                                         {!getbutton ? <Button type="submit" variant="contained"  >
                                             Submit
                                         </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
                                     </div>
+
                                 </div>
                             </div>
                         </Form>
@@ -435,15 +577,15 @@ export default function CurriculumoLessonPlans() {
 
                 </Modal.Body>
 
-            </Modal> */}
+            </Modal>
             {/* Ends */}
 
 
 
             {/* Modal Add LessonPlans */}
-            {/* <Modal show={showAddLessonPlans} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddLessonPlans} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add LessonPlans</Modal.Title>
+                    <Modal.Title>Add Lesson</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}
@@ -455,21 +597,67 @@ export default function CurriculumoLessonPlans() {
 
                         initialValues={{
                             curriculum_id: location.state.curriculum_id,
-                            unit_id: location.state.unit_id,
-                            subunit_name: "",
+                            suboption_id: location.state.suboption_id,
+                            lesson_name: "",
+                            integration: "",
+                            lesson_objective: "",
+                            lesson_target: "",
+                            prep: "",
+                            reflection_question: "",
+                            sel_compentencies: "",
+                            lesson_set: "",
+                            spark_it_up: "",
+                            standards_alignment: "",
+                            teach: "",
+                            teaching_cues: "",
+                            teaching_suggestions: "",
+                            vocabulary: "",
                         }}
 
                         validationSchema={Yup.object({
-                            subunit_name: Yup.string().required("Required")
+                            lesson_name: Yup.string().required("Required"),
+                            integration: Yup.string().required("Required"),
+                            lesson_objective: Yup.string().required("Required"),
+                            lesson_target: Yup.string().required("Required"),
+                            prep: Yup.string().required("Required"),
+                            reflection_question: Yup.string().required("Required"),
+                            sel_compentencies: Yup.string().required("Required"),
+                            lesson_set: Yup.string().required("Required"),
+                            spark_it_up: Yup.string().required("Required"),
+                            standards_alignment: Yup.string().required("Required"),
+                            teach: Yup.string().required("Required"),
+                            teaching_cues: Yup.string().required("Required"),
+                            teaching_suggestions: Yup.string().required("Required"),
+                            vocabulary: Yup.string().required("Required"),
                         })}
 
                         onSubmit={(values, { resetForm }) => {
+                            let formData = new FormData();
 
+                            formData.append("curriculum_id", values.curriculum_id)
+                            formData.append("suboption_id", values.suboption_id)
+                            formData.append("lesson_name", values.lesson_name)
+                            formData.append("integration", values.integration)
+                            formData.append("lesson_objective", values.lesson_objective)
+                            formData.append("lesson_target", values.lesson_target)
+                            formData.append("prep", values.prep)
+                            formData.append("reflection_question", values.reflection_question)
+                            formData.append("sel_compentencies", values.sel_compentencies)
+                            formData.append("lesson_set", values.lesson_set)
+                            formData.append("spark_it_up", values.spark_it_up)
+                            formData.append("standards_alignment", values.standards_alignment)
+                            formData.append("teach", values.teach)
+                            formData.append("teaching_cues", values.teaching_cues)
+                            formData.append("teaching_suggestions", values.teaching_suggestions)
+                            formData.append("vocabulary", values.vocabulary)
+                            if (getImage.pictureAsFile) {
+                                formData.append("image_url", getImage.pictureAsFile)
+                            }
                             console.log(values);
                             setbutton(true);
 
 
-                            add_LessonPlans(values)
+                            add_lesson(formData)
                                 .then((res) => {
                                     Store.addNotification({
                                         title: "Success",
@@ -490,17 +678,18 @@ export default function CurriculumoLessonPlans() {
                                     });
                                     resetForm({ values: "" });
 
-                                    get_LessonPlans({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
+                                    get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
                                         then((res) => {
-                                            console.log(res.data.result)
+                                            console.log("=======>", res.data.result)
 
-                                            setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
-
+                                            setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
+                                            setLoader(false);
 
                                         }).catch((err) => {
                                             console.log(err);
                                         })
-
+                                    setImage({})
+                                    setImageUrl("")
                                     setShowAddLessonPlans(false);
                                     setbutton(false);
 
@@ -522,9 +711,11 @@ export default function CurriculumoLessonPlans() {
                                                 onScreen: true,
                                             },
                                         });
-                                        setbutton(false);
 
                                     }
+                                    setbutton(false);
+                                    setImage({})
+                                    setImageUrl("")
                                 });
                         }}
 
@@ -535,13 +726,104 @@ export default function CurriculumoLessonPlans() {
                                 <div className="modal-body">
                                     <div className="row">
 
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="col-lg-4 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Name</label>
-                                                <MyTextInput type="text" className="form-control" name="subunit_name" />
+                                                <MyTextInput type="text" className="form-control" name="lesson_name" />
                                             </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group spo">
+                                                <label>Integration</label>
+                                                <MyTextArea type="text" className="form-control" name="integration" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Lesson Objective</label>
+                                                <MyTextArea type="text" className="form-control" name="lesson_objective" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Lesson Target</label>
+                                                <MyTextArea type="text" className="form-control" name="lesson_target" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Prep</label>
+                                                <MyTextArea type="text" className="form-control" name="prep" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Reflection Question</label>
+                                                <MyTextArea type="text" className="form-control" name="reflection_question" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Competencies</label>
+                                                <MyTextArea type="text" className="form-control" name="sel_compentencies" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Lesson Set</label>
+                                                <MyTextArea type="text" className="form-control" name="lesson_set" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Spark It Up</label>
+                                                <MyTextArea type="text" className="form-control" name="spark_it_up" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Standard Alignment</label>
+                                                <MyTextArea type="text" className="form-control" name="standards_alignment" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Teach</label>
+                                                <MyTextArea type="text" className="form-control" name="teach" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Teaching Cues</label>
+                                                <MyTextArea type="text" className="form-control" name="teaching_cues" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Teaching Suggestions</label>
+                                                <MyTextArea type="text" className="form-control" name="teaching_suggestions" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Vocabulary</label>
+                                                <MyTextArea type="text" className="form-control" name="vocabulary" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Image</label>
 
-
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="form-control"
+                                                    name="image_url"
+                                                    onChange={(e) => onHandle(e)}
+                                                    required
+                                                />
+                                                {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                            </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             {!getbutton ? <Button type="submit" variant="contained"  >
@@ -558,7 +840,7 @@ export default function CurriculumoLessonPlans() {
 
                 </Modal.Body>
 
-            </Modal> */}
+            </Modal>
             {/* Ends Add LessonPlans */}
 
 

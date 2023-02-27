@@ -357,3 +357,39 @@ export const edit_suboption = (data) => {
     data
   })
 }
+export const add_lesson = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/addLessons`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const delete_lesson = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/deleteLessons`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const edit_lesson = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateLessons`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}

@@ -355,9 +355,13 @@ export default function CurriculumoSubOptions() {
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
                             }
+                            // else {
+                            //     formData.append("pdf_url", null)
+
+                            // }
                             setbutton(true);
 
-                            edit_suboption(values)
+                            edit_suboption(formData)
                                 .then((res) => {
                                     resetForm({ values: "" });
                                     Store.addNotification({

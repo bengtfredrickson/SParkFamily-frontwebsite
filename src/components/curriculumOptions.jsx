@@ -52,6 +52,7 @@ export default function CurriculumoOptions() {
 
     };
     const onHandle = (e) => {
+        console.log("=====1101010101010101>", e.target.files[0])
         setPdf({
             pictureAsFile: e.target.files[0],
         });
@@ -355,9 +356,13 @@ export default function CurriculumoOptions() {
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
                             }
+                            // else {
+                            //     formData.append("pdf_url", null)
+
+                            // }
                             setbutton(true);
 
-                            edit_option(values)
+                            edit_option(formData)
                                 .then((res) => {
                                     resetForm({ values: "" });
                                     Store.addNotification({
@@ -456,6 +461,7 @@ export default function CurriculumoOptions() {
                                                     onChange={(e) => onHandle(e)}
                                                 />
                                             </div>
+                                            {console.log("========>", getPdfUrl)}
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
 
 
