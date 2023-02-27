@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { add_lesson, edit_lesson, get_lessons } from '../services/web/webServices';
+import { add_lesson, delete_lesson, edit_lesson, get_lessons } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -78,49 +78,49 @@ export default function CurriculumoLessonPlans() {
         }
     }
 
-    // const onDelete = (params) => () => {
-    //     if (window.confirm("Are your sure? You want to delete this?")) {
-    //         let data = {
-    //             subunit_id: params.row.subunit_id,
-    //         }
-    //         delete_LessonPlans(data).then((res) => {
+    const onDelete = (params) => () => {
+        if (window.confirm("Are your sure? You want to delete this?")) {
+            let data = {
+                lesson_id: params.row.lesson_id,
+            }
+            delete_lesson(data).then((res) => {
 
-    //             Store.addNotification({
-    //                 title: "Success",
-    //                 message: "Record Deleted Successfully",
-    //                 type: "success",
-    //                 insert: "top",
-    //                 container: "top-right",
-    //                 className: "rnc__notification-container--top-right",
-    //                 animationIn: ["animate__animated", "animate__fadeIn"],
-    //                 animationOut: [
-    //                     "animate__animated",
-    //                     "animate__fadeOut",
-    //                 ],
-    //                 dismiss: {
-    //                     duration: 5000,
-    //                     onScreen: true,
-    //                 },
-    //             });
-    //             get_LessonPlans({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
-    //             then((res) => {
-    //                     console.log(res.data.result)
+                Store.addNotification({
+                    title: "Success",
+                    message: "Record Deleted Successfully",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    className: "rnc__notification-container--top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: [
+                        "animate__animated",
+                        "animate__fadeOut",
+                    ],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                    },
+                });
+                get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
+                    then((res) => {
+                        console.log("=======>", res.data.result)
 
-    //                     setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+                        setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
+                        setLoader(false);
+
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+
+            }).catch((err) => {
+                console.log(err)
+            })
+
+        }
 
 
-    //                 }).catch((err) => {
-    //                     console.log(err);
-    //                 })
-
-    //         }).catch((err) => {
-    //             console.log(err)
-    //         })
-
-    //     }
-
-
-    // };
+    };
     // ends
     useEffect(() => {
         if (LessonPlans.length === 0 || location?.state?.reloadLessonPlans) {
@@ -240,11 +240,11 @@ export default function CurriculumoLessonPlans() {
                 return (
                     <>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
-                        {/* <Button color="error"
+                        <Button color="error"
                             onClick={onDelete(params)}
                         >
                             <i className="fa fa-trash" aria-hidden="true"></i>
-                        </Button> */}
+                        </Button>
 
 
                     </>
