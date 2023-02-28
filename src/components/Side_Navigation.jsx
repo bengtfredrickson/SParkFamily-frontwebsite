@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router';
 
 export default function Side_Navigation() {
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.removeItem('auth_token');
-    // localStorage.removeItem('auth_meta');
+  const logout = async () => {
+    await localStorage.removeItem('auth_token');
     navigate('/')
   }
+
 
   const css = `
     /*========== GOOGLE FONTS ==========*/
@@ -372,20 +372,8 @@ export default function Side_Navigation() {
   }
 
   linkColor.forEach(l => l?.addEventListener('click', colorLink))
-  const navDropdown = document.querySelectorAll(".nav__dropdown");
 
-  for (let i = 0; i < navDropdown.length; i++) {
-    navDropdown[i]?.addEventListener("click", () =>
-      navDropdown[i].classList.toggle("open")
-    );
-  }
 
-  const main = document.querySelector("main");
-  main?.addEventListener("mousemove", (e) => {
-    for (let i = 0; i < navDropdown.length; i++) {
-      navDropdown[i].classList.remove("open");
-    }
-  });
 
   return (
     <>
@@ -396,7 +384,7 @@ export default function Side_Navigation() {
         {/*========== HEADER ==========*/}
         <header className="header">
           <div className="header__container">
-            <img src="images/profile.png" alt className="header__img" />
+            {/* <img src="images/profile.png" alt className="header__img" /> */}
             <Link to="#" className="header__logo"><img src="images/splash.png" alt="No Logo" /></Link>
             <div className="header__search">
               <input type="search" placeholder="Search" className="header__input" />
@@ -419,11 +407,11 @@ export default function Side_Navigation() {
               <div className="nav__list">
                 <div className="nav__items">
                   <h3 className="nav__subtitle">Dashboard</h3>
-                  <Link to="/home" className="nav__link active">
+                  <Link to="/home" className={window.location.href.includes("home") ? "nav__link active" : "nav__link"}>
                     <i className="bx bx-home nav__icon" />
                     <span className="nav__name">Home</span>
                   </Link>
-                  <Link to="/curriculum" className="nav__link ">
+                  <Link to="/curriculum" className={window.location.href.includes("curriculum") ? "nav__link active" : "nav__link"}>
                     <i className="bx bx-book nav__icon" />
                     <span className="nav__name">Curriculum</span>
                   </Link>
@@ -432,7 +420,7 @@ export default function Side_Navigation() {
             </div>
             <Link to="#" className="nav__link nav__logout">
               <i className="bx bx-log-out nav__icon" />
-              <span className="nav__name">Log Out</span>
+              <span className="nav__name" onClick={logout}>Log Out</span>
             </Link>
           </nav>
         </div>

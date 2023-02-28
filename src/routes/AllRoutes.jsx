@@ -4,16 +4,12 @@ import Home from '../components/Home'
 import Login from '../components/Login';
 import { GuardedRoute, GuardedLogin } from '../services/authentication/authentication/GuardedRoute';
 import Curriculum from '../components/curriculum';
-import Module from '../components/modules';
-import ModuleFiles from '../components/modules_files';
-import AllModules from '../components/allModules';
-import AllUnits from '../components/allUnits';
-import AllSubUnits from '../components/allSubUnits';
 import CurriculumUnits from '../components/curriculumUnits';
 import CurriculumSubUnits from '../components/curriculumSubUnits';
 import CurriculumoOptions from '../components/curriculumOptions';
 import CurriculumoSubOptions from '../components/curriculumSubOptions';
 import CurriculumoLessonPlans from '../components/curriculumLessons';
+import CurriculumModules from '../components/curriculumModule';
 
 
 export default function AllRoutes() {
@@ -44,21 +40,6 @@ export default function AllRoutes() {
         <Route exact path='/curriculum' element={<GuardedRoute />}>
           <Route exact path='/curriculum' caseSensitive={false} element={<Curriculum />} />
         </Route>
-        <Route exact path='/module' element={<GuardedRoute />}>
-          <Route exact path='/module' caseSensitive={false} element={<Module />} />
-        </Route>
-        <Route exact path='/module_files' element={<GuardedRoute />}>
-          <Route exact path='/module_files' caseSensitive={false} element={<ModuleFiles />} />
-        </Route>
-        <Route exact path='/all_modules' element={<GuardedRoute />}>
-          <Route exact path='/all_modules' caseSensitive={false} element={<AllModules />} />
-        </Route>
-        <Route exact path='/all_sub_units' element={<GuardedRoute />}>
-          <Route exact path='/all_sub_units' caseSensitive={false} element={<AllSubUnits />} />
-        </Route>
-        <Route exact path='/all_units' element={<GuardedRoute />}>
-          <Route exact path='/all_units' caseSensitive={false} element={<AllUnits />} />
-        </Route>
         <Route exact path='/curriculum_units' element={<GuardedRoute />}>
           <Route exact path='/curriculum_units' caseSensitive={false} element={<CurriculumUnits />} />
         </Route>
@@ -73,6 +54,9 @@ export default function AllRoutes() {
         </Route>
         <Route exact path='/curriculum_lessons' element={<GuardedRoute />}>
           <Route exact path='/curriculum_lessons' caseSensitive={false} element={<CurriculumoLessonPlans />} />
+        </Route>
+        <Route exact path='/curriculum_module' element={<GuardedRoute />}>
+          <Route exact path='/curriculum_module' caseSensitive={false} element={<CurriculumModules />} />
         </Route>
 
 

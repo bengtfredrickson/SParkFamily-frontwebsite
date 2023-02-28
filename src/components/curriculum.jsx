@@ -198,7 +198,7 @@ export default function Curriculum() {
                 return (
                     <>
 
-                        {params.row.nav_text === "3-6 PE" ? <Button>Modules</Button> : <Button onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id } })}>Units</Button>}
+                        {params.row.curriculum_id === 2 ? <Button onClick={() => navigate('/curriculum_module', { state: { id: params.row.curriculum_id } })}>Modules</Button> : <Button onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id } })}>Units</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error" onClick={onDelete(params)}>
                             <i className="fa fa-trash" aria-hidden="true"></i>
@@ -244,7 +244,7 @@ export default function Curriculum() {
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                    {!curriculum.length? <h3>No Data Found!</h3>: null}
+                                                        {!curriculum.length ? <h3>No Data Found!</h3> : null}
 
                                                         {curriculum.length > 0 && (
                                                             <>

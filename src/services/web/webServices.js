@@ -70,58 +70,6 @@ export const delete_curriculum = (data) => {
 
   })
 }
-export const get_modules = (id) => {
-  const token = localStorage.getItem("auth_token");
-  return axios({
-    method: 'get',
-    url: `${base_uri.base_uri_admin}/admin/getAllModule/${id}`,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-
-    },
-
-  })
-}
-export const get_module_files = (id) => {
-  const token = localStorage.getItem("auth_token");
-  return axios({
-    method: 'get',
-    url: `${base_uri.base_uri_admin}/admin/getModuleData/${id}`,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-
-    },
-
-  })
-}
-export const get_all_modules = () => {
-  const token = localStorage.getItem("auth_token");
-  return axios({
-    method: 'get',
-    url: `${base_uri.base_uri_admin}/admin/getAllModuleList`,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-
-    },
-
-  })
-}
-export const get_all_units = () => {
-  const token = localStorage.getItem("auth_token");
-  return axios({
-    method: 'get',
-    url: `${base_uri.base_uri_admin}/admin/getAllUnits`,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-
-    },
-
-  })
-}
 export const get_units = (data) => {
   const token = localStorage.getItem("auth_token");
   return axios({
@@ -386,6 +334,55 @@ export const edit_lesson = (data) => {
   return axios({
     method: 'patch',
     url: `${base_uri.base_uri_admin}/admin/updateLessons`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const get_module = (id) => {
+  console.log()
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'get',
+    url: `${base_uri.base_uri_admin}/admin/getAllModule/${id}`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+
+  })
+}
+export const add_module = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/addModule`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const delete_module = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/deleteModule`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const edit_module = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateModule`,
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
