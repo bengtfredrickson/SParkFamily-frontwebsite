@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 import { Loader } from './Helper/Loader';
 import Footer from './Footer';
 import moment from 'moment/moment';
-import { convertToRaw, EditorState } from 'draft-js';
+import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from 'draftjs-to-html'
@@ -43,11 +43,89 @@ export default function CurriculumoLessonPlans() {
         setShowEditLessonPlans(false);
         setImage({})
         setImageUrl("")
+        setEditorData1("")
+        setIntegration("")
+        setEditorData2("")
+        setObjective("")
+        setEditorData3("")
+        setTarget("")
+        setEditorData4("")
+        setPrep("")
+        setEditorData5("")
+        setQuestions("")
+        setEditorData6("")
+        setCompetencies("")
+        setEditorData7("")
+        setSet("")
+        setEditorData8("")
+        setSparkItUp("")
+        setEditorData9("")
+        setAlignment("")
+        setEditorData10("")
+        setTeach("")
+        setEditorData11("")
+        setCues("")
+        setEditorData12("")
+        setSuggestion("")
+        setEditorData13("")
+        setVocabulary("")
     };
     const handleShow = (e) => {
         setDetail(e.row)
         setShowEditLessonPlans(true);
         setImageUrl(e.row.image_url);
+        setEditorData1(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.integration))
+        ))
+        setIntegration(e.row.integration)
+        setEditorData2(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_objective))
+        ))
+        setObjective(e.row.lesson_objective)
+        setEditorData3(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_target))
+        ))
+        setTarget(e.row.lesson_target)
+        setEditorData4(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.prep))
+        ))
+        setPrep(e.row.prep)
+        setEditorData5(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.reflection_question))
+        ))
+        setQuestions(e.row.reflection_question)
+        setEditorData6(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.sel_compentencies))
+        ))
+        setCompetencies(e.row.sel_compentencies)
+        setEditorData7(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_set))
+        ))
+        setSet(e.row.lesson_set)
+        setEditorData8(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.spark_it_up))
+        ))
+        setSparkItUp(e.row.spark_it_up)
+        setEditorData9(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.standards_alignment))
+        ))
+        setAlignment(e.row.standards_alignment)
+        setEditorData10(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.teach))
+        ))
+        setTeach(e.row.teach)
+        setEditorData11(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.teaching_cues))
+        ))
+        setCues(e.row.teaching_cues)
+        setEditorData12(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.teaching_suggestions))
+        ))
+        setSuggestion(e.row.teaching_suggestions)
+        setEditorData13(EditorState.createWithContent(
+            ContentState.createFromBlockArray(convertFromHTML(e.row.vocabulary))
+        ))
+        setVocabulary(e.row.vocabulary)
     };
     const onHandle = (e) => {
         setImage({
@@ -66,6 +144,33 @@ export default function CurriculumoLessonPlans() {
         setShowAddLessonPlans(false);
         setImage({})
         setImageUrl("")
+        setEditorData1("")
+        setIntegration("")
+        setEditorData2("")
+        setObjective("")
+        setEditorData3("")
+        setTarget("")
+        setEditorData4("")
+        setPrep("")
+        setEditorData5("")
+        setQuestions("")
+        setEditorData6("")
+        setCompetencies("")
+        setEditorData7("")
+        setSet("")
+        setEditorData8("")
+        setSparkItUp("")
+        setEditorData9("")
+        setAlignment("")
+        setEditorData10("")
+        setTeach("")
+        setEditorData11("")
+        setCues("")
+        setEditorData12("")
+        setSuggestion("")
+        setEditorData13("")
+        setVocabulary("")
+
     };
     const handleShow1 = () => {
         setShowAddLessonPlans(true);
@@ -171,71 +276,71 @@ export default function CurriculumoLessonPlans() {
                 )
             }
         },
-        {
-            field: 'lesson_objective',
-            headerName: 'Objective',
-            width: 120,
-        },
-        {
-            field: 'lesson_target',
-            headerName: 'Target',
-            width: 120,
-        },
-        {
-            field: 'integration',
-            headerName: 'Integrations',
-            width: 120,
-        },
-        {
-            field: 'prep',
-            headerName: 'Prep',
-            width: 120,
-        },
-        {
-            field: 'reflection_question',
-            headerName: 'Question',
-            width: 120,
-        },
-        {
-            field: 'sel_compentencies',
-            headerName: 'Compentencies',
-            width: 120,
-        },
-        {
-            field: 'lesson_set',
-            headerName: 'Lesson Set',
-            width: 120,
-        },
-        {
-            field: 'spark_it_up',
-            headerName: 'Spark It Up',
-            width: 120,
-        },
-        {
-            field: 'standards_alignment',
-            headerName: 'Alignment',
-            width: 120,
-        },
-        {
-            field: 'teach',
-            headerName: 'Teach',
-            width: 120,
-        },
-        {
-            field: 'teaching_cues',
-            headerName: 'Cues',
-            width: 120,
-        },
-        {
-            field: 'teaching_suggestions',
-            headerName: 'Suggestions',
-            width: 120,
-        },
-        {
-            field: 'vocabulary',
-            headerName: 'Vocabulary',
-            width: 120,
-        },
+        // {
+        //     field: 'lesson_objective',
+        //     headerName: 'Objective',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'lesson_target',
+        //     headerName: 'Target',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'integration',
+        //     headerName: 'Integrations',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'prep',
+        //     headerName: 'Prep',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'reflection_question',
+        //     headerName: 'Question',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'sel_compentencies',
+        //     headerName: 'Compentencies',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'lesson_set',
+        //     headerName: 'Lesson Set',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'spark_it_up',
+        //     headerName: 'Spark It Up',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'standards_alignment',
+        //     headerName: 'Alignment',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'teach',
+        //     headerName: 'Teach',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'teaching_cues',
+        //     headerName: 'Cues',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'teaching_suggestions',
+        //     headerName: 'Suggestions',
+        //     width: 120,
+        // },
+        // {
+        //     field: 'vocabulary',
+        //     headerName: 'Vocabulary',
+        //     width: 120,
+        // },
 
         {
             field: 'action',
@@ -261,18 +366,88 @@ export default function CurriculumoLessonPlans() {
 
 
 
-    const [editorData, setEditorData] = useState('')
-    const [finalEditorData, setFinalEditorData] = useState('')
-    const handelChange = (value) => {
-        var arr = []
-        // console.log(draftToHtml(convertToRaw(value.getCurrentContent())))
-        // console.log('raw Data = ',convertToRaw(value.getCurrentContent()))
-        convertToRaw(value.getCurrentContent()).blocks.map((Item) => {
-            arr.push(Item.text)
-        })
-        setEditorData(value)
-        setFinalEditorData(arr.join(' /n '))
-        console.log('okok  == = = = = == ', arr.join(' /n '))
+    const [editorData1, setEditorData1] = useState('')
+    const [editorData2, setEditorData2] = useState('')
+    const [editorData3, setEditorData3] = useState('')
+    const [editorData4, setEditorData4] = useState('')
+    const [editorData5, setEditorData5] = useState('')
+    const [editorData6, setEditorData6] = useState('')
+    const [editorData7, setEditorData7] = useState('')
+    const [editorData8, setEditorData8] = useState('')
+    const [editorData9, setEditorData9] = useState('')
+    const [editorData10, setEditorData10] = useState('')
+    const [editorData11, setEditorData11] = useState('')
+    const [editorData12, setEditorData12] = useState('')
+    const [editorData13, setEditorData13] = useState('')
+
+    const [Integration, setIntegration] = useState('')
+    const [Objective, setObjective] = useState('')
+    const [Target, setTarget] = useState('')
+    const [Prep, setPrep] = useState('')
+    const [Questions, setQuestions] = useState('')
+    const [Competencies, setCompetencies] = useState('')
+    const [Set, setSet] = useState('')
+    const [SparkItUp, setSparkItUp] = useState('')
+    const [Alignment, setAlignment] = useState('')
+    const [Teach, setTeach] = useState('')
+    const [Cues, setCues] = useState('')
+    const [Suggestion, setSuggestion] = useState('')
+    const [Vocabulary, setVocabulary] = useState('')
+    const handelChange = (value, e) => {
+        let data1 = draftToHtml(convertToRaw(value.getCurrentContent()))
+        if (e === 1) {
+            setEditorData1(value)
+            setIntegration(data1)
+        }
+        else if (e === 2) {
+            setEditorData2(value)
+            setObjective(data1)
+        }
+        else if (e === 3) {
+            setEditorData3(value)
+            setTarget(data1)
+        }
+        else if (e === 4) {
+            setEditorData4(value)
+            setPrep(data1)
+        }
+        else if (e === 5) {
+            setEditorData5(value)
+            setQuestions(data1)
+        }
+        else if (e === 6) {
+            setEditorData6(value)
+            setCompetencies(data1)
+        }
+        else if (e === 7) {
+            setEditorData7(value)
+            setSet(data1)
+        }
+        else if (e === 8) {
+            setEditorData8(value)
+            setSparkItUp(data1)
+        }
+        else if (e === 9) {
+            setEditorData9(value)
+            setAlignment(data1)
+        }
+        else if (e === 10) {
+            setEditorData10(value)
+            setTeach(data1)
+        }
+        else if (e === 11) {
+            setEditorData11(value)
+            setCues(data1)
+        }
+        else if (e === 12) {
+            setEditorData12(value)
+            setSuggestion(data1)
+        }
+        else if (e === 13) {
+            setEditorData13(value)
+            setVocabulary(data1)
+        }
+
     }
 
     return (
@@ -377,19 +552,19 @@ export default function CurriculumoLessonPlans() {
 
                         validationSchema={Yup.object({
                             lesson_name: Yup.string().required("Required"),
-                            integration: Yup.string().required("Required"),
-                            lesson_objective: Yup.string().required("Required"),
-                            lesson_target: Yup.string().required("Required"),
-                            prep: Yup.string().required("Required"),
-                            reflection_question: Yup.string().required("Required"),
-                            sel_compentencies: Yup.string().required("Required"),
-                            lesson_set: Yup.string().required("Required"),
-                            spark_it_up: Yup.string().required("Required"),
-                            standards_alignment: Yup.string().required("Required"),
-                            teach: Yup.string().required("Required"),
-                            teaching_cues: Yup.string().required("Required"),
-                            teaching_suggestions: Yup.string().required("Required"),
-                            vocabulary: Yup.string().required("Required"),
+                            // integration: Yup.string().required("Required"),
+                            // lesson_objective: Yup.string().required("Required"),
+                            // lesson_target: Yup.string().required("Required"),
+                            // prep: Yup.string().required("Required"),
+                            // reflection_question: Yup.string().required("Required"),
+                            // sel_compentencies: Yup.string().required("Required"),
+                            // lesson_set: Yup.string().required("Required"),
+                            // spark_it_up: Yup.string().required("Required"),
+                            // standards_alignment: Yup.string().required("Required"),
+                            // teach: Yup.string().required("Required"),
+                            // teaching_cues: Yup.string().required("Required"),
+                            // teaching_suggestions: Yup.string().required("Required"),
+                            // vocabulary: Yup.string().required("Required"),
                         })}
                         onSubmit={(values, { resetForm }) => {
                             let formData = new FormData();
@@ -398,19 +573,19 @@ export default function CurriculumoLessonPlans() {
                             formData.append("suboption_id", values.suboption_id)
                             formData.append("lesson_id", values.lesson_id)
                             formData.append("lesson_name", values.lesson_name)
-                            formData.append("integration", values.integration)
-                            formData.append("lesson_objective", values.lesson_objective)
-                            formData.append("lesson_target", values.lesson_target)
-                            formData.append("prep", values.prep)
-                            formData.append("reflection_question", values.reflection_question)
-                            formData.append("sel_compentencies", values.sel_compentencies)
-                            formData.append("lesson_set", values.lesson_set)
-                            formData.append("spark_it_up", values.spark_it_up)
-                            formData.append("standards_alignment", values.standards_alignment)
-                            formData.append("teach", values.teach)
-                            formData.append("teaching_cues", values.teaching_cues)
-                            formData.append("teaching_suggestions", values.teaching_suggestions)
-                            formData.append("vocabulary", values.vocabulary)
+                            formData.append("integration", Integration)
+                            formData.append("lesson_objective", Objective)
+                            formData.append("lesson_target", Target)
+                            formData.append("prep", Prep)
+                            formData.append("reflection_question", Questions)
+                            formData.append("sel_compentencies", Competencies)
+                            formData.append("lesson_set", Set)
+                            formData.append("spark_it_up", SparkItUp)
+                            formData.append("standards_alignment", Alignment)
+                            formData.append("teach", Teach)
+                            formData.append("teaching_cues", Cues)
+                            formData.append("teaching_suggestions", Suggestion)
+                            formData.append("vocabulary", Vocabulary)
                             if (getImage.pictureAsFile) {
                                 formData.append("image_url", getImage.pictureAsFile)
                             }
@@ -448,6 +623,32 @@ export default function CurriculumoLessonPlans() {
                                     setImageUrl("")
                                     setShowEditLessonPlans(false)
                                     setbutton(false);
+                                    setEditorData1("")
+                                    setIntegration("")
+                                    setEditorData2("")
+                                    setObjective("")
+                                    setEditorData3("")
+                                    setTarget("")
+                                    setEditorData4("")
+                                    setPrep("")
+                                    setEditorData5("")
+                                    setQuestions("")
+                                    setEditorData6("")
+                                    setCompetencies("")
+                                    setEditorData7("")
+                                    setSet("")
+                                    setEditorData8("")
+                                    setSparkItUp("")
+                                    setEditorData9("")
+                                    setAlignment("")
+                                    setEditorData10("")
+                                    setTeach("")
+                                    setEditorData11("")
+                                    setCues("")
+                                    setEditorData12("")
+                                    setSuggestion("")
+                                    setEditorData13("")
+                                    setVocabulary("")
 
                                 }
 
@@ -474,6 +675,32 @@ export default function CurriculumoLessonPlans() {
                                     setImage({})
                                     setImageUrl("")
                                     setbutton(false);
+                                    setEditorData1("")
+                                    setIntegration("")
+                                    setEditorData2("")
+                                    setObjective("")
+                                    setEditorData3("")
+                                    setTarget("")
+                                    setEditorData4("")
+                                    setPrep("")
+                                    setEditorData5("")
+                                    setQuestions("")
+                                    setEditorData6("")
+                                    setCompetencies("")
+                                    setEditorData7("")
+                                    setSet("")
+                                    setEditorData8("")
+                                    setSparkItUp("")
+                                    setEditorData9("")
+                                    setAlignment("")
+                                    setEditorData10("")
+                                    setTeach("")
+                                    setEditorData11("")
+                                    setCues("")
+                                    setEditorData12("")
+                                    setSuggestion("")
+                                    setEditorData13("")
+                                    setVocabulary("")
 
                                 });
                         }}
@@ -491,79 +718,300 @@ export default function CurriculumoLessonPlans() {
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group spo">
                                             <label>Integration</label>
-                                            <MyTextArea type="text" className="form-control" name="integration" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData1}
+                                                onEditorStateChange={(value) => handelChange(value, 1)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Lesson Objective</label>
-                                            <MyTextArea type="text" className="form-control" name="lesson_objective" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData2}
+                                                onEditorStateChange={(value) => handelChange(value, 2)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Lesson Target</label>
-                                            <MyTextArea type="text" className="form-control" name="lesson_target" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData3}
+                                                onEditorStateChange={(value) => handelChange(value, 3)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Prep</label>
-                                            <MyTextArea type="text" className="form-control" name="prep" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData4}
+                                                onEditorStateChange={(value) => handelChange(value, 4)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Reflection Question</label>
-                                            <MyTextArea type="text" className="form-control" name="reflection_question" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData5}
+                                                onEditorStateChange={(value) => handelChange(value, 5)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Competencies</label>
-                                            <MyTextArea type="text" className="form-control" name="sel_compentencies" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData6}
+                                                onEditorStateChange={(value) => handelChange(value, 6)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Lesson Set</label>
-                                            <MyTextArea type="text" className="form-control" name="lesson_set" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData7}
+                                                onEditorStateChange={(value) => handelChange(value, 7)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Spark It Up</label>
-                                            <MyTextArea type="text" className="form-control" name="spark_it_up" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData8}
+                                                onEditorStateChange={(value) => handelChange(value, 8)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Standard Alignment</label>
-                                            <MyTextArea type="text" className="form-control" name="standards_alignment" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData9}
+                                                onEditorStateChange={(value) => handelChange(value, 9)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="standards_alignment" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Teach</label>
-                                            <MyTextArea type="text" className="form-control" name="teach" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData10}
+                                                onEditorStateChange={(value) => handelChange(value, 10)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="teach" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Teaching Cues</label>
-                                            <MyTextArea type="text" className="form-control" name="teaching_cues" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData11}
+                                                onEditorStateChange={(value) => handelChange(value, 11)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="teaching_cues" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Teaching Suggestions</label>
-                                            <MyTextArea type="text" className="form-control" name="teaching_suggestions" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData12}
+                                                onEditorStateChange={(value) => handelChange(value, 12)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="teaching_suggestions" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Vocabulary</label>
-                                            <MyTextArea type="text" className="form-control" name="vocabulary" />
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                }}
+                                                toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                }}
+                                                editorState={editorData13}
+                                                onEditorStateChange={(value) => handelChange(value, 13)}
+                                            // onBlur={() => helpers.setTouched(true)}
+                                            />
+                                            {/* <MyTextArea type="text" className="form-control" name="vocabulary" /> */}
                                         </div>
                                     </div>
                                     <div className="col-lg-6 col-md-12 col-sm-12">
@@ -633,19 +1081,19 @@ export default function CurriculumoLessonPlans() {
 
                         validationSchema={Yup.object({
                             lesson_name: Yup.string().required("Required"),
-                            integration: Yup.string().required("Required"),
-                            lesson_objective: Yup.string().required("Required"),
-                            lesson_target: Yup.string().required("Required"),
-                            prep: Yup.string().required("Required"),
-                            reflection_question: Yup.string().required("Required"),
-                            sel_compentencies: Yup.string().required("Required"),
-                            lesson_set: Yup.string().required("Required"),
-                            spark_it_up: Yup.string().required("Required"),
-                            standards_alignment: Yup.string().required("Required"),
-                            teach: Yup.string().required("Required"),
-                            teaching_cues: Yup.string().required("Required"),
-                            teaching_suggestions: Yup.string().required("Required"),
-                            vocabulary: Yup.string().required("Required"),
+                            // integration: Yup.string().required("Required"),
+                            // lesson_objective: Yup.string().required("Required"),
+                            // lesson_target: Yup.string().required("Required"),
+                            // prep: Yup.string().required("Required"),
+                            // reflection_question: Yup.string().required("Required"),
+                            // sel_compentencies: Yup.string().required("Required"),
+                            // lesson_set: Yup.string().required("Required"),
+                            // spark_it_up: Yup.string().required("Required"),
+                            // standards_alignment: Yup.string().required("Required"),
+                            // teach: Yup.string().required("Required"),
+                            // teaching_cues: Yup.string().required("Required"),
+                            // teaching_suggestions: Yup.string().required("Required"),
+                            // vocabulary: Yup.string().required("Required"),
                         })}
 
                         onSubmit={(values, { resetForm }) => {
@@ -656,19 +1104,19 @@ export default function CurriculumoLessonPlans() {
                             formData.append("curriculum_id", values.curriculum_id)
                             formData.append("suboption_id", values.suboption_id)
                             formData.append("lesson_name", values.lesson_name)
-                            formData.append("integration", values.integration)
-                            formData.append("lesson_objective", values.lesson_objective)
-                            formData.append("lesson_target", values.lesson_target)
-                            formData.append("prep", values.prep)
-                            formData.append("reflection_question", values.reflection_question)
-                            formData.append("sel_compentencies", values.sel_compentencies)
-                            formData.append("lesson_set", values.lesson_set)
-                            formData.append("spark_it_up", values.spark_it_up)
-                            formData.append("standards_alignment", values.standards_alignment)
-                            formData.append("teach", values.teach)
-                            formData.append("teaching_cues", values.teaching_cues)
-                            formData.append("teaching_suggestions", values.teaching_suggestions)
-                            formData.append("vocabulary", values.vocabulary)
+                            formData.append("integration", Integration)
+                            formData.append("lesson_objective", Objective)
+                            formData.append("lesson_target", Target)
+                            formData.append("prep", Prep)
+                            formData.append("reflection_question", Questions)
+                            formData.append("sel_compentencies", Competencies)
+                            formData.append("lesson_set", Set)
+                            formData.append("spark_it_up", SparkItUp)
+                            formData.append("standards_alignment", Alignment)
+                            formData.append("teach", Teach)
+                            formData.append("teaching_cues", Cues)
+                            formData.append("teaching_suggestions", Suggestion)
+                            formData.append("vocabulary", Vocabulary)
                             if (getImage.pictureAsFile) {
                                 formData.append("image_url", getImage.pictureAsFile)
                             }
@@ -710,6 +1158,32 @@ export default function CurriculumoLessonPlans() {
                                     setImageUrl("")
                                     setShowAddLessonPlans(false);
                                     setbutton(false);
+                                    setEditorData1("")
+                                    setIntegration("")
+                                    setEditorData2("")
+                                    setObjective("")
+                                    setEditorData3("")
+                                    setTarget("")
+                                    setEditorData4("")
+                                    setPrep("")
+                                    setEditorData5("")
+                                    setQuestions("")
+                                    setEditorData6("")
+                                    setCompetencies("")
+                                    setEditorData7("")
+                                    setSet("")
+                                    setEditorData8("")
+                                    setSparkItUp("")
+                                    setEditorData9("")
+                                    setAlignment("")
+                                    setEditorData10("")
+                                    setTeach("")
+                                    setEditorData11("")
+                                    setCues("")
+                                    setEditorData12("")
+                                    setSuggestion("")
+                                    setEditorData13("")
+                                    setVocabulary("")
 
                                 })
                                 .catch((err) => {
@@ -734,6 +1208,32 @@ export default function CurriculumoLessonPlans() {
                                     setbutton(false);
                                     setImage({})
                                     setImageUrl("")
+                                    setEditorData1("")
+                                    setIntegration("")
+                                    setEditorData2("")
+                                    setObjective("")
+                                    setEditorData3("")
+                                    setTarget("")
+                                    setEditorData4("")
+                                    setPrep("")
+                                    setEditorData5("")
+                                    setQuestions("")
+                                    setEditorData6("")
+                                    setCompetencies("")
+                                    setEditorData7("")
+                                    setSet("")
+                                    setEditorData8("")
+                                    setSparkItUp("")
+                                    setEditorData9("")
+                                    setAlignment("")
+                                    setEditorData10("")
+                                    setTeach("")
+                                    setEditorData11("")
+                                    setCues("")
+                                    setEditorData12("")
+                                    setSuggestion("")
+                                    setEditorData13("")
+                                    setVocabulary("")
                                 });
                         }}
 
@@ -753,96 +1253,300 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group spo">
                                                 <label>Integration</label>
-                                                {/* <Editor
+                                                <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
                                                     wrapperStyle={{
-                                                    border: "1px solid #d6d6d6",
-                                                    padding: 10,
-                                                    borderRadius: 10
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
                                                     }}
                                                     toolbarStyle={{
-                                                    border: 0,
-                                                    borderBottom: "1px solid #d6d6d6"
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
                                                     }}
-                                                    editorState={editorData}
-                                                    onEditorStateChange={(value) => handelChange(value)}
-                                                    // onBlur={() => helpers.setTouched(true)}
-                                                /> */}
-                                                <MyTextArea type="text" className="form-control" name="integration" />
+                                                    editorState={editorData1}
+                                                    onEditorStateChange={(value) => handelChange(value, 1)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Lesson Objective</label>
-                                                <MyTextArea type="text" className="form-control" name="lesson_objective" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData2}
+                                                    onEditorStateChange={(value) => handelChange(value, 2)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Lesson Target</label>
-                                                <MyTextArea type="text" className="form-control" name="lesson_target" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData3}
+                                                    onEditorStateChange={(value) => handelChange(value, 3)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Prep</label>
-                                                <MyTextArea type="text" className="form-control" name="prep" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData4}
+                                                    onEditorStateChange={(value) => handelChange(value, 4)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Reflection Question</label>
-                                                <MyTextArea type="text" className="form-control" name="reflection_question" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData5}
+                                                    onEditorStateChange={(value) => handelChange(value, 5)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Competencies</label>
-                                                <MyTextArea type="text" className="form-control" name="sel_compentencies" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData6}
+                                                    onEditorStateChange={(value) => handelChange(value, 6)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Lesson Set</label>
-                                                <MyTextArea type="text" className="form-control" name="lesson_set" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData7}
+                                                    onEditorStateChange={(value) => handelChange(value, 7)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Spark It Up</label>
-                                                <MyTextArea type="text" className="form-control" name="spark_it_up" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData8}
+                                                    onEditorStateChange={(value) => handelChange(value, 8)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Standard Alignment</label>
-                                                <MyTextArea type="text" className="form-control" name="standards_alignment" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData9}
+                                                    onEditorStateChange={(value) => handelChange(value, 9)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="standards_alignment" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teach</label>
-                                                <MyTextArea type="text" className="form-control" name="teach" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData10}
+                                                    onEditorStateChange={(value) => handelChange(value, 10)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="teach" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teaching Cues</label>
-                                                <MyTextArea type="text" className="form-control" name="teaching_cues" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData11}
+                                                    onEditorStateChange={(value) => handelChange(value, 11)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="teaching_cues" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teaching Suggestions</label>
-                                                <MyTextArea type="text" className="form-control" name="teaching_suggestions" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData12}
+                                                    onEditorStateChange={(value) => handelChange(value, 12)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="teaching_suggestions" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Vocabulary</label>
-                                                <MyTextArea type="text" className="form-control" name="vocabulary" />
+                                                <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                        border: "1px solid #d6d6d6",
+                                                        padding: 10,
+                                                        borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                        border: 0,
+                                                        borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData13}
+                                                    onEditorStateChange={(value) => handelChange(value, 13)}
+                                                // onBlur={() => helpers.setTouched(true)}
+                                                />
+                                                {/* <MyTextArea type="text" className="form-control" name="vocabulary" /> */}
                                             </div>
                                         </div>
                                         <div className="col-lg-6 col-md-12 col-sm-12">
