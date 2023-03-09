@@ -150,46 +150,46 @@ export default function Curriculum() {
             width: 200,
 
         },
-        {
-            field: 'body_text',
-            headerName: 'Description',
-            type: 'text',
-            width: 700,
-        },
-        {
-            field: 'banner_link',
-            headerName: 'Banner',
-            width: 120,
-            renderCell: (params) => {
-                return (
-                    <div>
+        // {
+        //     field: 'body_text',
+        //     headerName: 'Description',
+        //     type: 'text',
+        //     width: 700,
+        // },
+        // {
+        //     field: 'banner_link',
+        //     headerName: 'Banner',
+        //     width: 120,
+        //     renderCell: (params) => {
+        //         return (
+        //             <div>
 
-                        {params?.row?.banner_link == ' ' ? <img className="circular_image" style={{ width: "62px" }} src="images/splash.png" alt="Not Found " /> : <img className="circular_image" style={{ width: "62px" }} src={params?.row?.banner_link} alt='' />}
+        //                 {params?.row?.banner_link == ' ' ? <img className="circular_image" style={{ width: "62px" }} src="images/splash.png" alt="Not Found " /> : <img className="circular_image" style={{ width: "62px" }} src={params?.row?.banner_link} alt='' />}
 
 
-                    </div>
-                )
-            }
-        },
+        //             </div>
+        //         )
+        //     }
+        // },
         {
             field: 'primary_color',
             headerName: 'Primary Colour',
             type: 'text',
             width: 130,
         },
-        {
-            field: 'created_on',
-            headerName: 'Published Date',
-            type: 'text',
-            width: 120,
-            renderCell: (params) => {
-                return (
-                    <>
-                        {moment(params.value).format("YYYY")}
-                    </>
-                );
-            },
-        },
+        // {
+        //     field: 'created_on',
+        //     headerName: 'Published Date',
+        //     type: 'text',
+        //     width: 120,
+        //     renderCell: (params) => {
+        //         return (
+        //             <>
+        //                 {moment(params.value).format("YYYY")}
+        //             </>
+        //         );
+        //     },
+        // },
         {
             field: 'action',
             headerName: "Action",
@@ -198,7 +198,7 @@ export default function Curriculum() {
                 return (
                     <>
 
-                        {params.row.curriculum_id === 2 ? <Button onClick={() => navigate('/curriculum_module', { state: { id: params.row.curriculum_id } })}>Modules</Button> : <Button onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id } })}>Units</Button>}
+                        {params.row.curriculum_id === 2 ? <Button onClick={() => navigate('/curriculum_module', { state: { id: params.row.curriculum_id } })}>Sections</Button> : <Button onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id } })}>Units</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error" onClick={onDelete(params)}>
                             <i className="fa fa-trash" aria-hidden="true"></i>

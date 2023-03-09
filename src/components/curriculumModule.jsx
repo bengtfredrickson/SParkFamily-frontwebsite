@@ -185,7 +185,7 @@ export default function CurriculumModules() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>Modules</h1>
+                                <h1>Sections</h1>
                             </div>
 
                             <div className="section-body">
@@ -194,7 +194,7 @@ export default function CurriculumModules() {
                                         <div className="card">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Modules</a>
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Section</a>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
@@ -361,7 +361,7 @@ export default function CurriculumModules() {
             {/* Modal Add Modules */}
             <Modal show={showAddModules} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Modules</Modal.Title>
+                    <Modal.Title>Add Section</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}

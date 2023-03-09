@@ -8,11 +8,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
 import { Form, Formik, Field } from 'formik';
 import Modal from "react-bootstrap/Modal";
-import { MyTextArea, MyTextInput } from '../services/web/inputServices';
+import { MyTextArea, MyTextEditor, MyTextInput } from '../services/web/inputServices';
 import * as Yup from 'yup';
 import { Loader } from './Helper/Loader';
 import Footer from './Footer';
 import moment from 'moment/moment';
+import { convertToRaw, EditorState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from 'draftjs-to-html'
+import htmlToDraft from 'html-to-draftjs'
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
@@ -256,7 +261,19 @@ export default function CurriculumoLessonPlans() {
 
 
 
-
+    const [editorData, setEditorData] = useState('')
+    const [finalEditorData, setFinalEditorData] = useState('')
+    const handelChange = (value) => {
+        var arr = []
+        // console.log(draftToHtml(convertToRaw(value.getCurrentContent())))
+        // console.log('raw Data = ',convertToRaw(value.getCurrentContent()))
+        convertToRaw(value.getCurrentContent()).blocks.map((Item) => {
+            arr.push(Item.text)
+        })
+        setEditorData(value)
+        setFinalEditorData(arr.join(' /n '))
+        console.log('okok  == = = = = == ', arr.join(' /n '))
+    }
 
     return (
         <>
@@ -599,7 +616,7 @@ export default function CurriculumoLessonPlans() {
                             curriculum_id: location.state.curriculum_id,
                             suboption_id: location.state.suboption_id,
                             lesson_name: "",
-                            integration: "",
+                            integration: '',
                             lesson_objective: "",
                             lesson_target: "",
                             prep: "",
@@ -632,6 +649,8 @@ export default function CurriculumoLessonPlans() {
                         })}
 
                         onSubmit={(values, { resetForm }) => {
+                            console.log("=========>", values);
+
                             let formData = new FormData();
 
                             formData.append("curriculum_id", values.curriculum_id)
@@ -653,10 +672,9 @@ export default function CurriculumoLessonPlans() {
                             if (getImage.pictureAsFile) {
                                 formData.append("image_url", getImage.pictureAsFile)
                             }
-                            console.log(values);
                             setbutton(true);
 
-
+                            console.log('formData = ', formData)
                             add_lesson(formData)
                                 .then((res) => {
                                     Store.addNotification({
@@ -735,6 +753,23 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group spo">
                                                 <label>Integration</label>
+                                                {/* <Editor
+                                                    toolbarClassName="toolbarClassName"
+                                                    wrapperClassName="wrapperClassName"
+                                                    editorClassName="editorClassName"
+                                                    wrapperStyle={{
+                                                    border: "1px solid #d6d6d6",
+                                                    padding: 10,
+                                                    borderRadius: 10
+                                                    }}
+                                                    toolbarStyle={{
+                                                    border: 0,
+                                                    borderBottom: "1px solid #d6d6d6"
+                                                    }}
+                                                    editorState={editorData}
+                                                    onEditorStateChange={(value) => handelChange(value)}
+                                                    // onBlur={() => helpers.setTouched(true)}
+                                                /> */}
                                                 <MyTextArea type="text" className="form-control" name="integration" />
                                             </div>
                                         </div>

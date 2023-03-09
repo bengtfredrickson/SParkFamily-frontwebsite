@@ -185,7 +185,7 @@ export default function CurriculumSubUnits() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>Subunits</h1>
+                                <h1>Sub Sections</h1>
                             </div>
 
                             <div className="section-body">
@@ -194,7 +194,7 @@ export default function CurriculumSubUnits() {
                                         <div className="card">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Subunits</a>
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Sub Section</a>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
@@ -363,7 +363,7 @@ export default function CurriculumSubUnits() {
             {/* Modal Add Subunits */}
             <Modal show={showAddSubunits} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Subunits</Modal.Title>
+                    <Modal.Title>Add Sub Section</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}

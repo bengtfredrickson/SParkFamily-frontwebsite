@@ -153,7 +153,7 @@ export default function CurriculumUnits() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_sub_units', { state: { curriculum_id:location.state.id, unit_id: params.row.curriculum_id,  } })}>Sub Units</Button>
+                        <Button onClick={() => navigate('/curriculum_sub_units', { state: { curriculum_id:location.state.id, unit_id: params.row.curriculum_id,  } })}>Sub Sections</Button>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
