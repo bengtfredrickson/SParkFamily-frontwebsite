@@ -248,7 +248,7 @@ export default function CurriculumoSubOptions() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>SubOptions</h1>
+                                <h1>Resources</h1>
                             </div>
 
                             <div className="section-body">
@@ -257,7 +257,7 @@ export default function CurriculumoSubOptions() {
                                         <div className="card">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add SubOptions</a>
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Resources</a>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">

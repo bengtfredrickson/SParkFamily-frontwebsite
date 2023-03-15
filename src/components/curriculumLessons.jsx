@@ -718,6 +718,7 @@ export default function CurriculumoLessonPlans() {
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group spo">
                                             <label>Integration</label>
+                                            {console.log("===========aaaaa====>", editorData1)}
                                             <Editor
                                                 toolbarClassName="toolbarClassName"
                                                 wrapperClassName="wrapperClassName"
