@@ -641,7 +641,6 @@ export default function CurriculumoSubOptions() {
                                                     className="form-control"
                                                     name="banner_link"
                                                     onChange={(e) => onHandle(e)}
-                                                    required
                                                 />
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}

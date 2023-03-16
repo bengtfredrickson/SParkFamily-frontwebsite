@@ -390,3 +390,75 @@ export const edit_module = (data) => {
     data
   })
 }
+export const edit_earlyChild = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateLessonsEarlyChild`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const edit_afterLesson = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateAfterLesson`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const edit_HighLesson = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'patch',
+    url: `${base_uri.base_uri_admin}/admin/updateHighLessons`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const add_earlyChild = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/addLessonsEarlyChild`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const add_afterLesson = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/addAfterLesson`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
+export const add_HighLesson = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: 'post',
+    url: `${base_uri.base_uri_admin}/admin/addHighLessons`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    data
+  })
+}
