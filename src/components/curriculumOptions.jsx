@@ -346,7 +346,10 @@ export default function CurriculumoOptions() {
                                 /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                                 'Enter correct url!'
                             ),
-                            video_url: Yup.string()
+                            video_url: Yup.string().matches(
+                                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                                'Enter correct url!'
+                            )
                         })}
 
                         onSubmit={(values, { resetForm }) => {
@@ -529,7 +532,10 @@ export default function CurriculumoOptions() {
                                 /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                                 'Enter correct url!'
                             ),
-                            video_url: Yup.string()
+                            video_url: Yup.string().matches(
+                                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                                'Enter correct url!'
+                            )
                         })}
 
                         onSubmit={(values, { resetForm }) => {
