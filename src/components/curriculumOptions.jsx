@@ -343,7 +343,7 @@ export default function CurriculumoOptions() {
                         validationSchema={Yup.object({
                             option_name: Yup.string().required("Required"),
                             audio_url: Yup.string().matches(
-                                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                                /(https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|]\.mp3$/,
                                 'Enter correct url!'
                             ),
                             video_url: Yup.string().matches(
@@ -529,7 +529,7 @@ export default function CurriculumoOptions() {
                         validationSchema={Yup.object({
                             option_name: Yup.string().required("Required"),
                             audio_url: Yup.string().matches(
-                                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                                /(https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|]\.mp3$/,
                                 'Enter correct url!'
                             ),
                             video_url: Yup.string().matches(
