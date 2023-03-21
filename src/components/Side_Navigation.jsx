@@ -386,10 +386,10 @@ export default function Side_Navigation() {
           <div className="header__container">
             {/* <img src="images/profile.png" alt className="header__img" /> */}
             <Link to="#" className="header__logo"><img src="images/splash.png" alt="No Logo" /></Link>
-            <div className="header__search">
+            {/* <div className="header__search">
               <input type="search" placeholder="Search" className="header__input" />
               <i className="bx bx-search header__icon" />
-            </div>
+            </div> */}
             <div className="header__toggle">
               <i className="bx bx-menu" id="header-toggle" />
             </div>

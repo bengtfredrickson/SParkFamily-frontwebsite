@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Side_Navigation from "./Side_Navigation";
 import "../components/Helper/Home.css"
-import { get_all_curriculums,  } from "../services/web/webServices";
+import { get_all_curriculums, } from "../services/web/webServices";
 import Footer from "./Footer";
 export default function Home() {
   const [getCurriculum, setCurriculum] = useState([]);
@@ -29,10 +29,6 @@ export default function Home() {
             <div className="app-page-title">
               <div className="page-title-wrapper">
                 <div className="page-title-heading">
-                  <div className="page-title-icon">
-                    <i className="pe-7s-car icon-gradient bg-mean-fruit">
-                    </i>
-                  </div>
                   <div>Analytics Dashboard
                     <div className="page-title-subheading">This is an example dashboard created using build-in elements and components.
                     </div>

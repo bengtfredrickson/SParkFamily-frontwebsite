@@ -445,7 +445,7 @@ export default function CurriculumoLessonPlans() {
                 return (
                     <div>
 
-                        {params?.row?.image_url == ' ' ? <img className="circular_image" style={{ width: "62px" }} src="images/splash.png" alt="Not Found " /> : <img className="circular_image" style={{ width: "62px" }} src={params?.row?.image_url} alt='' />}
+                        {params?.row?.image_url == '' ? <img className="circular_image" style={{ width: "62px" }} src="images/splash.png" alt="Not Found " /> : <img className="circular_image" style={{ width: "62px" }} src={params?.row?.image_url} alt='' />}
 
 
                     </div>
@@ -1029,7 +1029,7 @@ export default function CurriculumoLessonPlans() {
                                         setImage({})
                                         setImageUrl("")
                                         setbutton(false);
-
+                                        setShowEditLessonPlans(false)
                                         setEditorData1("")
                                         setIntegration("")
                                         setEditorData2("")
@@ -3011,7 +3011,7 @@ export default function CurriculumoLessonPlans() {
                                             })
                                         setImage({})
                                         setImageUrl("")
-                                        setShowEditLessonPlans(false)
+                                        setShowAddLessonPlans(false)
                                         setbutton(false);
 
                                         setEditorData1("")
@@ -3081,7 +3081,7 @@ export default function CurriculumoLessonPlans() {
                                         setImage({})
                                         setImageUrl("")
                                         setbutton(false);
-
+                                        setShowAddLessonPlans(false)
                                         setEditorData1("")
                                         setIntegration("")
                                         setEditorData2("")

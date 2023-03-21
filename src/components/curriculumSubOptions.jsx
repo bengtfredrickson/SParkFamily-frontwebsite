@@ -31,7 +31,7 @@ export default function CurriculumoSubOptions() {
     const [getPdf, setPdf] = useState({});
     const [getDetail, setDetail] = useState([]);
     const [getPdfUrl, setPdfUrl] = useState("");
-    const [getState, setState] = useState(true);
+    const [getState, setState] = useState(false);
     const [getbutton, setbutton] = useState(false);
     const [Preview, setPreview] = useState("")
     const [PreviewFlag, setPreviewFlag] = useState(0)
@@ -43,6 +43,8 @@ export default function CurriculumoSubOptions() {
         setShowEditSubOptions(false);
         setPdf({})
         setPdfUrl("")
+        setState(false)
+
     };
     const handleShow = (e) => {
         setDetail(e.row)
@@ -53,8 +55,13 @@ export default function CurriculumoSubOptions() {
         setPdf({
             pictureAsFile: e.target.files[0],
         });
-        setState(false);
-        setPdfUrl(URL.createObjectURL(e.target.files[0]));
+        if (e.target.files[0].type === "application/pdf") {
+            setState(false);
+        }
+        else {
+            setState(true);
+
+        } setPdfUrl(URL.createObjectURL(e.target.files[0]));
     };
     // ends
 
@@ -66,6 +73,7 @@ export default function CurriculumoSubOptions() {
         setShowAddSubOptions(false);
         setPdf({})
         setPdfUrl("")
+        setState(false)
     };
     const handleShow1 = () => {
         setShowAddSubOptions(true);
@@ -73,6 +81,7 @@ export default function CurriculumoSubOptions() {
     const [showPreview, setshowPreview] = useState(false);
     const handleClose2 = () => {
         setshowPreview(false);
+        setState(false)
     };
     const handleShow2 = (e, flag) => {
         setshowPreview(true);
@@ -393,6 +402,7 @@ export default function CurriculumoSubOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setState(false)
 
                                 }
 
@@ -419,6 +429,7 @@ export default function CurriculumoSubOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setState(false)
 
                                 });
                         }}
@@ -464,7 +475,9 @@ export default function CurriculumoSubOptions() {
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
 
 
+                                            {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
                                         </div>
+
 
 
                                     </div>
@@ -473,8 +486,8 @@ export default function CurriculumoSubOptions() {
                                     <div className="col-lg-12 col-md-12 col-sm-12">
 
 
-                                        {!getbutton ? <Button type="submit" variant="contained"  >
-                                            Submit
+                                        {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                        </Button> : <Button type="submit" variant="contained" >Submit
                                         </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
                                     </div>
                                 </div>
@@ -577,6 +590,7 @@ export default function CurriculumoSubOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setState(false)
 
                                 })
                                 .catch((err) => {
@@ -599,6 +613,7 @@ export default function CurriculumoSubOptions() {
                                         setbutton(false);
                                         setPdf({})
                                         setPdfUrl("")
+                                        setState(false)
 
                                     }
                                 });
@@ -644,11 +659,13 @@ export default function CurriculumoSubOptions() {
                                                 />
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
+                                            {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
                                         </div>
 
+
                                         <div className="col-lg-12 col-md-12 col-sm-12">
-                                            {!getbutton ? <Button type="submit" variant="contained"  >
-                                                Submit
+                                            {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                            </Button> : <Button type="submit" variant="contained" >Submit
                                             </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
 
                                         </div>

@@ -35,7 +35,7 @@ export default function CurriculumoOptions() {
     const [getPdfUrl, setPdfUrl] = useState("");
     const [Preview, setPreview] = useState("")
     const [PreviewFlag, setPreviewFlag] = useState(0)
-    const [getState, setState] = useState(true);
+    const [getState, setState] = useState(false);
     const [getbutton, setbutton] = useState(false);
 
     // Edit Options Model
@@ -44,6 +44,7 @@ export default function CurriculumoOptions() {
         setShowEditOptions(false);
         setPdf({})
         setPdfUrl("")
+        setState(false)
     };
     const handleShow = (e) => {
         setDetail(e.row)
@@ -56,7 +57,13 @@ export default function CurriculumoOptions() {
         setPdf({
             pictureAsFile: e.target.files[0],
         });
-        setState(false);
+        if (e.target.files[0].type === "application/pdf") {
+            setState(false);
+        }
+        else {
+            setState(true);
+
+        }
         setPdfUrl(URL.createObjectURL(e.target.files[0]));
     };
     // ends
@@ -68,6 +75,7 @@ export default function CurriculumoOptions() {
     const [showPreview, setshowPreview] = useState(false);
     const handleClose2 = () => {
         setshowPreview(false);
+        setState(false)
     };
     const handleShow2 = (e, flag) => {
         setshowPreview(true);
@@ -87,6 +95,7 @@ export default function CurriculumoOptions() {
         setShowAddOptions(false);
         setPdf({})
         setPdfUrl("")
+        setState(false)
     };
     const handleShow1 = () => {
         setShowAddOptions(true);
@@ -393,6 +402,8 @@ export default function CurriculumoOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setState(false)
+
 
                                 }
 
@@ -419,6 +430,7 @@ export default function CurriculumoOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setState(false)
 
                                 });
                         }}
@@ -461,11 +473,12 @@ export default function CurriculumoOptions() {
                                                     onChange={(e) => onHandle(e)}
                                                 />
                                             </div>
-                                            {console.log("========>", getPdfUrl)}
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
 
 
                                         </div>
+                                        {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
+
 
 
                                     </div>
@@ -474,8 +487,8 @@ export default function CurriculumoOptions() {
                                     <div className="col-lg-12 col-md-12 col-sm-12">
 
 
-                                        {!getbutton ? <Button type="submit" variant="contained"  >
-                                            Submit
+                                        {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                        </Button> : <Button type="submit" variant="contained" >Submit
                                         </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
                                     </div>
                                 </div>
@@ -576,6 +589,8 @@ export default function CurriculumoOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setState(false)
+
 
                                 })
                                 .catch((err) => {
@@ -598,6 +613,7 @@ export default function CurriculumoOptions() {
                                         setbutton(false);
                                         setPdfUrl("")
                                         setPdf({})
+                                        setState(false)
 
                                     }
                                 });
@@ -644,11 +660,13 @@ export default function CurriculumoOptions() {
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
                                         </div>
+                                        {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
 
                                         <div className="col-lg-12 col-md-12 col-sm-12">
-                                            {!getbutton ? <Button type="submit" variant="contained"  >
-                                                Submit
-                                            </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+                                            {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                            </Button> : <Button type="submit" variant="contained" >Submit
+                                            </Button>
+                                                : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
 
                                         </div>
 
@@ -663,7 +681,6 @@ export default function CurriculumoOptions() {
             </Modal>
             {/* Ends Add Options */}
 
-            {/* Modal Add Options */}
             <Modal show={showPreview} onHide={handleClose2} keyboard={false}>
                 <Modal.Header>
                     <i
@@ -687,7 +704,6 @@ export default function CurriculumoOptions() {
                 </Modal.Body>
 
             </Modal>
-            {/* Ends Add Options */}
 
 
             <Footer />
