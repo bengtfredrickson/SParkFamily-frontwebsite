@@ -659,8 +659,8 @@ export default function CurriculumoOptions() {
                                                 />
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
+                                            {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
                                         </div>
-                                        {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
 
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
