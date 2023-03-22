@@ -256,6 +256,7 @@ export default function CurriculumUnits() {
                         initialValues={{
                             curriculum_id: location.state.id,
                             unit_name: getDetail.unit_name,
+                            module_id: location.state.module_id,
                             unit_id: getDetail.unit_id
                         }}
 
@@ -373,6 +374,7 @@ export default function CurriculumUnits() {
 
                         initialValues={{
                             curriculum_id: location.state.id,
+                            module_id: location.state.module_id,
                             unit_name: "",
                         }}
 
