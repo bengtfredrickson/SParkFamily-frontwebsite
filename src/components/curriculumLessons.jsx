@@ -1573,7 +1573,7 @@ export default function CurriculumoLessonPlans() {
                                             setImage({})
                                             setImageUrl("")
                                             setbutton(false);
-
+                                            setShowEditLessonPlans(false)
                                             setEditorData1("")
                                             setIntegration("")
                                             setEditorData2("")
@@ -2081,6 +2081,8 @@ export default function CurriculumoLessonPlans() {
                                                 setGuideline("")
                                                 setIntegrationIcon("")
                                                 setKeyWords("")
+                                                setShowEditLessonPlans(false)
+
 
                                             });
                                     }}
@@ -2477,6 +2479,7 @@ export default function CurriculumoLessonPlans() {
                                                     setImage({})
                                                     setImageUrl("")
                                                     setbutton(false);
+                                                    setShowEditLessonPlans(false)
                                                     setEditorData1("")
                                                     setIntegration("")
                                                     setEditorData2("")
@@ -3555,7 +3558,7 @@ export default function CurriculumoLessonPlans() {
                                                 })
                                             setImage({})
                                             setImageUrl("")
-                                            setShowEditLessonPlans(false)
+                                            setShowAddLessonPlans(false)
                                             setbutton(false);
 
                                             setEditorData1("")
@@ -3625,6 +3628,7 @@ export default function CurriculumoLessonPlans() {
                                             setImage({})
                                             setImageUrl("")
                                             setbutton(false);
+                                            setShowAddLessonPlans(false)
 
                                             setEditorData1("")
                                             setIntegration("")
@@ -4024,7 +4028,7 @@ export default function CurriculumoLessonPlans() {
                                                     })
                                                 setImage({})
                                                 setImageUrl("")
-                                                setShowEditLessonPlans(false)
+                                                setShowAddLessonPlans(false)
                                                 setbutton(false);
                                                 setEditorData1("")
                                                 setIntegration("")
@@ -4093,6 +4097,8 @@ export default function CurriculumoLessonPlans() {
                                                 setImage({})
                                                 setImageUrl("")
                                                 setbutton(false);
+                                                setShowAddLessonPlans(false)
+
                                                 setEditorData1("")
                                                 setIntegration("")
                                                 setEditorData2("")
@@ -4461,7 +4467,7 @@ export default function CurriculumoLessonPlans() {
                                                         })
                                                     setImage({})
                                                     setImageUrl("")
-                                                    setShowEditLessonPlans(false)
+                                                    setShowAddLessonPlans(false)
                                                     setbutton(false);
                                                     setEditorData1("")
                                                     setIntegration("")
@@ -4531,6 +4537,7 @@ export default function CurriculumoLessonPlans() {
                                                     setImageUrl("")
                                                     setbutton(false);
                                                     setEditorData1("")
+                                                    setShowAddLessonPlans(false)
                                                     setIntegration("")
                                                     setEditorData2("")
                                                     setObjective("")
