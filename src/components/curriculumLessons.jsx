@@ -1110,7 +1110,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Lesson Objective</label>
+                                                <label>Learning Objective</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1133,7 +1133,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Lesson Target</label>
+                                                <label>Learning Target</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1202,7 +1202,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Competencies</label>
+                                                <label>SEL</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1225,7 +1225,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Lesson Set</label>
+                                                <label>Set</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1386,7 +1386,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-6 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Image</label>
+                                                <label>Diagram</label>
 
                                                 <input
                                                     type="file"
@@ -2258,7 +2258,7 @@ export default function CurriculumoLessonPlans() {
                                                 </div>
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
-                                                        <label>Guideline</label>
+                                                        <label>Guideline Addressed</label>
                                                         <Editor
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -3162,7 +3162,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Lesson Objective</label>
+                                                <label>Learning Objective</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3185,7 +3185,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Lesson Target</label>
+                                                <label>Learning Target</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3254,7 +3254,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Competencies</label>
+                                                <label>SEL</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3277,7 +3277,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Lesson Set</label>
+                                                <label>Set</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3323,7 +3323,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Standard Alignment</label>
+                                                <label>Standards</label>
                                                 <Editor
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3438,7 +3438,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                         <div className="col-lg-6 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Image</label>
+                                                <label>Diagram</label>
 
                                                 <input
                                                     type="file"
@@ -4311,7 +4311,7 @@ export default function CurriculumoLessonPlans() {
                                                 </div>
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
-                                                        <label>Guideline</label>
+                                                        <label>Guideline Addressed</label>
                                                         <Editor
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
