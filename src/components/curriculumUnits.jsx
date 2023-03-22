@@ -119,7 +119,7 @@ export default function CurriculumUnits() {
     // ends
     useEffect(() => {
         if (Units.length === 0 || location?.state?.reloadUnits) {
-            get_units({ curriculum_id: location.state.id }).
+            get_units({ curriculum_id: location.state.id, module_id: location.state.module_id}).
                 then((res) => {
                     console.log("=======>", res.data.result)
 
