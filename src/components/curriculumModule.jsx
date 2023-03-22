@@ -153,7 +153,7 @@ export default function CurriculumModules() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_units', { state: { id:location.state.id } })}>Units</Button>
+                        <Button onClick={() => navigate('/curriculum_units', { state: { id: location.state.id, module_id: params.row.module_id } })}>Units</Button>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -201,7 +201,7 @@ export default function CurriculumModules() {
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                    {!Modules.length? <h3>No Data Found!</h3>: null}
+                                                        {!Modules.length ? <h3>No Data Found!</h3> : null}
                                                         {Modules.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>

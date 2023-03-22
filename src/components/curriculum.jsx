@@ -198,7 +198,7 @@ export default function Curriculum() {
                 return (
                     <>
 
-                        {params.row.curriculum_id === 2 ? <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_module', { state: { id: params.row.curriculum_id } })}>Sections</Button> : <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id } })}>Units</Button>}
+                        {params.row.curriculum_id === 2 || params.row.curriculum_id === 24 ? <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_module', { state: { id: params.row.curriculum_id } })}>Sections</Button> : <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id, module_id: 0 } })}>Units</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         {/* <Button color="error" onClick={onDelete(params)}>
                             <i className="fa fa-trash" aria-hidden="true"></i>
