@@ -97,14 +97,15 @@ export default function CurriculumUnits() {
                         onScreen: true,
                     },
                 });
-                get_units({ curriculum_id: location.state.id }).
+                get_units({ curriculum_id: location.state.id, module_id: location.state.module_id }).
                     then((res) => {
-                        console.log(res.data.result)
+                        console.log("=======>", res.data.result)
 
                         setUnits(res.data.result.map((el, index) => ({ ...el, id: el.unit_id, i: index })))
-
+                        setLoader(false);
 
                     }).catch((err) => {
+                        setLoader(false);
                         console.log(err);
                     })
 
