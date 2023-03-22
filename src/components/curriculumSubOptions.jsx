@@ -257,7 +257,7 @@ export default function CurriculumoSubOptions() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>Resources</h1>
+                                <h1>Lessons Materials</h1>
                             </div>
 
                             <div className="section-body">
@@ -505,7 +505,7 @@ export default function CurriculumoSubOptions() {
             {/* Modal Add SubOptions */}
             <Modal show={showAddSubOptions} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Options</Modal.Title>
+                    <Modal.Title>Add Lesson Material</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}

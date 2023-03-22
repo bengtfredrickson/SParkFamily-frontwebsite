@@ -783,7 +783,7 @@ export default function CurriculumoLessonPlans() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>Lesson</h1>
+                                <h1>Lesson Plan</h1>
                             </div>
 
                             <div className="section-body">
@@ -792,7 +792,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="card">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Lesson</a>
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Lesson Plan</a>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
@@ -2894,7 +2894,7 @@ export default function CurriculumoLessonPlans() {
             {/* Modal Add LessonPlans */}
             <Modal show={showAddLessonPlans} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Lesson</Modal.Title>
+                    <Modal.Title>Add Lesson Plan</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}

@@ -229,7 +229,7 @@ export default function CurriculumoOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params.row.option_id } })}>Resources</Button>
+                        <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params.row.option_id } })}>Lessons Materials</Button>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -261,7 +261,7 @@ export default function CurriculumoOptions() {
                     <div className="main-content" style={{ marginBottom: "9px" }}>
                         <section className="section">
                             <div className="section-header">
-                                <h1>Options</h1>
+                                <h1>Resources</h1>
                             </div>
 
                             <div className="section-body">
@@ -270,7 +270,7 @@ export default function CurriculumoOptions() {
                                         <div className="card">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Options</a>
+                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Resources</a>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
@@ -506,7 +506,7 @@ export default function CurriculumoOptions() {
             {/* Modal Add Options */}
             <Modal show={showAddOptions} onHide={handleClose1} keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Options</Modal.Title>
+                    <Modal.Title>Add Resources</Modal.Title>
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}

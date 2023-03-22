@@ -153,7 +153,7 @@ export default function CurriculumSubUnits() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_options', { state: { curriculum_id:location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: params.row.subunit_id } })}>Lesson Plans</Button>
+                        <Button onClick={() => navigate('/curriculum_options', { state: { curriculum_id:location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: params.row.subunit_id } })}>Resources</Button>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
