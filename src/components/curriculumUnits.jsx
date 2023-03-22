@@ -119,7 +119,7 @@ export default function CurriculumUnits() {
     // ends
     useEffect(() => {
         if (Units.length === 0 || location?.state?.reloadUnits) {
-            get_units({ curriculum_id: location.state.id, module_id: location.state.module_id}).
+            get_units({ curriculum_id: location.state.id, module_id: location.state.module_id }).
                 then((res) => {
                     console.log("=======>", res.data.result)
 
@@ -153,7 +153,7 @@ export default function CurriculumUnits() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_sub_units', { state: { curriculum_id:location.state.id, unit_id: params.row.unit_id,  } })}>Sub Sections</Button>
+                        <Button onClick={() => navigate('/curriculum_sub_units', { state: { curriculum_id: location.state.id, unit_id: params.row.unit_id, } })}>Sub Sections</Button>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -201,7 +201,7 @@ export default function CurriculumUnits() {
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                    {!Units.length? <h3>No Data Found!</h3>: null}
+                                                        {!Units.length ? <h3>No Data Found!</h3> : null}
                                                         {Units.length > 0 && (
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
@@ -285,14 +285,15 @@ export default function CurriculumUnits() {
                                             onScreen: true,
                                         },
                                     });
-                                    get_units({ curriculum_id: location.state.id }).
+                                    get_units({ curriculum_id: location.state.id, module_id: location.state.module_id }).
                                         then((res) => {
-                                            console.log(res.data.result)
+                                            console.log("=======>", res.data.result)
 
                                             setUnits(res.data.result.map((el, index) => ({ ...el, id: el.unit_id, i: index })))
-
+                                            setLoader(false);
 
                                         }).catch((err) => {
+                                            setLoader(false);
                                             console.log(err);
                                         })
                                     setShowEditUnits(false)
@@ -409,14 +410,15 @@ export default function CurriculumUnits() {
                                     });
                                     resetForm({ values: "" });
 
-                                    get_units({ curriculum_id: location.state.id }).
+                                    get_units({ curriculum_id: location.state.id, module_id: location.state.module_id }).
                                         then((res) => {
-                                            console.log(res.data.result)
+                                            console.log("=======>", res.data.result)
 
                                             setUnits(res.data.result.map((el, index) => ({ ...el, id: el.unit_id, i: index })))
-
+                                            setLoader(false);
 
                                         }).catch((err) => {
+                                            setLoader(false);
                                             console.log(err);
                                         })
 
