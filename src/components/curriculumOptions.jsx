@@ -31,8 +31,12 @@ export default function CurriculumoOptions() {
     const [select, setSelection] = useState([]);
     const [Options, setOptions] = useState([]);
     const [getPdf, setPdf] = useState({});
+    const [getVideo, setVideo] = useState({});
+    const [getAudio, setAudio] = useState({});
     const [getDetail, setDetail] = useState([]);
     const [getPdfUrl, setPdfUrl] = useState("");
+    const [getVideoUrl, setVideoUrl] = useState("");
+    const [getAudioUrl, setAudioUrl] = useState("");
     const [Preview, setPreview] = useState("")
     const [PreviewFlag, setPreviewFlag] = useState(0)
     const [getState, setState] = useState(false);
@@ -50,21 +54,39 @@ export default function CurriculumoOptions() {
         setDetail(e.row)
         setShowEditOptions(true);
         setPdfUrl(e.row.pdf_url);
+        setAudioUrl(e.row.audio_url);
+        setVideoUrl(e.row.video_url)
 
     };
-    const onHandle = (e) => {
-        console.log("=====1101010101010101>", e.target.files[0])
-        setPdf({
-            pictureAsFile: e.target.files[0],
-        });
-        if (e.target.files[0].type === "application/pdf") {
-            setState(false);
+    const onHandle = (e, type) => {
+        if (type === "p") {
+            setPdf({
+                pictureAsFile: e.target.files[0],
+            });
+            if (e.target.files[0].type === "application/pdf") {
+                setState(false);
+            }
+            else {
+                setState(true);
+
+            }
+            setPdfUrl(URL.createObjectURL(e.target.files[0]));
         }
-        else {
-            setState(true);
+        else if (type === "a") {
+            setAudio({
+                pictureAsFile: e.target.files[0],
+            });
+            setAudioUrl(URL.createObjectURL(e.target.files[0]));
 
         }
-        setPdfUrl(URL.createObjectURL(e.target.files[0]));
+        else if (type === "v") {
+            setVideo({
+                pictureAsFile: e.target.files[0],
+            });
+            setVideoUrl(URL.createObjectURL(e.target.files[0]));
+
+        }
+
     };
     // ends
 
@@ -334,38 +356,40 @@ export default function CurriculumoOptions() {
                             unit_id: getDetail.unit_id,
                             subunit_id: getDetail.subunit_id,
                             is_files: getDetail.is_files,
-                            audio_url: getDetail.audio_url,
-                            video_url: getDetail.video_url,
+                            audio_title: getDetail.audio_title,
+                            video_title: getDetail.video_title,
+                            pdf_title: getDetail.pdf_title,
                             option_name: getDetail.option_name,
                             option_id: getDetail.option_id
                         }}
 
                         validationSchema={Yup.object({
                             option_name: Yup.string().required("Required"),
-                            audio_url: Yup.string().matches(
-                                /(https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|]\.mp3$/,
-                                'Enter correct url!'
-                            ),
-                            video_url: Yup.string()
+                            audio_title: Yup.string(),
+                            video_title: Yup.string(),
+                            pdf_title: Yup.string()
                         })}
 
                         onSubmit={(values, { resetForm }) => {
                             let formData = new FormData();
                             formData.append("curriculum_id", values.curriculum_id)
+                            formData.append("option_id", values.option_id)
                             formData.append("unit_id", values.unit_id)
                             formData.append("subunit_id", values.subunit_id)
                             formData.append("is_files", values.is_files)
-                            formData.append("audio_url", values.audio_url)
-                            formData.append("video_url", values.video_url)
+                            formData.append("audio_title", values.audio_title)
+                            formData.append("video_title", values.video_title)
+                            formData.append("pdf_title", values.pdf_title)
                             formData.append("option_name", values.option_name)
-                            formData.append("option_id", values.option_id)
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
                             }
-                            // else {
-                            //     formData.append("pdf_url", null)
-
-                            // }
+                            if (getAudio.pictureAsFile) {
+                                formData.append("audio_url", getAudio.pictureAsFile)
+                            }
+                            if (getVideo.pictureAsFile) {
+                                formData.append("video_url", getVideo.pictureAsFile)
+                            }
                             setbutton(true);
 
                             edit_option(formData)
@@ -399,6 +423,10 @@ export default function CurriculumoOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setAudio({})
+                                    setVideo({})
+                                    setAudioUrl("")
+                                    setVideoUrl("")
                                     setState(false)
 
 
@@ -427,6 +455,10 @@ export default function CurriculumoOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setAudio({})
+                                    setVideo({})
+                                    setAudioUrl("")
+                                    setVideoUrl("")
                                     setState(false)
 
                                 });
@@ -448,14 +480,54 @@ export default function CurriculumoOptions() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group spo">
-                                                <label>Audio link</label>
-                                                <MyTextInput type="text" className="form-control" name="audio_url" />
+                                                <label>Audio Title</label>
+                                                <MyTextInput type="text" className="form-control" name="audio_title" />
                                             </div>
+                                        </div>
+                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Audio File</label>
+
+                                                <input
+                                                    type="file"
+                                                    accept="audio/*"
+                                                    className="form-control"
+                                                    name="banner_link"
+                                                    onChange={(e) => onHandle(e, "a")}
+                                                />
+                                            </div>
+                                            {getAudioUrl != "" ? <ReactAudioPlayer
+                                                src={getAudioUrl}
+                                                // autoPlay
+                                                controls
+                                            /> : null}
+                                            {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Video Link</label>
-                                                <MyTextInput type="text" className="form-control" name="video_url" />
+                                                <label>Video Title</label>
+                                                <MyTextInput type="text" className="form-control" name="video_title" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Video File</label>
+
+                                                <input
+                                                    type="file"
+                                                    accept="video/*"
+                                                    className="form-control"
+                                                    name="banner_link"
+                                                    onChange={(e) => onHandle(e, "v")}
+                                                />
+                                            </div>
+                                            {getVideoUrl != "" ? <ReactPlayer width="100%" height="100" url={getVideoUrl} controls={true} /> : null}
+                                            {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Pdf Title</label>
+                                                <MyTextInput type="text" className="form-control" name="pdf_title" />
                                             </div>
                                         </div>
                                         <div className="col-lg-6 col-md-12 col-sm-12">
@@ -467,7 +539,7 @@ export default function CurriculumoOptions() {
                                                     accept="application/pdf"
                                                     className="form-control"
                                                     name="banner_link"
-                                                    onChange={(e) => onHandle(e)}
+                                                    onChange={(e) => onHandle(e, "p")}
                                                 />
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
@@ -520,16 +592,18 @@ export default function CurriculumoOptions() {
                             is_files: 1,
                             audio_url: "",
                             video_url: "",
-                            option_name: ""
+                            option_name: "",
+                            pdf_title: "",
+                            audio_title: "",
+                            video_title: "",
+                            pdf_url: "",
                         }}
 
                         validationSchema={Yup.object({
                             option_name: Yup.string().required("Required"),
-                            audio_url: Yup.string().matches(
-                                /(https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|]\.mp3$/,
-                                'Enter correct url!'
-                            ),
-                            video_url: Yup.string()
+                            audio_title: Yup.string(),
+                            video_title: Yup.string(),
+                            pdf_title: Yup.string()
 
                         })}
 
@@ -539,14 +613,20 @@ export default function CurriculumoOptions() {
                             formData.append("unit_id", values.unit_id)
                             formData.append("subunit_id", values.subunit_id)
                             formData.append("is_files", values.is_files)
-                            formData.append("audio_url", values.audio_url)
-                            formData.append("video_url", values.video_url)
+                            formData.append("audio_title", values.audio_title)
+                            formData.append("video_title", values.video_title)
+                            formData.append("pdf_title", values.pdf_title)
                             formData.append("option_name", values.option_name)
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
                             }
+                            if (getAudio.pictureAsFile) {
+                                formData.append("audio_url", getAudio.pictureAsFile)
+                            }
+                            if (getVideo.pictureAsFile) {
+                                formData.append("video_url", getVideo.pictureAsFile)
+                            }
                             setbutton(true);
-
 
                             add_option(formData)
                                 .then((res) => {
@@ -584,6 +664,10 @@ export default function CurriculumoOptions() {
                                     setbutton(false);
                                     setPdfUrl("")
                                     setPdf({})
+                                    setAudio({})
+                                    setVideo({})
+                                    setAudioUrl("")
+                                    setVideoUrl("")
                                     setState(false)
 
 
@@ -608,6 +692,10 @@ export default function CurriculumoOptions() {
                                         setbutton(false);
                                         setPdfUrl("")
                                         setPdf({})
+                                        setAudio({})
+                                        setVideo({})
+                                        setAudioUrl("")
+                                        setVideoUrl("")
                                         setState(false)
 
                                     }
@@ -631,14 +719,54 @@ export default function CurriculumoOptions() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group spo">
-                                                <label>Audio link</label>
-                                                <MyTextInput type="text" className="form-control" name="audio_url" />
+                                                <label>Audio Title</label>
+                                                <MyTextInput type="text" className="form-control" name="audio_title" />
                                             </div>
+                                        </div>
+                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Audio File</label>
+
+                                                <input
+                                                    type="file"
+                                                    accept="audio/*"
+                                                    className="form-control"
+                                                    name="banner_link"
+                                                    onChange={(e) => onHandle(e, "a")}
+                                                />
+                                            </div>
+                                            {getAudioUrl != "" ? <ReactAudioPlayer
+                                                src={getAudioUrl}
+                                                // autoPlay
+                                                controls
+                                            /> : null}
+                                            {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Video Link</label>
-                                                <MyTextInput type="text" className="form-control" name="video_url" />
+                                                <label>Video Title</label>
+                                                <MyTextInput type="text" className="form-control" name="video_title" />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Video File</label>
+
+                                                <input
+                                                    type="file"
+                                                    accept="video/*"
+                                                    className="form-control"
+                                                    name="banner_link"
+                                                    onChange={(e) => onHandle(e, "v")}
+                                                />
+                                            </div>
+                                            {getVideoUrl != "" ? <ReactPlayer width="100%" height="100" url={getVideoUrl} controls={true} /> : null}
+                                            {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Pdf Title</label>
+                                                <MyTextInput type="text" className="form-control" name="pdf_title" />
                                             </div>
                                         </div>
                                         <div className="col-lg-6 col-md-12 col-sm-12">
@@ -650,7 +778,7 @@ export default function CurriculumoOptions() {
                                                     accept="application/pdf"
                                                     className="form-control"
                                                     name="banner_link"
-                                                    onChange={(e) => onHandle(e)}
+                                                    onChange={(e) => onHandle(e, "p")}
                                                 />
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
