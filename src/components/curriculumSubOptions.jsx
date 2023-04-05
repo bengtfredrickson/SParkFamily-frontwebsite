@@ -32,6 +32,8 @@ export default function CurriculumoSubOptions() {
     const [getDetail, setDetail] = useState([]);
     const [getPdfUrl, setPdfUrl] = useState("");
     const [getState, setState] = useState(false);
+    const [getState1, setState1] = useState(false);
+    const [getState2, setState2] = useState(false);
     const [getbutton, setbutton] = useState(false);
     const [Preview, setPreview] = useState("")
     const [getVideo, setVideo] = useState({});
@@ -75,6 +77,13 @@ export default function CurriculumoSubOptions() {
             setAudio({
                 pictureAsFile: e.target.files[0],
             });
+            if (e.target.files[0].type === "audio/mp3") {
+                setState1(false);
+            }
+            else {
+                setState1(true);
+
+            }
             setAudioUrl(URL.createObjectURL(e.target.files[0]));
 
         }
@@ -82,6 +91,13 @@ export default function CurriculumoSubOptions() {
             setVideo({
                 pictureAsFile: e.target.files[0],
             });
+            if (e.target.files[0].type === "video/mp4") {
+                setState2(false);
+            }
+            else {
+                setState2(true);
+
+            }
             setVideoUrl(URL.createObjectURL(e.target.files[0]));
 
         }
@@ -97,6 +113,8 @@ export default function CurriculumoSubOptions() {
         setPdf({})
         setPdfUrl("")
         setState(false)
+        setState1(false)
+        setState2(false)
     };
     const handleShow1 = () => {
         setShowAddSubOptions(true);
@@ -105,6 +123,8 @@ export default function CurriculumoSubOptions() {
     const handleClose2 = () => {
         setshowPreview(false);
         setState(false)
+        setState1(false)
+        setState2(false)
     };
     const handleShow2 = (e, flag) => {
         setshowPreview(true);
@@ -430,7 +450,8 @@ export default function CurriculumoSubOptions() {
                                     setAudioUrl("")
                                     setVideoUrl("")
                                     setState(false)
-
+                                    setState1(false)
+                                    setState2(false)
                                 }
 
                                 )
@@ -461,7 +482,8 @@ export default function CurriculumoSubOptions() {
                                     setAudioUrl("")
                                     setVideoUrl("")
                                     setState(false)
-
+                                    setState1(false)
+                                    setState2(false)
                                 });
                         }}
                     >
@@ -547,7 +569,8 @@ export default function CurriculumoSubOptions() {
 
 
                                             {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
-                                        </div>
+                                            {getState1 ? <p style={{ color: "red" }}>Only Mp3 Audio is allowed !</p> : null}
+                                            {getState2 ? <p style={{ color: "red" }}>Only Mp4 Video is allowed !</p> : null}                                        </div>
 
 
 
@@ -557,7 +580,7 @@ export default function CurriculumoSubOptions() {
                                     <div className="col-lg-12 col-md-12 col-sm-12">
 
 
-                                        {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                        {!getbutton ? getState || getState1 || getState2 ? <Button disabled type="submit" variant="contained">Submit
                                         </Button> : <Button type="submit" variant="contained" >Submit
                                         </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
                                     </div>
@@ -674,7 +697,8 @@ export default function CurriculumoSubOptions() {
                                     setAudioUrl("")
                                     setVideoUrl("")
                                     setState(false)
-
+                                    setState1(false)
+                                    setState2(false)
                                 })
                                 .catch((err) => {
 
@@ -701,7 +725,8 @@ export default function CurriculumoSubOptions() {
                                         setAudioUrl("")
                                         setVideoUrl("")
                                         setState(false)
-
+                                        setState1(false)
+                                        setState2(false)
                                     }
                                 });
                         }}
@@ -787,11 +812,12 @@ export default function CurriculumoSubOptions() {
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
                                             {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
-                                        </div>
+                                            {getState1 ? <p style={{ color: "red" }}>Only Mp3 Audio is allowed !</p> : null}
+                                            {getState2 ? <p style={{ color: "red" }}>Only Mp4 Video is allowed !</p> : null}                                        </div>
 
 
                                         <div className="col-lg-12 col-md-12 col-sm-12">
-                                            {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                            {!getbutton ? getState || getState1 || getState2 ? <Button disabled type="submit" variant="contained">Submit
                                             </Button> : <Button type="submit" variant="contained" >Submit
                                             </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
 
@@ -819,7 +845,7 @@ export default function CurriculumoSubOptions() {
                 <Modal.Body>
                     {console.log("===============>", Preview, PreviewFlag)
                     }                    {
-                        PreviewFlag === 0 ? Preview === "" | Preview === null ? <p>No PDF Available</p> : <object width="100%" height="400" data={Preview} type="application/pdf" alt="" /> : PreviewFlag === 1 ? Preview === "" | Preview === null ? <p>No Video Available</p> : <ReactPlayer url={Preview} controls={true}/>
+                        PreviewFlag === 0 ? Preview === "" | Preview === null ? <p>No PDF Available</p> : <object width="100%" height="400" data={Preview} type="application/pdf" alt="" /> : PreviewFlag === 1 ? Preview === "" | Preview === null ? <p>No Video Available</p> : <ReactPlayer url={Preview} controls={true} />
                             : PreviewFlag === 2 ? Preview === "" | Preview === null ? <p>No Audio Available</p> : <ReactAudioPlayer
                                 src={Preview}
                                 autoPlay
