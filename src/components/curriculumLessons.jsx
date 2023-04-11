@@ -1089,6 +1089,8 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group spo">
                                                 <label>Integration</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
+
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1112,6 +1114,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Learning Objective</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1135,6 +1138,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Learning Target</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1158,6 +1162,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Prep</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1181,6 +1186,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Reflection Question</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1204,6 +1210,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>SEL</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1227,6 +1234,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Set</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1250,6 +1258,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Spark It Up</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1273,6 +1282,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Standard Alignment</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1296,6 +1306,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Teach</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1319,6 +1330,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Teaching Cues</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1342,6 +1354,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Teaching Suggestions</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1365,6 +1378,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Vocabulary</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -1633,6 +1647,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group spo">
                                                     <label>Ready</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1656,6 +1671,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Set</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1679,6 +1695,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Go</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1702,6 +1719,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Adaptations</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1725,6 +1743,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Objectives</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1748,6 +1767,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Academics</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1771,6 +1791,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Teaching Tips</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1794,6 +1815,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Family Fun</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1817,6 +1839,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Lyrics</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -1840,6 +1863,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Music Credits</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -2101,6 +2125,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group spo">
                                                         <label>Ready</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -2124,6 +2149,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Set</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -2147,6 +2173,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Go</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -2170,6 +2197,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Safety First</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -2193,6 +2221,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Game Reset</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -2216,6 +2245,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Home Play</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -2239,6 +2269,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>The Right Fit</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -2262,6 +2293,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Guideline Addressed</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -2540,6 +2572,7 @@ export default function CurriculumoLessonPlans() {
                                                             <label>Integration</label>
                                                             {console.log("===========aaaaa====>", editorData1)}
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2563,6 +2596,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Lesson Objective</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2586,6 +2620,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Lesson Target</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2609,6 +2644,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Prep</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2632,6 +2668,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Reflection Question</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2655,6 +2692,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Competencies</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2678,6 +2716,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Lesson Set</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2701,6 +2740,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Spark It Up</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2724,6 +2764,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Standard Alignment</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2747,6 +2788,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Teach</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2770,6 +2812,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Teaching Cues</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2793,6 +2836,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Teaching Suggestions</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2816,6 +2860,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Integration Icons</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -2839,6 +2884,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Key Words</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -3144,6 +3190,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group spo">
                                                 <label>Integration</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3167,6 +3214,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Learning Objective</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3190,6 +3238,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Learning Target</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3213,6 +3262,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Prep</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3236,6 +3286,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Reflection Question</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3259,6 +3310,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>SEL</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3282,6 +3334,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Set</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3305,6 +3358,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Spark It Up</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3328,6 +3382,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Standards</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3351,6 +3406,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Teach</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3374,6 +3430,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Teaching Cues</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3397,6 +3454,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Teaching Suggestions</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3420,6 +3478,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="form-group">
                                                 <label>Vocabulary</label>
                                                 <Editor
+                                                    handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
                                                     editorClassName="editorClassName"
@@ -3689,6 +3748,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group spo">
                                                     <label>Ready</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3712,6 +3772,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Set</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3735,6 +3796,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Go</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3758,6 +3820,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Adaptations</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3781,6 +3844,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Objectives</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3804,6 +3868,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Academics</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3827,6 +3892,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Teaching Tips</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3850,6 +3916,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Family Fun</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3873,6 +3940,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Lyrics</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -3896,6 +3964,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="form-group">
                                                     <label>Music Credits</label>
                                                     <Editor
+                                                        handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
                                                         editorClassName="editorClassName"
@@ -4158,6 +4227,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group spo">
                                                         <label>Ready</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -4181,6 +4251,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Set</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -4204,6 +4275,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Go</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -4227,6 +4299,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Safety First</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -4250,6 +4323,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Game Reset</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -4273,6 +4347,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Home Play</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -4296,6 +4371,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>The Right Fit</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -4319,6 +4395,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="form-group">
                                                         <label>Guideline Addressed</label>
                                                         <Editor
+                                                            handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
                                                             editorClassName="editorClassName"
@@ -4597,6 +4674,7 @@ export default function CurriculumoLessonPlans() {
                                                             <label>Integration</label>
                                                             {console.log("===========aaaaa====>", editorData1)}
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4620,6 +4698,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Lesson Objective</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4643,6 +4722,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Lesson Target</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4666,6 +4746,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Prep</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4689,6 +4770,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Reflection Question</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4712,6 +4794,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Competencies</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4735,6 +4818,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Lesson Set</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4758,6 +4842,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Spark It Up</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4781,6 +4866,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Standard Alignment</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4804,6 +4890,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Teach</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4827,6 +4914,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Teaching Cues</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4850,6 +4938,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Teaching Suggestions</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4873,6 +4962,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Integration Icons</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
@@ -4896,6 +4986,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group">
                                                             <label>Key Words</label>
                                                             <Editor
+                                                                handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
                                                                 editorClassName="editorClassName"
