@@ -390,12 +390,17 @@ export default function CurriculumoLessonPlans() {
                 });
                 get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
                     then((res) => {
-                        console.log("======aaaaaa=>", res.data.result)
+                        console.log("=======>", res.data.result)
+                        if (res.data.result !== null) {
+                            setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
+                        }else{
+                            setLessonPlans([])
 
-                        setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
+                        }
                         setLoader(false);
 
                     }).catch((err) => {
+                        setLoader(false);
                         console.log(err);
                     })
 
