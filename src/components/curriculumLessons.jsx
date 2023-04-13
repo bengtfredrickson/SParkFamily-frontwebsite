@@ -4492,8 +4492,7 @@ export default function CurriculumoLessonPlans() {
 
                                             formData.append("curriculum_id", values.curriculum_id)
                                             formData.append("suboption_id", values.suboption_id)
-                                            formData.append("lesson_id", values.lesson_id)
-                                            formData.append("lesson_name", values.lesson_name)
+                                            formData.append("title", values.title)
                                             formData.append("integration", Integration)
                                             formData.append("lesson_objective", Objective)
                                             formData.append("lesson_target", Target)
