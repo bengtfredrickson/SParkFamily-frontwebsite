@@ -139,9 +139,9 @@ export default function CurriculumoLessonPlans() {
             ))
             setSuggestion(e.row.teaching_suggestions)
             setEditorData13(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.vocabulary))
+                ContentState.createFromBlockArray(convertFromHTML(e.row.vocabulary ? e.row.vocabulary : ""))
             ))
-            setVocabulary(e.row.vocabulary)
+            setVocabulary(e.row.vocabulary ? e.row.vocabulary : "")
         }
         else if (t === 2) {
             setDetail(e.row)
