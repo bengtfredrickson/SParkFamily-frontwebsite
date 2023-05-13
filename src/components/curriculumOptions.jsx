@@ -48,7 +48,11 @@ export default function CurriculumoOptions() {
     const [showEditOptions, setShowEditOptions] = useState(false);
     const handleClose = () => {
         setShowEditOptions(false);
+        setAudio({})
+        setVideo({})
         setPdf({})
+        setAudioUrl("")
+        setVideoUrl("")
         setPdfUrl("")
         setState(false)
         setState1(false)
@@ -80,7 +84,7 @@ export default function CurriculumoOptions() {
             setAudio({
                 pictureAsFile: e.target.files[0],
             });
-            if (e.target.files[0].type === "audio/mp3") {
+            if (e.target.files[0].type.includes("audio")) {
                 setState1(false);
             }
             else {
@@ -136,7 +140,11 @@ export default function CurriculumoOptions() {
     };
     const handleClose1 = () => {
         setShowAddOptions(false);
+        setAudio({})
+        setVideo({})
         setPdf({})
+        setAudioUrl("")
+        setVideoUrl("")
         setPdfUrl("")
         setState(false)
         setState1(false)
@@ -238,7 +246,7 @@ export default function CurriculumoOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>
+                        {params.row.pdf_url === "" || params.row.pdf_url === null ? <Button><i className="fas fa-file-pdf" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -250,7 +258,7 @@ export default function CurriculumoOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>
+                        {params.row.video_url === "" || params.row.video_url === null ? <Button ><i className="fas fa-file-video" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -262,7 +270,7 @@ export default function CurriculumoOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>
+                        {params.row.audio_url === "" || params.row.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -274,7 +282,7 @@ export default function CurriculumoOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params.row.option_id } })}>Lessons Materials</Button>
+                        {location.state.page_key === 1 ? null : <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params.row.option_id } })}>Lessons Materials</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -406,15 +414,27 @@ export default function CurriculumoOptions() {
                             formData.append("option_name", values.option_name)
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
+                                formData.append("audio_url", "")
+                                formData.append("video_url", "")
+
                             }
                             if (getAudio.pictureAsFile) {
                                 formData.append("audio_url", getAudio.pictureAsFile)
+                                formData.append("pdf_url", "")
+                                formData.append("video_url", "")
                             }
                             if (getVideo.pictureAsFile) {
                                 formData.append("video_url", getVideo.pictureAsFile)
+                                formData.append("pdf_url", "")
+                                formData.append("audio_url", "")
+                            }
+                            if (!getPdf.pictureAsFile && !getAudio.pictureAsFile && !getVideo.pictureAsFile) {
+                                formData.append("pdf_url", getPdfUrl)
+                                formData.append("audio_url", getAudioUrl)
+                                formData.append("video_url", getVideoUrl)
+
                             }
                             setbutton(true);
-
                             edit_option(formData)
                                 .then((res) => {
                                     resetForm({ values: "" });
@@ -505,78 +525,79 @@ export default function CurriculumoOptions() {
 
 
                                         </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group spo">
-                                                <label>Audio Title</label>
-                                                <MyTextInput type="text" className="form-control" name="audio_title" />
+                                        {location.state.page_key === 1 ? <div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12">
+                                                <div className="form-group spo">
+                                                    <label>Audio Title</label>
+                                                    <MyTextInput type="text" className="form-control" name="audio_title" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Audio File</label>
+                                            <div className="col-lg-6 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>Audio File</label>
 
-                                                <input
-                                                    type="file"
-                                                    accept="audio/*"
-                                                    className="form-control"
-                                                    name="banner_link"
-                                                    onChange={(e) => onHandle(e, "a")}
-                                                />
+                                                    <input
+                                                        type="file"
+                                                        accept="audio/*"
+                                                        className="form-control"
+                                                        name="banner_link"
+                                                        onChange={(e) => onHandle(e, "a")}
+                                                    />
+                                                </div>
+                                                {getAudioUrl != "" ? <ReactAudioPlayer
+                                                    src={getAudioUrl}
+                                                    // autoPlay
+                                                    controls
+                                                /> : null}
+                                                {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
                                             </div>
-                                            {getAudioUrl != "" ? <ReactAudioPlayer
-                                                src={getAudioUrl}
-                                                // autoPlay
-                                                controls
-                                            /> : null}
-                                            {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Video Title</label>
-                                                <MyTextInput type="text" className="form-control" name="video_title" />
+                                            <div className="col-lg-12 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>Video Title</label>
+                                                    <MyTextInput type="text" className="form-control" name="video_title" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Video File</label>
+                                            <div className="col-lg-6 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>Video File</label>
 
-                                                <input
-                                                    type="file"
-                                                    accept="video/*"
-                                                    className="form-control"
-                                                    name="banner_link"
-                                                    onChange={(e) => onHandle(e, "v")}
-                                                />
+                                                    <input
+                                                        type="file"
+                                                        accept="video/*"
+                                                        className="form-control"
+                                                        name="banner_link"
+                                                        onChange={(e) => onHandle(e, "v")}
+                                                    />
+                                                </div>
+                                                {getVideoUrl != "" ? <ReactPlayer width="100%" height="100" url={getVideoUrl} controls={true} /> : null}
+                                                {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
                                             </div>
-                                            {getVideoUrl != "" ? <ReactPlayer width="100%" height="100" url={getVideoUrl} controls={true} /> : null}
-                                            {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Pdf Title</label>
-                                                <MyTextInput type="text" className="form-control" name="pdf_title" />
+                                            <div className="col-lg-12 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>Pdf Title</label>
+                                                    <MyTextInput type="text" className="form-control" name="pdf_title" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>PDF</label>
+                                            <div className="col-lg-6 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>PDF</label>
 
-                                                <input
-                                                    type="file"
-                                                    accept="application/pdf"
-                                                    className="form-control"
-                                                    name="banner_link"
-                                                    onChange={(e) => onHandle(e, "p")}
-                                                />
+                                                    <input
+                                                        type="file"
+                                                        accept="application/pdf"
+                                                        className="form-control"
+                                                        name="banner_link"
+                                                        onChange={(e) => onHandle(e, "p")}
+                                                    />
+                                                </div>
+                                                {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
+
+
                                             </div>
-                                            {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
-
-
-                                        </div>
-                                        {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
-                                        {getState1 ? <p style={{ color: "red" }}>Only Mp3 Audio is allowed !</p> : null}
-                                        {getState2 ? <p style={{ color: "red" }}>Only Mp4 Video is allowed !</p> : null}
-
+                                            {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
+                                            {getState1 ? <p style={{ color: "red" }}>Only Mp3 Audio is allowed !</p> : null}
+                                            {getState2 ? <p style={{ color: "red" }}>Only Mp4 Video is allowed !</p> : null}
+                                        </div> : null}
 
 
                                     </div>
@@ -743,82 +764,88 @@ export default function CurriculumoOptions() {
                                     <div className="row">
 
                                         <div className="col-lg-4 col-md-12 col-sm-12">
-                                            <div className="form-group">
+                                            {<div className="form-group">
                                                 <label>Name</label>
                                                 <MyTextInput type="text" className="form-control" name="option_name" />
-                                            </div>
+                                            </div>}
 
 
                                         </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group spo">
-                                                <label>Audio Title</label>
-                                                <MyTextInput type="text" className="form-control" name="audio_title" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Audio File</label>
+                                        {location.state.page_key !== 1 ? null : <div style={{ "width": '100%' }}>
+                                            {getVideoUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
+                                                <div className="form-group spo">
+                                                    <label>Audio Title</label>
+                                                    <MyTextInput type="text" className="form-control" name="audio_title" />
+                                                </div>
+                                            </div>}
+                                            {getVideoUrl != "" || getPdfUrl != "" ? null : <div div className="col-lg-6 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>Audio File</label>
 
-                                                <input
-                                                    type="file"
-                                                    accept="audio/*"
-                                                    className="form-control"
-                                                    name="banner_link"
-                                                    onChange={(e) => onHandle(e, "a")}
-                                                />
-                                            </div>
-                                            {getAudioUrl != "" ? <ReactAudioPlayer
-                                                src={getAudioUrl}
-                                                // autoPlay
-                                                controls
-                                            /> : null}
-                                            {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Video Title</label>
-                                                <MyTextInput type="text" className="form-control" name="video_title" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Video File</label>
+                                                    <input
+                                                        type="file"
+                                                        accept="audio/*"
+                                                        className="form-control"
+                                                        name="banner_link"
+                                                        onChange={(e) => onHandle(e, "a")}
+                                                    />
+                                                </div>
+                                                {getAudioUrl != "" ? <ReactAudioPlayer
+                                                    src={getAudioUrl}
+                                                    // autoPlay
+                                                    controls
+                                                /> : null}
+                                                {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
+                                            </div>}
+                                            {getAudioUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>Video Title</label>
+                                                    <MyTextInput type="text" className="form-control" name="video_title" />
+                                                </div>
+                                            </div>}
+                                            {getAudioUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-6 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>Video File</label>
 
-                                                <input
-                                                    type="file"
-                                                    accept="video/*"
-                                                    className="form-control"
-                                                    name="banner_link"
-                                                    onChange={(e) => onHandle(e, "v")}
-                                                />
-                                            </div>
-                                            {getVideoUrl != "" ? <ReactPlayer width="100%" height="100" url={getVideoUrl} controls={true} /> : null}
-                                            {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>Pdf Title</label>
-                                                <MyTextInput type="text" className="form-control" name="pdf_title" />
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
-                                            <div className="form-group">
-                                                <label>PDF</label>
+                                                    <input
+                                                        type="file"
+                                                        accept="video/*"
+                                                        className="form-control"
+                                                        name="banner_link"
+                                                        onChange={(e) => onHandle(e, "v")}
+                                                    />
+                                                </div>
+                                                {getVideoUrl != "" ? <ReactPlayer width="100%" height="100" url={getVideoUrl} controls={true} /> : null}
+                                                {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
+                                            </div>}
+                                            {getVideoUrl != "" || getAudioUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>Pdf Title</label>
+                                                    <MyTextInput type="text" className="form-control" name="pdf_title" />
+                                                </div>
+                                            </div>}
+                                            {getAudioUrl != "" || getVideoUrl != "" ? null : <div className="col-lg-6 col-md-12 col-sm-12">
+                                                <div className="form-group">
+                                                    <label>PDF</label>
 
-                                                <input
-                                                    type="file"
-                                                    accept="application/pdf"
-                                                    className="form-control"
-                                                    name="banner_link"
-                                                    onChange={(e) => onHandle(e, "p")}
-                                                />
+                                                    <input
+                                                        type="file"
+                                                        accept="application/pdf"
+                                                        className="form-control"
+                                                        name="banner_link"
+                                                        onChange={(e) => onHandle(e, "p")}
+                                                    />
+                                                </div>
+                                                {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
+
+                                            </div>}
+                                            <div style={{ 'width': '100%' }}>
+                                                {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
+                                                {getState1 ? <p style={{ color: "red" }}>Only Mp3 Audio is allowed !</p> : null}
+                                                {getState2 ? <p style={{ color: "red" }}>Only Mp4 Video is allowed !</p> : null}
                                             </div>
-                                            {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
-                                            {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
-                                            {getState1 ? <p style={{ color: "red" }}>Only Mp3 Audio is allowed !</p> : null}
-                                            {getState2 ? <p style={{ color: "red" }}>Only Mp4 Video is allowed !</p> : null}
-                                        </div>
+                                        </div>}
+
 
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             {!getbutton ? getState || getState1 || getState2 ? <Button disabled type="submit" variant="contained">Submit
@@ -836,10 +863,10 @@ export default function CurriculumoOptions() {
 
                 </Modal.Body>
 
-            </Modal>
+            </Modal >
             {/* Ends Add Options */}
 
-            <Modal show={showPreview} onHide={handleClose2} keyboard={false}>
+            <Modal Modal show={showPreview} onHide={handleClose2} keyboard={false} >
                 <Modal.Header>
                     <i
                         className="fas fa-cut"
@@ -848,8 +875,7 @@ export default function CurriculumoOptions() {
                     ></i>
                 </Modal.Header>
                 <Modal.Body>
-                    {console.log("===============>", Preview, PreviewFlag)
-                    }                    {
+                    {
                         PreviewFlag === 0 ? Preview === "" | Preview === null ? <p>No PDF Available</p> : <object width="100%" height="400" data={Preview} type="application/pdf" alt="" /> : PreviewFlag === 1 ? Preview === "" | Preview === null ? <p>No Video Available</p> : <ReactPlayer url={Preview} controls={true} />
                             : PreviewFlag === 2 ? Preview === "" | Preview === null ? <p>No Audio Available</p> : <ReactAudioPlayer
                                 src={Preview}
@@ -861,7 +887,7 @@ export default function CurriculumoOptions() {
 
                 </Modal.Body>
 
-            </Modal>
+            </Modal >
 
 
             <Footer />

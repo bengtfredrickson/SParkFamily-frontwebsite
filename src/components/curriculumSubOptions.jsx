@@ -47,8 +47,12 @@ export default function CurriculumoSubOptions() {
     const [showEditSubOptions, setShowEditSubOptions] = useState(false);
     const handleClose = () => {
         setShowEditSubOptions(false);
-        setPdf({})
         setPdfUrl("")
+        setPdf({})
+        setAudio({})
+        setVideo({})
+        setAudioUrl("")
+        setVideoUrl("")
         setState(false)
 
     };
@@ -77,7 +81,7 @@ export default function CurriculumoSubOptions() {
             setAudio({
                 pictureAsFile: e.target.files[0],
             });
-            if (e.target.files[0].type === "audio/mp3") {
+            if (e.target.files[0].type.includes("audio")) {
                 setState1(false);
             }
             else {
@@ -110,8 +114,12 @@ export default function CurriculumoSubOptions() {
     const [showAddSubOptions, setShowAddSubOptions] = useState(false);
     const handleClose1 = () => {
         setShowAddSubOptions(false);
-        setPdf({})
         setPdfUrl("")
+        setPdf({})
+        setAudio({})
+        setVideo({})
+        setAudioUrl("")
+        setVideoUrl("")
         setState(false)
         setState1(false)
         setState2(false)
@@ -232,7 +240,7 @@ export default function CurriculumoSubOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>
+                        {params.row.pdf_url === "" || params.row.pdf_url === null ? <Button><i className="fas fa-file-pdf" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -244,7 +252,7 @@ export default function CurriculumoSubOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>
+                        {params.row.video_url === "" || params.row.video_url === null ? <Button ><i className="fas fa-file-video" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -256,7 +264,7 @@ export default function CurriculumoSubOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>
+                        {params.row.audio_url === "" || params.row.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -404,64 +412,52 @@ export default function CurriculumoSubOptions() {
                             formData.append("option_id", values.option_id)
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
+                                formData.append("audio_url", "")
+                                formData.append("video_url", "")
+
                             }
                             if (getAudio.pictureAsFile) {
                                 formData.append("audio_url", getAudio.pictureAsFile)
+                                formData.append("pdf_url", "")
+                                formData.append("video_url", "")
                             }
                             if (getVideo.pictureAsFile) {
                                 formData.append("video_url", getVideo.pictureAsFile)
+                                formData.append("pdf_url", "")
+                                formData.append("audio_url", "")
+                            }
+                            if (!getPdf.pictureAsFile && !getAudio.pictureAsFile && !getVideo.pictureAsFile) {
+                                formData.append("pdf_url", getPdfUrl)
+                                formData.append("audio_url", getAudioUrl)
+                                formData.append("video_url", getVideoUrl)
+
                             }
                             setbutton(true);
-
-                            edit_suboption(formData)
-                                .then((res) => {
-                                    resetForm({ values: "" });
-                                    Store.addNotification({
-                                        title: "Success",
-                                        message: res?.data?.message,
-                                        type: "success",
-                                        insert: "top",
-                                        container: "top-right",
-                                        className: "rnc__notification-container--top-right",
-                                        animationIn: ["animate__animated", "animate__fadeIn"],
-                                        animationOut: ["animate__animated", "animate__fadeOut"],
-                                        dismiss: {
-                                            duration: 5000,
-                                            onScreen: true,
-                                        },
-                                    });
-                                    get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
-                                        then((res) => {
-                                            console.log("=======>", res.data.result)
-
-                                            setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
-                                            setLoader(false);
+                            if (values.suboption_name.toLowerCase().includes("lesson")) {
+                                Store.addNotification({
+                                    title: "Error!",
+                                    message: "You cannot add more than 1 lesson plan",
+                                    type: "danger",
+                                    insert: "top",
+                                    container: "top-right",
+                                    className: "rnc__notification-container--top-right",
+                                    animationIn: ["animate__animated", "animate__fadeIn"],
+                                    animationOut: ["animate__animated", "animate__fadeOut"],
+                                    dismiss: {
+                                        duration: 5000,
+                                        onScreen: true,
+                                    },
+                                });
 
 
-                                        }).catch((err) => {
-                                            console.log(err);
-                                        })
-                                    setShowEditSubOptions(false)
-                                    setbutton(false);
-                                    setPdfUrl("")
-                                    setPdf({})
-                                    setAudio({})
-                                    setVideo({})
-                                    setAudioUrl("")
-                                    setVideoUrl("")
-                                    setState(false)
-                                    setState1(false)
-                                    setState2(false)
-                                }
-
-                                )
-                                .catch((err) => {
-                                    // setButton(true);
-                                    if (err) {
+                            } else {
+                                edit_suboption(formData)
+                                    .then((res) => {
+                                        resetForm({ values: "" });
                                         Store.addNotification({
-                                            title: "Error!",
-                                            message: err?.result?.data?.message,
-                                            type: "danger",
+                                            title: "Success",
+                                            message: res?.data?.message,
+                                            type: "success",
                                             insert: "top",
                                             container: "top-right",
                                             className: "rnc__notification-container--top-right",
@@ -472,19 +468,64 @@ export default function CurriculumoSubOptions() {
                                                 onScreen: true,
                                             },
                                         });
+                                        get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
+                                            then((res) => {
+                                                console.log("=======>", res.data.result)
 
+                                                setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                                setLoader(false);
+
+
+                                            }).catch((err) => {
+                                                console.log(err);
+                                            })
+                                        setShowEditSubOptions(false)
+                                        setbutton(false);
+                                        setPdfUrl("")
+                                        setPdf({})
+                                        setAudio({})
+                                        setVideo({})
+                                        setAudioUrl("")
+                                        setVideoUrl("")
+                                        setState(false)
+                                        setState1(false)
+                                        setState2(false)
                                     }
-                                    setbutton(false);
-                                    setPdfUrl("")
-                                    setPdf({})
-                                    setAudio({})
-                                    setVideo({})
-                                    setAudioUrl("")
-                                    setVideoUrl("")
-                                    setState(false)
-                                    setState1(false)
-                                    setState2(false)
-                                });
+
+                                    )
+                                    .catch((err) => {
+                                        // setButton(true);
+                                        if (err) {
+                                            Store.addNotification({
+                                                title: "Error!",
+                                                message: err?.result?.data?.message,
+                                                type: "danger",
+                                                insert: "top",
+                                                container: "top-right",
+                                                className: "rnc__notification-container--top-right",
+                                                animationIn: ["animate__animated", "animate__fadeIn"],
+                                                animationOut: ["animate__animated", "animate__fadeOut"],
+                                                dismiss: {
+                                                    duration: 5000,
+                                                    onScreen: true,
+                                                },
+                                            });
+
+                                        }
+                                        setbutton(false);
+                                        setPdfUrl("")
+                                        setPdf({})
+                                        setAudio({})
+                                        setVideo({})
+                                        setAudioUrl("")
+                                        setVideoUrl("")
+                                        setState(false)
+                                        setState1(false)
+                                        setState2(false)
+                                    });
+                            }
+
+
                         }}
                     >
                         <Form>
@@ -591,7 +632,7 @@ export default function CurriculumoSubOptions() {
 
                 </Modal.Body>
 
-            </Modal>
+            </Modal >
             {/* Ends */}
 
 
@@ -654,72 +695,60 @@ export default function CurriculumoSubOptions() {
                                 formData.append("video_url", getVideo.pictureAsFile)
                             }
                             setbutton(true);
+                            if (values.suboption_name.toLowerCase().includes("lesson")) {
+                                Store.addNotification({
+                                    title: "Error!",
+                                    message: "You cannot add more than 1 lesson plan",
+                                    type: "danger",
+                                    insert: "top",
+                                    container: "top-right",
+                                    className: "rnc__notification-container--top-right",
+                                    animationIn: ["animate__animated", "animate__fadeIn"],
+                                    animationOut: ["animate__animated", "animate__fadeOut"],
+                                    dismiss: {
+                                        duration: 5000,
+                                        onScreen: true,
+                                    },
+                                });
 
 
-                            add_suboption(formData)
-                                .then((res) => {
-                                    Store.addNotification({
-                                        title: "Success",
-                                        message: res?.data?.message,
-                                        type: "success",
-                                        insert: "top",
-                                        container: "top-right",
-                                        className: "rnc__notification-container--top-right",
-                                        animationIn: ["animate__animated", "animate__fadeIn"],
-                                        animationOut: [
-                                            "animate__animated",
-                                            "animate__fadeOut",
-                                        ],
-                                        dismiss: {
-                                            duration: 5000,
-                                            onScreen: true,
-                                        },
-                                    });
-                                    resetForm({ values: "" });
-
-                                    get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
-                                        then((res) => {
-                                            console.log("=======>", res.data.result)
-
-                                            setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
-                                            setLoader(false);
-
-                                        }).catch((err) => {
-                                            console.log(err);
-                                        })
-
-                                    setShowAddSubOptions(false);
-                                    setbutton(false);
-                                    setPdfUrl("")
-                                    setPdf({})
-                                    setAudio({})
-                                    setVideo({})
-                                    setAudioUrl("")
-                                    setVideoUrl("")
-                                    setState(false)
-                                    setState1(false)
-                                    setState2(false)
-                                })
-                                .catch((err) => {
-
-                                    if (err) {
+                            } else {
+                                add_suboption(formData)
+                                    .then((res) => {
                                         Store.addNotification({
-                                            title: "Error!",
-                                            message: err?.result?.data?.message,
-                                            type: "danger",
+                                            title: "Success",
+                                            message: res?.data?.message,
+                                            type: "success",
                                             insert: "top",
                                             container: "top-right",
                                             className: "rnc__notification-container--top-right",
                                             animationIn: ["animate__animated", "animate__fadeIn"],
-                                            animationOut: ["animate__animated", "animate__fadeOut"],
+                                            animationOut: [
+                                                "animate__animated",
+                                                "animate__fadeOut",
+                                            ],
                                             dismiss: {
                                                 duration: 5000,
                                                 onScreen: true,
                                             },
                                         });
+                                        resetForm({ values: "" });
+
+                                        get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
+                                            then((res) => {
+                                                console.log("=======>", res.data.result)
+
+                                                setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                                setLoader(false);
+
+                                            }).catch((err) => {
+                                                console.log(err);
+                                            })
+
+                                        setShowAddSubOptions(false);
                                         setbutton(false);
-                                        setPdf({})
                                         setPdfUrl("")
+                                        setPdf({})
                                         setAudio({})
                                         setVideo({})
                                         setAudioUrl("")
@@ -727,8 +756,39 @@ export default function CurriculumoSubOptions() {
                                         setState(false)
                                         setState1(false)
                                         setState2(false)
-                                    }
-                                });
+                                    })
+                                    .catch((err) => {
+
+                                        if (err) {
+                                            Store.addNotification({
+                                                title: "Error!",
+                                                message: err?.result?.data?.message,
+                                                type: "danger",
+                                                insert: "top",
+                                                container: "top-right",
+                                                className: "rnc__notification-container--top-right",
+                                                animationIn: ["animate__animated", "animate__fadeIn"],
+                                                animationOut: ["animate__animated", "animate__fadeOut"],
+                                                dismiss: {
+                                                    duration: 5000,
+                                                    onScreen: true,
+                                                },
+                                            });
+                                            setbutton(false);
+                                            setPdf({})
+                                            setPdfUrl("")
+                                            setAudio({})
+                                            setVideo({})
+                                            setAudioUrl("")
+                                            setVideoUrl("")
+                                            setState(false)
+                                            setState1(false)
+                                            setState2(false)
+                                        }
+                                    });
+                            }
+
+
                         }}
 
 
@@ -746,13 +806,13 @@ export default function CurriculumoSubOptions() {
 
 
                                         </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                        {getVideoUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group spo">
                                                 <label>Audio Title</label>
                                                 <MyTextInput type="text" className="form-control" name="audio_title" />
                                             </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                        </div>}
+                                        {getVideoUrl != "" || getPdfUrl != "" ? null : <div div className="col-lg-6 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Audio File</label>
 
@@ -770,14 +830,14 @@ export default function CurriculumoSubOptions() {
                                                 controls
                                             /> : null}
                                             {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                        </div>}
+                                        {getAudioUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Video Title</label>
                                                 <MyTextInput type="text" className="form-control" name="video_title" />
                                             </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                        </div>}
+                                        {getAudioUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-6 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Video File</label>
 
@@ -791,14 +851,14 @@ export default function CurriculumoSubOptions() {
                                             </div>
                                             {getVideoUrl != "" ? <ReactPlayer width="100%" height="100" url={getVideoUrl} controls={true} /> : null}
                                             {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
-                                        </div>
-                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                        </div>}
+                                        {getVideoUrl != "" || getAudioUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Pdf Title</label>
                                                 <MyTextInput type="text" className="form-control" name="pdf_title" />
                                             </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12 col-sm-12">
+                                        </div>}
+                                        {getAudioUrl != "" || getVideoUrl != "" ? null : <div className="col-lg-6 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>PDF</label>
 
@@ -811,10 +871,13 @@ export default function CurriculumoSubOptions() {
                                                 />
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
+
+                                        </div>}
+                                        <div style={{ 'width': '100%' }}>
                                             {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
                                             {getState1 ? <p style={{ color: "red" }}>Only Mp3 Audio is allowed !</p> : null}
-                                            {getState2 ? <p style={{ color: "red" }}>Only Mp4 Video is allowed !</p> : null}                                        </div>
-
+                                            {getState2 ? <p style={{ color: "red" }}>Only Mp4 Video is allowed !</p> : null}
+                                        </div>
 
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             {!getbutton ? getState || getState1 || getState2 ? <Button disabled type="submit" variant="contained">Submit
