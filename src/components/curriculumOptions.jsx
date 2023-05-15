@@ -243,6 +243,7 @@ export default function CurriculumoOptions() {
             field: 'pdf_url',
             headerName: "Pdf",
             width: 200,
+            hide: location.state.page_key === 1 ? false : true,
             renderCell: (params) => {
                 return (
                     <>
@@ -255,6 +256,7 @@ export default function CurriculumoOptions() {
             field: 'video_url',
             headerName: "Video",
             width: 200,
+            hide: location.state.page_key === 1 ? false : true,
             renderCell: (params) => {
                 return (
                     <>
@@ -267,6 +269,7 @@ export default function CurriculumoOptions() {
             field: 'audio_url',
             headerName: "Audio",
             width: 200,
+            hide: location.state.page_key === 1 ? false : true,
             renderCell: (params) => {
                 return (
                     <>
