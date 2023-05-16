@@ -98,7 +98,7 @@ export default function CurriculumSubUnits() {
                     },
                 });
                 get_subunits({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
-                then((res) => {
+                    then((res) => {
                         console.log(res.data.result)
 
                         setSubunits(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
@@ -153,7 +153,7 @@ export default function CurriculumSubUnits() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_options', { state: { curriculum_id:location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: params.row.subunit_id , page_key: params.row.key} })}>Resources</Button>
+                        <Button onClick={() => navigate('/curriculum_options', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: params.row.subunit_id, page_key: params.row.key } })}>Resources</Button>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -194,14 +194,14 @@ export default function CurriculumSubUnits() {
                                         <div className="card">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Sub Section</a>
+                                                {Subunits.length >= 3 ? null : <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Sub Section</a>}
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
 
 
                                                     {getLoader === true ? <Loader /> : <Box sx={{ height: 650, width: '100%' }}>
-                                                    {!Subunits.length? <h3>No Data Found!</h3>: null}
+                                                        {!Subunits.length ? <h3>No Data Found!</h3> : null}
 
                                                         {Subunits.length > 0 && (
                                                             <>
