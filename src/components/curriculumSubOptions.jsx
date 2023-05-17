@@ -276,7 +276,7 @@ export default function CurriculumoSubOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_lessons', { state: { curriculum_id: location.state.curriculum_id, suboption_id: params.row.suboption_id } })}>Lesson Plans</Button>
+                        {params.row.suboption_name.toLowerCase().includes("lesson") ? <Button onClick={() => navigate('/curriculum_lessons', { state: { curriculum_id: location.state.curriculum_id, suboption_id: params.row.suboption_id } })}>Lesson Plans</Button> : <Button style={{"color": "grey"}}>Lesson Plans</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
