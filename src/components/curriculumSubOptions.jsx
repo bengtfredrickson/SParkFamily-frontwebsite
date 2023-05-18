@@ -276,7 +276,7 @@ export default function CurriculumoSubOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        {params.row.suboption_name.toLowerCase().includes("lesson") ? <Button onClick={() => navigate('/curriculum_lessons', { state: { curriculum_id: location.state.curriculum_id, suboption_id: params.row.suboption_id } })}>Lesson Plans</Button> : <Button style={{"color": "grey"}}>Lesson Plans</Button>}
+                        {params.row.suboption_name.toLowerCase().includes("lesson") ? <Button onClick={() => navigate('/curriculum_lessons', { state: { curriculum_id: location.state.curriculum_id, suboption_id: params.row.suboption_id } })}>Lesson Plans</Button> : <Button style={{ "color": "grey" }}>Lesson Plans</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -695,21 +695,105 @@ export default function CurriculumoSubOptions() {
                                 formData.append("video_url", getVideo.pictureAsFile)
                             }
                             setbutton(true);
-                            if (values.suboption_name.toLowerCase().includes("lesson")) {
-                                Store.addNotification({
-                                    title: "Error!",
-                                    message: "You cannot add more than 1 lesson plan",
-                                    type: "danger",
-                                    insert: "top",
-                                    container: "top-right",
-                                    className: "rnc__notification-container--top-right",
-                                    animationIn: ["animate__animated", "animate__fadeIn"],
-                                    animationOut: ["animate__animated", "animate__fadeOut"],
-                                    dismiss: {
-                                        duration: 5000,
-                                        onScreen: true,
-                                    },
-                                });
+                            const isFound = SubOptions.some(element => {
+                                if (element.suboption_name.toLowerCase().includes("lesson")) {
+                                    return true;
+                                }
+
+                                return false;
+                            });
+                            if (isFound) {
+                                if (values.suboption_name.toLowerCase().includes("lesson")) {
+                                    Store.addNotification({
+                                        title: "Error!",
+                                        message: "You cannot add more than 1 lesson plan",
+                                        type: "danger",
+                                        insert: "top",
+                                        container: "top-right",
+                                        className: "rnc__notification-container--top-right",
+                                        animationIn: ["animate__animated", "animate__fadeIn"],
+                                        animationOut: ["animate__animated", "animate__fadeOut"],
+                                        dismiss: {
+                                            duration: 5000,
+                                            onScreen: true,
+                                        },
+                                    });
+                                } else {
+                                    add_suboption(formData)
+                                    .then((res) => {
+                                        Store.addNotification({
+                                            title: "Success",
+                                            message: res?.data?.message,
+                                            type: "success",
+                                            insert: "top",
+                                            container: "top-right",
+                                            className: "rnc__notification-container--top-right",
+                                            animationIn: ["animate__animated", "animate__fadeIn"],
+                                            animationOut: [
+                                                "animate__animated",
+                                                "animate__fadeOut",
+                                            ],
+                                            dismiss: {
+                                                duration: 5000,
+                                                onScreen: true,
+                                            },
+                                        });
+                                        resetForm({ values: "" });
+
+                                        get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
+                                            then((res) => {
+                                                console.log("=======>", res.data.result)
+
+                                                setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                                setLoader(false);
+
+                                            }).catch((err) => {
+                                                console.log(err);
+                                            })
+
+                                        setShowAddSubOptions(false);
+                                        setbutton(false);
+                                        setPdfUrl("")
+                                        setPdf({})
+                                        setAudio({})
+                                        setVideo({})
+                                        setAudioUrl("")
+                                        setVideoUrl("")
+                                        setState(false)
+                                        setState1(false)
+                                        setState2(false)
+                                    })
+                                    .catch((err) => {
+
+                                        if (err) {
+                                            Store.addNotification({
+                                                title: "Error!",
+                                                message: err?.result?.data?.message,
+                                                type: "danger",
+                                                insert: "top",
+                                                container: "top-right",
+                                                className: "rnc__notification-container--top-right",
+                                                animationIn: ["animate__animated", "animate__fadeIn"],
+                                                animationOut: ["animate__animated", "animate__fadeOut"],
+                                                dismiss: {
+                                                    duration: 5000,
+                                                    onScreen: true,
+                                                },
+                                            });
+                                            setbutton(false);
+                                            setPdf({})
+                                            setPdfUrl("")
+                                            setAudio({})
+                                            setVideo({})
+                                            setAudioUrl("")
+                                            setVideoUrl("")
+                                            setState(false)
+                                            setState1(false)
+                                            setState2(false)
+                                        }
+                                    });
+                                }
+
 
 
                             } else {
