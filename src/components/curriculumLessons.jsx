@@ -292,7 +292,13 @@ export default function CurriculumoLessonPlans() {
         setImage({
             pictureAsFile: e.target.files[0],
         });
-        setState(false);
+        if (e.target.files[0].type.includes("image")) {
+            setState(false);
+        }
+        else {
+            setState(true);
+
+        } 
         setImageUrl(URL.createObjectURL(e.target.files[0]));
     };
     // ends
@@ -393,7 +399,7 @@ export default function CurriculumoLessonPlans() {
                         console.log("=======>", res.data.result)
                         if (res.data.result !== null) {
                             setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
-                        }else{
+                        } else {
                             setLessonPlans([])
 
                         }
@@ -1093,7 +1099,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group spo">
                                                 <label>Integration</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
 
                                                     toolbarClassName="toolbarClassName"
@@ -1118,7 +1124,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Learning Objective</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1142,7 +1148,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Learning Target</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1166,7 +1172,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Prep</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1190,7 +1196,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Reflection Question</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1214,7 +1220,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>SEL</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1238,7 +1244,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Set</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1262,7 +1268,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Spark It Up</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1286,7 +1292,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Standard Alignment</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1310,7 +1316,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teach</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1334,7 +1340,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teaching Cues</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1358,7 +1364,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teaching Suggestions</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1382,7 +1388,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Vocabulary</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -1415,12 +1421,15 @@ export default function CurriculumoLessonPlans() {
                                                     onChange={(e) => onHandle(e)}
                                                 />
                                                 {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                                {getState ? <p style={{ color: "red" }}>Only Image is allowed !</p> : null}
+
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
-                                            {!getbutton ? <Button type="submit" variant="contained"  >
-                                                Submit
+                                            {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                            </Button> : <Button type="submit" variant="contained" >Submit
                                             </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
 
                                         </div>
 
@@ -1651,7 +1660,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group spo">
                                                     <label>Ready</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1675,7 +1684,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Set</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1699,7 +1708,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Go</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1723,7 +1732,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Adaptations</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1747,7 +1756,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Objectives</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1771,7 +1780,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Academics</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1795,7 +1804,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Teaching Tips</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1819,7 +1828,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Family Fun</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1843,7 +1852,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Lyrics</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1867,7 +1876,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Music Credits</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -1900,12 +1909,15 @@ export default function CurriculumoLessonPlans() {
                                                         onChange={(e) => onHandle(e)}
                                                     />
                                                     {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                                    {getState ? <p style={{ color: "red" }}>Only Image is allowed !</p> : null}
+
                                                 </div>
                                             </div>
                                             <div className="col-lg-12 col-md-12 col-sm-12">
-                                                {!getbutton ? <Button type="submit" variant="contained"  >
-                                                    Submit
+                                                {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                                </Button> : <Button type="submit" variant="contained" >Submit
                                                 </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
 
                                             </div>
 
@@ -2129,7 +2141,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group spo">
                                                         <label>Ready</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -2153,7 +2165,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Set</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -2177,7 +2189,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Go</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -2201,7 +2213,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Safety First</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -2225,7 +2237,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Game Reset</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -2249,7 +2261,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Home Play</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -2273,7 +2285,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>The Right Fit</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -2297,7 +2309,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Guideline Addressed</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -2331,12 +2343,15 @@ export default function CurriculumoLessonPlans() {
                                                             onChange={(e) => onHandle(e)}
                                                         />
                                                         {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                                        {getState ? <p style={{ color: "red" }}>Only Image is allowed !</p> : null}
+
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
-                                                    {!getbutton ? <Button type="submit" variant="contained"  >
-                                                        Submit
+                                                    {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                                    </Button> : <Button type="submit" variant="contained" >Submit
                                                     </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
 
                                                 </div>
 
@@ -2576,7 +2591,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group spo">
                                                             <label>Integration</label>
                                                             {console.log("===========aaaaa====>", editorData1)}
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2600,7 +2615,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Lesson Objective</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2624,7 +2639,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Lesson Target</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2648,7 +2663,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Prep</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2672,7 +2687,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Reflection Question</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2696,7 +2711,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Competencies</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2720,7 +2735,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Lesson Set</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2744,7 +2759,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Spark It Up</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2768,7 +2783,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Standard Alignment</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2792,7 +2807,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Teach</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2816,7 +2831,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Teaching Cues</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2840,7 +2855,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Teaching Suggestions</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2864,7 +2879,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Integration Icons</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2888,7 +2903,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Key Words</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -2921,12 +2936,15 @@ export default function CurriculumoLessonPlans() {
                                                                 onChange={(e) => onHandle(e)}
                                                             />
                                                             {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                                            {getState ? <p style={{ color: "red" }}>Only Image is allowed !</p> : null}
+
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
-                                                        {!getbutton ? <Button type="submit" variant="contained"  >
-                                                            Submit
+                                                        {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                                        </Button> : <Button type="submit" variant="contained" >Submit
                                                         </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
 
                                                     </div>
 
@@ -3194,7 +3212,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group spo">
                                                 <label>Integration</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3218,7 +3236,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Learning Objective</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3242,7 +3260,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Learning Target</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3266,7 +3284,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Prep</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3290,7 +3308,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Reflection Question</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3314,7 +3332,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>SEL</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3338,7 +3356,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Set</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3362,7 +3380,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Spark It Up</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3386,7 +3404,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Standards</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3410,7 +3428,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teach</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3434,7 +3452,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teaching Cues</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3458,7 +3476,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Teaching Suggestions</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3482,7 +3500,7 @@ export default function CurriculumoLessonPlans() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Vocabulary</label>
-                                                <Editor
+                                                <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                     handlePastedText={() => false}
                                                     toolbarClassName="toolbarClassName"
                                                     wrapperClassName="wrapperClassName"
@@ -3516,12 +3534,15 @@ export default function CurriculumoLessonPlans() {
                                                     required
                                                 />
                                                 {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                                {getState ? <p style={{ color: "red" }}>Only Image is allowed !</p> : null}
+
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
-                                            {!getbutton ? <Button type="submit" variant="contained"  >
-                                                Submit
+                                            {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                            </Button> : <Button type="submit" variant="contained" >Submit
                                             </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
 
                                         </div>
 
@@ -3752,7 +3773,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group spo">
                                                     <label>Ready</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3776,7 +3797,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Set</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3800,7 +3821,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Go</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3824,7 +3845,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Adaptations</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3848,7 +3869,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Objectives</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3872,7 +3893,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Academics</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3896,7 +3917,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Teaching Tips</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3920,7 +3941,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Family Fun</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3944,7 +3965,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Lyrics</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -3968,7 +3989,7 @@ export default function CurriculumoLessonPlans() {
                                             <div className="col-lg-12 col-md-12 col-sm-12">
                                                 <div className="form-group">
                                                     <label>Music Credits</label>
-                                                    <Editor
+                                                    <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                         handlePastedText={() => false}
                                                         toolbarClassName="toolbarClassName"
                                                         wrapperClassName="wrapperClassName"
@@ -4001,12 +4022,14 @@ export default function CurriculumoLessonPlans() {
                                                         onChange={(e) => onHandle(e)}
                                                     />
                                                     {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                                    {getState ? <p style={{ color: "red" }}>Only Image is allowed !</p> : null}
                                                 </div>
                                             </div>
                                             <div className="col-lg-12 col-md-12 col-sm-12">
-                                                {!getbutton ? <Button type="submit" variant="contained"  >
-                                                    Submit
+                                                {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                                </Button> : <Button type="submit" variant="contained" >Submit
                                                 </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
 
                                             </div>
 
@@ -4231,7 +4254,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group spo">
                                                         <label>Ready</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -4255,7 +4278,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Set</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -4279,7 +4302,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Go</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -4303,7 +4326,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Safety First</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -4327,7 +4350,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Game Reset</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -4351,7 +4374,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Home Play</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -4375,7 +4398,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>The Right Fit</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -4399,7 +4422,7 @@ export default function CurriculumoLessonPlans() {
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                                     <div className="form-group">
                                                         <label>Guideline Addressed</label>
-                                                        <Editor
+                                                        <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                             handlePastedText={() => false}
                                                             toolbarClassName="toolbarClassName"
                                                             wrapperClassName="wrapperClassName"
@@ -4434,12 +4457,14 @@ export default function CurriculumoLessonPlans() {
                                                             required
                                                         />
                                                         {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                                        {getState ? <p style={{ color: "red" }}>Only Image is allowed !</p> : null}
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-12 col-md-12 col-sm-12">
-                                                    {!getbutton ? <Button type="submit" variant="contained"  >
-                                                        Submit
+                                                    {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                                    </Button> : <Button type="submit" variant="contained" >Submit
                                                     </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
+
 
                                                 </div>
 
@@ -4677,7 +4702,7 @@ export default function CurriculumoLessonPlans() {
                                                         <div className="form-group spo">
                                                             <label>Integration</label>
                                                             {console.log("===========aaaaa====>", editorData1)}
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4701,7 +4726,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Lesson Objective</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4725,7 +4750,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Lesson Target</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4749,7 +4774,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Prep</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4773,7 +4798,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Reflection Question</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4797,7 +4822,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Competencies</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4821,7 +4846,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Lesson Set</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4845,7 +4870,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Spark It Up</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4869,7 +4894,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Standard Alignment</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4893,7 +4918,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Teach</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4917,7 +4942,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Teaching Cues</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4941,7 +4966,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Teaching Suggestions</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4965,7 +4990,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Integration Icons</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -4989,7 +5014,7 @@ export default function CurriculumoLessonPlans() {
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className="form-group">
                                                             <label>Key Words</label>
-                                                            <Editor
+                                                            <Editor toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded'/*, 'emoji'*/, 'image', 'remove', 'history'] }}
                                                                 handlePastedText={() => false}
                                                                 toolbarClassName="toolbarClassName"
                                                                 wrapperClassName="wrapperClassName"
@@ -5023,11 +5048,12 @@ export default function CurriculumoLessonPlans() {
                                                                 required
                                                             />
                                                             {getImageUrl != "" ? <img src={getImageUrl} className=" w-30 p-3" alt="" /> : null}
+                                                            {getState ? <p style={{ color: "red" }}>Only Image is allowed !</p> : null}
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-12 col-md-12 col-sm-12">
-                                                        {!getbutton ? <Button type="submit" variant="contained"  >
-                                                            Submit
+                                                        {!getbutton ? getState ? <Button disabled type="submit" variant="contained">Submit
+                                                        </Button> : <Button type="submit" variant="contained" >Submit
                                                         </Button> : <Button variant="contained" style={{ backgroundColor: 'blue', color: "white" }} disabled>Wait Please!</Button>}
 
                                                     </div>
