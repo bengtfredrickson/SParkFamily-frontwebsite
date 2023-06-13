@@ -298,7 +298,7 @@ export default function CurriculumoLessonPlans() {
         else {
             setState(true);
 
-        } 
+        }
         setImageUrl(URL.createObjectURL(e.target.files[0]));
     };
     // ends
@@ -1013,6 +1013,7 @@ export default function CurriculumoLessonPlans() {
                                         setGuideline("")
                                         setIntegrationIcon("")
                                         setKeyWords("")
+                                        setState(false)
 
                                     }
 
@@ -1081,6 +1082,8 @@ export default function CurriculumoLessonPlans() {
                                         setGuideline("")
                                         setIntegrationIcon("")
                                         setKeyWords("")
+                                        setState(false)
+
 
                                     });
                             }}
@@ -1574,6 +1577,8 @@ export default function CurriculumoLessonPlans() {
                                             setGuideline("")
                                             setIntegrationIcon("")
                                             setKeyWords("")
+                                            setState(false)
+
 
                                         }
 
@@ -1642,6 +1647,8 @@ export default function CurriculumoLessonPlans() {
                                             setGuideline("")
                                             setIntegrationIcon("")
                                             setKeyWords("")
+                                            setState(false)
+
 
                                         });
                                 }}
@@ -2054,6 +2061,8 @@ export default function CurriculumoLessonPlans() {
                                                 setGuideline("")
                                                 setIntegrationIcon("")
                                                 setKeyWords("")
+                                                setState(false)
+
 
                                             }
 
@@ -2122,6 +2131,8 @@ export default function CurriculumoLessonPlans() {
                                                 setIntegrationIcon("")
                                                 setKeyWords("")
                                                 setShowEditLessonPlans(false)
+                                                setState(false)
+
 
 
                                             });
@@ -2504,6 +2515,8 @@ export default function CurriculumoLessonPlans() {
                                                     setGuideline("")
                                                     setIntegrationIcon("")
                                                     setKeyWords("")
+                                                    setState(false)
+
 
                                                 }
 
@@ -2572,6 +2585,8 @@ export default function CurriculumoLessonPlans() {
                                                     setGuideline("")
                                                     setIntegrationIcon("")
                                                     setKeyWords("")
+                                                    setState(false)
+
 
                                                 });
                                         }}
@@ -3126,6 +3141,8 @@ export default function CurriculumoLessonPlans() {
                                         setGuideline("")
                                         setIntegrationIcon("")
                                         setKeyWords("")
+                                        setState(false)
+
 
                                     }
 
@@ -3194,6 +3211,8 @@ export default function CurriculumoLessonPlans() {
                                         setGuideline("")
                                         setIntegrationIcon("")
                                         setKeyWords("")
+                                        setState(false)
+
 
                                     });
                             }}
@@ -3686,6 +3705,8 @@ export default function CurriculumoLessonPlans() {
                                             setGuideline("")
                                             setIntegrationIcon("")
                                             setKeyWords("")
+                                            setState(false)
+
 
                                         }
 
@@ -3755,6 +3776,8 @@ export default function CurriculumoLessonPlans() {
                                             setGuideline("")
                                             setIntegrationIcon("")
                                             setKeyWords("")
+                                            setState(false)
+
 
                                         });
                                 }}
@@ -4167,6 +4190,8 @@ export default function CurriculumoLessonPlans() {
                                                 setGuideline("")
                                                 setIntegrationIcon("")
                                                 setKeyWords("")
+                                                setState(false)
+
 
                                             }
 
@@ -4236,6 +4261,8 @@ export default function CurriculumoLessonPlans() {
                                                 setGuideline("")
                                                 setIntegrationIcon("")
                                                 setKeyWords("")
+                                                setState(false)
+
 
                                             });
                                     }}
@@ -4615,6 +4642,8 @@ export default function CurriculumoLessonPlans() {
                                                     setGuideline("")
                                                     setIntegrationIcon("")
                                                     setKeyWords("")
+                                                    setState(false)
+
 
                                                 }
 
@@ -4683,6 +4712,8 @@ export default function CurriculumoLessonPlans() {
                                                     setGuideline("")
                                                     setIntegrationIcon("")
                                                     setKeyWords("")
+                                                    setState(false)
+
 
                                                 });
                                         }}
