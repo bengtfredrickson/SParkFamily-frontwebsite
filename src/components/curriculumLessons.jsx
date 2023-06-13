@@ -34,7 +34,7 @@ export default function CurriculumoLessonPlans() {
     const [getImage, setImage] = useState({});
     const [getDetail, setDetail] = useState([]);
     const [getImageUrl, setImageUrl] = useState("");
-    const [getState, setState] = useState(true);
+    const [getState, setState] = useState(false);
     const [getbutton, setbutton] = useState(false);
 
     // Edit LessonPlans Model
@@ -781,7 +781,6 @@ export default function CurriculumoLessonPlans() {
         }
 
     }
-
     return (
         <>
             <style>{css}</style>
