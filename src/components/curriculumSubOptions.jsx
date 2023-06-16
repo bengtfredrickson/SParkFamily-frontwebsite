@@ -433,7 +433,14 @@ export default function CurriculumoSubOptions() {
 
                             }
                             setbutton(true);
-                            if (values.suboption_name.toLowerCase().includes("lesson")) {
+                            const isFound = SubOptions.some(element => {
+                                if (element.suboption_name.toLowerCase().includes("lesson")) {
+                                    return true;
+                                }
+
+                                return false;
+                            });
+                            if (isFound && values.suboption_name.toLowerCase().includes("lesson")) {
                                 Store.addNotification({
                                     title: "Error!",
                                     message: "You cannot add more than 1 lesson plan",
