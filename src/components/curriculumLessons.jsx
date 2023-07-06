@@ -37,6 +37,15 @@ export default function CurriculumoLessonPlans() {
     const [getState, setState] = useState(false);
     const [getbutton, setbutton] = useState(false);
 
+    const convertHtmlToDraft = (data) => {
+        const blocksFromHTML = htmlToDraft(data);
+        const contentState = ContentState.createFromBlockArray(
+        blocksFromHTML.contentBlocks,
+        blocksFromHTML.entityMap
+        );
+        return EditorState.createWithContent(contentState);
+    }
+
     // Edit LessonPlans Model
     const [showEditLessonPlans, setShowEditLessonPlans] = useState(false);
     const handleClose = () => {
@@ -90,203 +99,113 @@ export default function CurriculumoLessonPlans() {
             setDetail(e.row)
             setShowEditLessonPlans(true);
             setImageUrl(e.row.image_url);
-            setEditorData1(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.integration))
-            ))
+            setEditorData1(convertHtmlToDraft(e.row.integration))
             setIntegration(e.row.integration)
-            setEditorData2(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_objective))
-            ))
+            setEditorData2(convertHtmlToDraft(e.row.lesson_objective))
             setObjective(e.row.lesson_objective)
-            setEditorData3(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_target))
-            ))
+            setEditorData3(convertHtmlToDraft(e.row.lesson_target))
             setTarget(e.row.lesson_target)
-            setEditorData4(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.prep))
-            ))
+            setEditorData4(convertHtmlToDraft(e.row.prep))
             setPrep(e.row.prep)
-            setEditorData5(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.reflection_question))
-            ))
+            setEditorData5(convertHtmlToDraft(e.row.reflection_question))
             setQuestions(e.row.reflection_question)
-            setEditorData6(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.sel_compentencies))
-            ))
+            setEditorData6(convertHtmlToDraft(e.row.sel_compentencies))
             setCompetencies(e.row.sel_compentencies)
-            setEditorData7(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_set))
-            ))
+            setEditorData7(convertHtmlToDraft(e.row.lesson_set))
             setSet(e.row.lesson_set)
-            setEditorData8(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.spark_it_up))
-            ))
+            setEditorData8(convertHtmlToDraft(e.row.spark_it_up))
             setSparkItUp(e.row.spark_it_up)
-            setEditorData9(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.standards_alignment))
-            ))
+            setEditorData9(convertHtmlToDraft(e.row.standards_alignment))
             setAlignment(e.row.standards_alignment)
-            setEditorData10(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.teach))
-            ))
+            setEditorData10(convertHtmlToDraft(e.row.teach))
             setTeach(e.row.teach)
-            setEditorData11(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.teaching_cues))
-            ))
+            setEditorData11(convertHtmlToDraft(e.row.teaching_cues))
             setCues(e.row.teaching_cues)
-            setEditorData12(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.teaching_suggestions))
-            ))
+            setEditorData12(convertHtmlToDraft(e.row.teaching_suggestions))
             setSuggestion(e.row.teaching_suggestions)
-            setEditorData13(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.vocabulary ? e.row.vocabulary : ""))
-            ))
+            setEditorData13(convertHtmlToDraft(e.row.vocabulary ? e.row.vocabulary : ""))
             setVocabulary(e.row.vocabulary ? e.row.vocabulary : "")
         }
         else if (t === 2) {
             setDetail(e.row)
             setShowEditLessonPlans(true);
             setImageUrl(e.row.image_url);
-            setEditorData1(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.ready))
-            ))
+            setEditorData1(convertHtmlToDraft(e.row.ready))
             setReady(e.row.ready)
-            setEditorData2(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_set))
-            ))
+            setEditorData2(convertHtmlToDraft(e.row.lesson_set))
             setSet(e.row.lesson_set)
-            setEditorData3(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.go))
-            ))
+            setEditorData3(convertHtmlToDraft(e.row.go))
             setGo(e.row.go)
-            setEditorData4(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.adaptations))
-            ))
+            setEditorData4(convertHtmlToDraft(e.row.adaptations))
             setAdaptation(e.row.adaptations)
-            setEditorData5(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.objectives))
-            ))
+            setEditorData5(convertHtmlToDraft(e.row.objectives))
             setObjective(e.row.objectives)
-            setEditorData6(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.academics))
-            ))
+            setEditorData6(convertHtmlToDraft(e.row.academics))
             setAcademics(e.row.academics)
-            setEditorData7(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.teacher_tips))
-            ))
+            setEditorData7(convertHtmlToDraft(e.row.teacher_tips))
             setTeacherTips(e.row.teacher_tips)
-            setEditorData8(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.family_fun))
-            ))
+            setEditorData8(convertHtmlToDraft(e.row.family_fun))
             setFamilyFun(e.row.family_fun)
-            setEditorData9(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lyrics))
-            ))
+            setEditorData9(convertHtmlToDraft(e.row.lyrics))
             setLyrics(e.row.lyrics)
-            setEditorData10(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.music_credits))
-            ))
+            setEditorData10(convertHtmlToDraft(e.row.music_credits))
             setMusicCredits(e.row.music_credits)
         }
         else if (t === 3) {
             setDetail(e.row)
             setShowEditLessonPlans(true);
             setImageUrl(e.row.image_url);
-            setEditorData1(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.ready))
-            ))
+            setEditorData1(convertHtmlToDraft(e.row.ready))
             setReady(e.row.ready)
-            setEditorData2(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_set))
-            ))
+            setEditorData2(convertHtmlToDraft(e.row.lesson_set))
             setSet(e.row.lesson_set)
-            setEditorData3(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.go))
-            ))
+            setEditorData3(convertHtmlToDraft(e.row.go))
             setGo(e.row.go)
-            setEditorData4(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.safety_first))
-            ))
+            setEditorData4(convertHtmlToDraft(e.row.safety_first))
             setSafetyFirst(e.row.safety_first)
-            setEditorData5(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.game_reset))
-            ))
+            setEditorData5(convertHtmlToDraft(e.row.game_reset))
             setGameReset(e.row.game_reset)
-            setEditorData6(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.home_play))
-            ))
+            setEditorData6(convertHtmlToDraft(e.row.home_play))
             setHomePlay(e.row.home_play)
-            setEditorData7(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.the_right_fit))
-            ))
+            setEditorData7(convertHtmlToDraft(e.row.the_right_fit))
             setTheRightFit(e.row.the_right_fit)
-            setEditorData8(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.guideline_addressed))
-            ))
+            setEditorData8(convertHtmlToDraft(e.row.guideline_addressed))
             setGuideline(e.row.guideline_addressed)
         }
         if (t === 4) {
             setDetail(e.row)
             setShowEditLessonPlans(true);
             setImageUrl(e.row.image_url);
-            setEditorData1(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.integration))
-            ))
+            setEditorData1(convertHtmlToDraft(e.row.integration))
             setIntegration(e.row.integration)
-            setEditorData2(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_objective))
-            ))
+            setEditorData2(convertHtmlToDraft(e.row.lesson_objective))
             setObjective(e.row.lesson_objective)
-            setEditorData3(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_target))
-            ))
+            setEditorData3(convertHtmlToDraft(e.row.lesson_target))
             setTarget(e.row.lesson_target)
-            setEditorData4(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.prep))
-            ))
+            setEditorData4(convertHtmlToDraft(e.row.prep))
             setPrep(e.row.prep)
-            setEditorData5(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.reflection_question))
-            ))
+            setEditorData5(convertHtmlToDraft(e.row.reflection_question))
             setQuestions(e.row.reflection_question)
-            setEditorData6(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.sel_compentencies))
-            ))
+            setEditorData6(convertHtmlToDraft(e.row.sel_compentencies))
             setCompetencies(e.row.sel_compentencies)
-            setEditorData7(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.lesson_set))
-            ))
+            setEditorData7(convertHtmlToDraft(e.row.lesson_set))
             setSet(e.row.lesson_set)
-            setEditorData8(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.spark_it_up))
-            ))
+            setEditorData8(convertHtmlToDraft(e.row.spark_it_up))
             setSparkItUp(e.row.spark_it_up)
-            setEditorData9(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.standards_alignment))
-            ))
+            setEditorData9(convertHtmlToDraft(e.row.standards_alignment))
             setAlignment(e.row.standards_alignment)
-            setEditorData10(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.teach))
-            ))
+            setEditorData10(convertHtmlToDraft(e.row.teach))
             setTeach(e.row.teach)
-            setEditorData11(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.teaching_cues))
-            ))
+            setEditorData11(convertHtmlToDraft(e.row.teaching_cues))
             setCues(e.row.teaching_cues)
-            setEditorData12(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.teaching_suggestions))
-            ))
+            setEditorData12(convertHtmlToDraft(e.row.teaching_suggestions))
             setSuggestion(e.row.teaching_suggestions)
-            setEditorData13(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.integration_icon))
-            ))
+            setEditorData13(convertHtmlToDraft(e.row.integration_icon))
             setIntegrationIcon(e.row.integration_icon)
-            setEditorData13(EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(e.row.key_words))
-            ))
+            setEditorData13(convertHtmlToDraft(e.row.key_words))
             setKeyWords(e.row.key_words)
         }
-
+    
     };
     const onHandle = (e) => {
         setImage({
@@ -394,8 +313,8 @@ export default function CurriculumoLessonPlans() {
                         onScreen: true,
                     },
                 });
-                get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                    then((res) => {
+                get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                    .then((res) => {
                         console.log("=======>", res.data.result)
                         if (res.data.result !== null) {
                             setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -421,8 +340,8 @@ export default function CurriculumoLessonPlans() {
     // ends
     useEffect(() => {
         if (LessonPlans.length === 0 || location?.state?.reloadLessonPlans) {
-            get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                then((res) => {
+            get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                .then((res) => {
                     console.log("=======>", res.data.result)
 
                     setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -957,8 +876,8 @@ export default function CurriculumoLessonPlans() {
                                                 onScreen: true,
                                             },
                                         });
-                                        get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                                            then((res) => {
+                                        get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                                            .then((res) => {
                                                 console.log("=======>", res.data.result)
 
                                                 setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -1521,8 +1440,8 @@ export default function CurriculumoLessonPlans() {
                                                     onScreen: true,
                                                 },
                                             });
-                                            get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                                                then((res) => {
+                                            get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                                                .then((res) => {
                                                     console.log("=======>", res.data.result)
 
                                                     setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -2006,8 +1925,8 @@ export default function CurriculumoLessonPlans() {
                                                         onScreen: true,
                                                     },
                                                 });
-                                                get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                                                    then((res) => {
+                                                get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                                                    .then((res) => {
                                                         console.log("=======>", res.data.result)
 
                                                         setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -2460,8 +2379,8 @@ export default function CurriculumoLessonPlans() {
                                                             onScreen: true,
                                                         },
                                                     });
-                                                    get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                                                        then((res) => {
+                                                    get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                                                        .then((res) => {
                                                             console.log("=======>", res.data.result)
 
                                                             setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -3085,8 +3004,8 @@ export default function CurriculumoLessonPlans() {
                                                 onScreen: true,
                                             },
                                         });
-                                        get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                                            then((res) => {
+                                        get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                                            .then((res) => {
                                                 console.log("=======>", res.data.result)
 
                                                 setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -3649,8 +3568,8 @@ export default function CurriculumoLessonPlans() {
                                                     onScreen: true,
                                                 },
                                             });
-                                            get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                                                then((res) => {
+                                            get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                                                .then((res) => {
                                                     console.log("=======>", res.data.result)
 
                                                     setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -4135,8 +4054,8 @@ export default function CurriculumoLessonPlans() {
                                                         onScreen: true,
                                                     },
                                                 });
-                                                get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                                                    then((res) => {
+                                                get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                                                    .then((res) => {
                                                         console.log("=======>", res.data.result)
 
                                                         setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
@@ -4587,8 +4506,8 @@ export default function CurriculumoLessonPlans() {
                                                             onScreen: true,
                                                         },
                                                     });
-                                                    get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id }).
-                                                        then((res) => {
+                                                    get_lessons({ curriculum_id: location.state.curriculum_id, suboption_id: location.state.suboption_id })
+                                                        .then((res) => {
                                                             console.log("=======>", res.data.result)
 
                                                             setLessonPlans(res.data.result.map((el, index) => ({ ...el, id: el.lesson_id, i: index })))
