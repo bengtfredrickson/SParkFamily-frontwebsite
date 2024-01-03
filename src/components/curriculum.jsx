@@ -13,10 +13,57 @@ import * as Yup from 'yup';
 import { Loader } from './Helper/Loader';
 import Footer from './Footer';
 import moment from 'moment/moment';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
         background:coral;
+    }
+
+    .curriculum_format .dropdown-menu{
+        position:absolute !important;
+        right:0 !important;
+        left:auto !important;
+        width:auto;
+    }
+
+    .custom-btn{
+    background: #48aee114;
+    padding: 2px 0px;
+    display: block;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid #1846b9;
+    }
+
+    .curriculum_format .custom-btn .btn-primary{
+        background-color:transparent !important;
+        color:#34395e !important;
+        text-transform: uppercase;
+        font-size:14px;
+        font-weight:500;
+    }
+
+    .curriculum_format .custom-btn .btn-primary:focus:active{
+        background-color:transparent !important;
+    }
+
+    .curriculum_format .card-header.d-Fle a{
+        background: transparent !important;
+        padding: 10px 15px !important;
+        display: block;
+        color:#34395e !important;
+        border-radius: 0 !important;
+        text-decoration: none;
+        border-top: 0 !important;
+        border-left:0 !important;
+        border-right:0 !important;
+        border-bottom: solid 1px #ccc !important;
+    }
+
+    .curriculum_format .card-header.d-Fle a:last-child{
+        border-bottom: 0 !important;
     }
     `
 export default function Curriculum() {
@@ -31,6 +78,8 @@ export default function Curriculum() {
     const [getImageUrl, setImageUrl] = useState({});
     const [getState, setState] = useState(true);
     const [getbutton, setbutton] = useState(false);
+
+    const [Module, setModule] = useState(0)
 
     // Edit Curriculum Model
     const [showEditCurriculum, setShowEditCurriculum] = useState(false);
@@ -62,13 +111,11 @@ export default function Curriculum() {
         setImage({})
         setImageUrl({})
     };
-    const handleShow1 = () => {
+    const handleShow1 = (selectedOption) => {
+        console.log("=========>", selectedOption)
+        setModule(selectedOption)
         setShowAddCurriculum(true);
     };
-    // Ends
-    // let index1=0;
-    // const navigate = useNavigate();
-    //   Function Hnadle
 
     function validate_pic(value) {
         let error;
@@ -198,7 +245,7 @@ export default function Curriculum() {
                 return (
                     <>
 
-                        {params.row.curriculum_id === 2 || params.row.curriculum_id === 24 ? <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_module', { state: { id: params.row.curriculum_id } })}>Sections</Button> : <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id, module_id: 0 } })}>Units</Button>}
+                        {params.row.module_id === 1 ? <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_module', { state: { id: params.row.curriculum_id } })}>Sections</Button> : <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id, module_id: 0 } })}>Units</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         {/* <Button color="error" onClick={onDelete(params)}>
                             <i className="fa fa-trash" aria-hidden="true"></i>
@@ -234,7 +281,18 @@ export default function Curriculum() {
                             <div className="section-body">
                                 <div className="row">
                                     <div className="col-12">
-                                        <div className="card">
+                                        <div className="card curriculum_format">
+                                            <div className="card-header d-Fle">
+                                                <h4></h4>
+                                                <DropdownButton className = "custom-btn"
+                                                    title="Add Curriculum"
+                                                    id="dropdown-basic-button"
+                                                    onSelect={(selectedOption) => handleShow1(selectedOption)}
+                                                >
+                                                    <Dropdown.Item eventKey="0">K-2 PE Format</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="1">3-6 PE Format (With Sections)</Dropdown.Item>
+                                                </DropdownButton>
+                                            </div>
                                             {/* <div className="card-header d-Fle">
                                                 <h4></h4>
                                                 <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Curriculum</a>
@@ -479,6 +537,7 @@ export default function Curriculum() {
                             primary_color: "",
                             secondary_color: "",
                             banner_link: "",
+                            module_id: ""
                         }}
 
                         validationSchema={Yup.object({
@@ -496,12 +555,12 @@ export default function Curriculum() {
                             formData.append("body_text", values.body_text)
                             formData.append("primary_color", values.primary_color)
                             formData.append("secondary_color", values.secondary_color)
+                            formData.append('module_id', Module)
 
                             if (getImage.pictureAsFile) {
                                 formData.append("banner_link", getImage.pictureAsFile)
                             }
 
-                            console.log("=========>", getImage.pictureAsFile);
                             setbutton(true);
 
 
