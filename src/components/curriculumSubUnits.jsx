@@ -13,10 +13,56 @@ import * as Yup from 'yup';
 import { Loader } from './Helper/Loader';
 import Footer from './Footer';
 import moment from 'moment/moment';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
         background:coral;
+    }
+    .curriculum_format .dropdown-menu{
+        position:absolute !important;
+        right:0 !important;
+        left:auto !important;
+        width:auto;
+    }
+
+    .custom-btn{
+    background: #48aee114;
+    padding: 2px 0px;
+    display: block;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid #1846b9;
+    }
+
+    .curriculum_format .custom-btn .btn-primary{
+        background-color:transparent !important;
+        color:#34395e !important;
+        text-transform: uppercase;
+        font-size:14px;
+        font-weight:500;
+    }
+
+    .curriculum_format .custom-btn .btn-primary:focus:active{
+        background-color:transparent !important;
+    }
+
+    .curriculum_format .card-header.d-Fle a{
+        background: transparent !important;
+        padding: 10px 15px !important;
+        display: block;
+        color:#34395e !important;
+        border-radius: 0 !important;
+        text-decoration: none;
+        border-top: 0 !important;
+        border-left:0 !important;
+        border-right:0 !important;
+        border-bottom: solid 1px #ccc !important;
+    }
+
+    .curriculum_format .card-header.d-Fle a:last-child{
+        border-bottom: 0 !important;
     }
     `
 export default function CurriculumSubUnits() {
@@ -34,6 +80,7 @@ export default function CurriculumSubUnits() {
 
     // Edit Subunits Model
     const [showEditSubunits, setShowEditSubunits] = useState(false);
+    const [SubUnitCategory, setSubUnitCategory] = useState("")
     const handleClose = () => {
         setShowEditSubunits(false);
     };
@@ -57,13 +104,10 @@ export default function CurriculumSubUnits() {
     const handleClose1 = () => {
         setShowAddSubunits(false);
     };
-    const handleShow1 = () => {
+    const handleShow1 = (value) => {
+        setSubUnitCategory(value)
         setShowAddSubunits(true);
     };
-    // Ends
-    // let index1=0;
-    // const navigate = useNavigate();
-    //   Function Hnadle
 
     function validate_pic(value) {
         let error;
@@ -147,6 +191,12 @@ export default function CurriculumSubUnits() {
 
         },
         {
+            field: 'title',
+            headerName: 'Title',
+            width: 500,
+
+        },
+        {
             field: 'action',
             headerName: "Action",
             width: 450,
@@ -191,10 +241,18 @@ export default function CurriculumSubUnits() {
                             <div className="section-body">
                                 <div className="row">
                                     <div className="col-12">
-                                        <div className="card">
+                                        <div className="card curriculum_format">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                {Subunits.length >= 3 ? null : <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Sub Section</a>}
+                                                <DropdownButton className="custom-btn"
+                                                    title="Add Curriculum"
+                                                    id="dropdown-basic-button"
+                                                    onSelect={(selectedOption) => handleShow1(selectedOption)}
+                                                >
+                                                    <Dropdown.Item eventKey="Overview">Category: Overview</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="Lesson Plans">Category: Lesson Plans</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="Assessments">Category: Assessments</Dropdown.Item>
+                                                </DropdownButton>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
@@ -259,10 +317,12 @@ export default function CurriculumSubUnits() {
                             unit_id: location.state.unit_id,
                             subunit_id: getDetail.subunit_id,
                             subunit_name: getDetail.subunit_name,
+                            title: getDetail.title,
                         }}
 
                         validationSchema={Yup.object({
-                            subunit_name: Yup.string().required("Required")
+                            subunit_name: Yup.string().required("Required"),
+                            title: Yup.string().required("Required")
 
                         })}
                         onSubmit={(values, { resetForm }) => {
@@ -334,7 +394,15 @@ export default function CurriculumSubUnits() {
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
                                             <label>Name</label>
-                                            <MyTextInput type="text" className="form-control" name="subunit_name" />
+                                            <MyTextInput type="text" className="form-control" name="subunit_name" readOnly={true} />
+                                        </div>
+
+
+                                    </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12">
+                                        <div className="form-group">
+                                            <label>Title</label>
+                                            <MyTextInput type="text" className="form-control" name="title" />
                                         </div>
 
 
@@ -376,11 +444,13 @@ export default function CurriculumSubUnits() {
                         initialValues={{
                             curriculum_id: location.state.curriculum_id,
                             unit_id: location.state.unit_id,
-                            subunit_name: "",
+                            subunit_name: SubUnitCategory,
+                            title: "",
                         }}
 
                         validationSchema={Yup.object({
-                            subunit_name: Yup.string().required("Required")
+                            subunit_name: Yup.string().required("Required"),
+                            title: Yup.string().required("Required")
                         })}
 
                         onSubmit={(values, { resetForm }) => {
@@ -458,7 +528,15 @@ export default function CurriculumSubUnits() {
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Name</label>
-                                                <MyTextInput type="text" className="form-control" name="subunit_name" />
+                                                <MyTextInput type="text" className="form-control" name="subunit_name" readOnly={true} />
+                                            </div>
+
+
+                                        </div>
+                                        <div className="col-lg-12 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Title</label>
+                                                <MyTextInput type="text" className="form-control" name="title" />
                                             </div>
 
 
