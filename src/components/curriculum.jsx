@@ -461,7 +461,7 @@ export default function Curriculum() {
                                     <div className="col-lg-4 col-md-12 col-sm-12">
                                         <div className="form-group spo">
                                             <label>Nav Text</label>
-                                            <MyTextInput type="text" className="form-control" name="nav_text" />
+                                            <MyTextInput type="text" className="form-control" name="nav_text" readOnly={true} />
                                         </div>
                                     </div>
                                     <div className="col-lg-4 col-md-12 col-sm-12">
@@ -542,7 +542,6 @@ export default function Curriculum() {
 
                         validationSchema={Yup.object({
                             name: Yup.string().required("Required"),
-                            nav_text: Yup.string().required("Required"),
                             body_text: Yup.string().required("Required"),
                             primary_color: Yup.string().required("Required"),
                             secondary_color: Yup.string().required("Required"),
@@ -551,7 +550,7 @@ export default function Curriculum() {
                         onSubmit={(values, { resetForm }) => {
                             let formData = new FormData();
                             formData.append("name", values.name)
-                            formData.append("nav_text", values.nav_text)
+                            formData.append("nav_text", values.name)
                             formData.append("body_text", values.body_text)
                             formData.append("primary_color", values.primary_color)
                             formData.append("secondary_color", values.secondary_color)
@@ -643,7 +642,7 @@ export default function Curriculum() {
                                         <div className="col-lg-4 col-md-12 col-sm-12">
                                             <div className="form-group spo">
                                                 <label>Nav Text</label>
-                                                <MyTextInput type="text" className="form-control" name="nav_text" />
+                                                <MyTextInput type="text" className="form-control" name="name" readOnly={true}/>
                                             </div>
                                         </div>
                                         <div className="col-lg-4 col-md-12 col-sm-12">

@@ -245,7 +245,7 @@ export default function CurriculumSubUnits() {
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
                                                 <DropdownButton className="custom-btn"
-                                                    title="Add Curriculum"
+                                                    title="Add Sub Unit"
                                                     id="dropdown-basic-button"
                                                     onSelect={(selectedOption) => handleShow1(selectedOption)}
                                                 >
