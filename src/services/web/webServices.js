@@ -225,7 +225,7 @@ export const get_lessons = (data) => {
   const token = localStorage.getItem("auth_token");
   return axios({
     method: 'post',
-    url: `${base_uri.base_uri_admin}/admin/getLessonPlans`,
+    url: `${base_uri.base_uri_admin}/admin/getLessonPlansList`,
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`

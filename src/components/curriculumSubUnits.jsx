@@ -64,6 +64,9 @@ const css = `
     .curriculum_format .card-header.d-Fle a:last-child{
         border-bottom: 0 !important;
     }
+    .curriculum_format .card-header.d-Fle a:hover {
+        background: #eef4fc !important;
+    }
     `
 export default function CurriculumSubUnits() {
     const navigate = useNavigate();

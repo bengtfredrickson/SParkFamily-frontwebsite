@@ -18,10 +18,59 @@ import { Editor } from 'react-draft-wysiwyg';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
         background:coral;
+    }
+    .curriculum_format .dropdown-menu{
+        position:absolute !important;
+        right:0 !important;
+        left:auto !important;
+        width:auto;
+    }
+
+    .custom-btn{
+    background: #48aee114;
+    padding: 2px 0px;
+    display: block;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid #1846b9;
+    }
+
+    .curriculum_format .custom-btn .btn-primary{
+        background-color:transparent !important;
+        color:#34395e !important;
+        text-transform: uppercase;
+        font-size:14px;
+        font-weight:500;
+    }
+
+    .curriculum_format .custom-btn .btn-primary:focus:active{
+        background-color:transparent !important;
+    }
+
+    .curriculum_format .card-header.d-Fle a{
+        background: transparent !important;
+        padding: 10px 15px !important;
+        display: block;
+        color:#34395e !important;
+        border-radius: 0 !important;
+        text-decoration: none;
+        border-top: 0 !important;
+        border-left:0 !important;
+        border-right:0 !important;
+        border-bottom: solid 1px #ccc !important;
+    }
+
+    .curriculum_format .card-header.d-Fle a:last-child{
+        border-bottom: 0 !important;
+    }
+    .curriculum_format .card-header.d-Fle a:hover {
+        background: #eef4fc !important;
     }
     `
 export default function CurriculumoLessonPlans() {
@@ -38,12 +87,15 @@ export default function CurriculumoLessonPlans() {
     const [getbutton, setbutton] = useState(false);
 
     const convertHtmlToDraft = (data) => {
-        const blocksFromHTML = htmlToDraft(data);
-        const contentState = ContentState.createFromBlockArray(
-        blocksFromHTML.contentBlocks,
-        blocksFromHTML.entityMap
-        );
-        return EditorState.createWithContent(contentState);
+        if(data){
+            const blocksFromHTML = htmlToDraft(data);
+            const contentState = ContentState.createFromBlockArray(
+                blocksFromHTML.contentBlocks,
+                blocksFromHTML.entityMap
+            );
+            return EditorState.createWithContent(contentState);
+        }
+        
     }
 
     // Edit LessonPlans Model
@@ -93,12 +145,14 @@ export default function CurriculumoLessonPlans() {
         setGuideline("")
         setIntegrationIcon("")
         setKeyWords("")
+        setLessonFormat("")
     };
     const handleShow = (e, t) => {
         if (t === 1) {
             setDetail(e.row)
             setShowEditLessonPlans(true);
             setImageUrl(e.row.image_url);
+            setLessonFormat(e.row.format);
             setEditorData1(convertHtmlToDraft(e.row.integration))
             setIntegration(e.row.integration)
             setEditorData2(convertHtmlToDraft(e.row.lesson_objective))
@@ -130,6 +184,7 @@ export default function CurriculumoLessonPlans() {
             setDetail(e.row)
             setShowEditLessonPlans(true);
             setImageUrl(e.row.image_url);
+            setLessonFormat(e.row.format);
             setEditorData1(convertHtmlToDraft(e.row.ready))
             setReady(e.row.ready)
             setEditorData2(convertHtmlToDraft(e.row.lesson_set))
@@ -155,6 +210,7 @@ export default function CurriculumoLessonPlans() {
             setDetail(e.row)
             setShowEditLessonPlans(true);
             setImageUrl(e.row.image_url);
+            setLessonFormat(e.row.format);
             setEditorData1(convertHtmlToDraft(e.row.ready))
             setReady(e.row.ready)
             setEditorData2(convertHtmlToDraft(e.row.lesson_set))
@@ -176,6 +232,7 @@ export default function CurriculumoLessonPlans() {
             setDetail(e.row)
             setShowEditLessonPlans(true);
             setImageUrl(e.row.image_url);
+            setLessonFormat(e.row.format);
             setEditorData1(convertHtmlToDraft(e.row.integration))
             setIntegration(e.row.integration)
             setEditorData2(convertHtmlToDraft(e.row.lesson_objective))
@@ -205,7 +262,7 @@ export default function CurriculumoLessonPlans() {
             setEditorData13(convertHtmlToDraft(e.row.key_words))
             setKeyWords(e.row.key_words)
         }
-    
+
     };
     const onHandle = (e) => {
         setImage({
@@ -271,8 +328,10 @@ export default function CurriculumoLessonPlans() {
         setGuideline("")
         setIntegrationIcon("")
         setKeyWords("")
+        setLessonFormat("")
     };
-    const handleShow1 = () => {
+    const handleShow1 = (format) => {
+        setFormat(format)
         setShowAddLessonPlans(true);
     };
     // Ends
@@ -293,6 +352,7 @@ export default function CurriculumoLessonPlans() {
             let data = {
                 curriculum_id: location.state.curriculum_id,
                 lesson_id: params.row.lesson_id,
+                format: params.row.format
             }
             delete_lesson(data).then((res) => {
 
@@ -389,39 +449,17 @@ export default function CurriculumoLessonPlans() {
             width: 450,
             renderCell: (params) => {
                 return (
-                    <>
-                        <Button onClick={() => handleShow(params,
-                            location.state.curriculum_id === "1" ||
-                                location.state.curriculum_id === "2" ||
-                                location.state.curriculum_id === "3" ||
-                                location.state.curriculum_id === "22" ||
-                                location.state.curriculum_id === "23" ||
-                                location.state.curriculum_id === "24" ||
-                                location.state.curriculum_id === "25" ||
-                                location.state.curriculum_id === 1 ||
-                                location.state.curriculum_id === 2 ||
-                                location.state.curriculum_id === 3 ||
-                                location.state.curriculum_id === 22 ||
-                                location.state.curriculum_id === 23 ||
-                                location.state.curriculum_id === 24 ||
-                                location.state.curriculum_id === 25 ?
-                                1 :
-                                location.state.curriculum_id === "8" ||
-                                    location.state.curriculum_id === "28" ||
-                                    location.state.curriculum_id === 8 ||
-                                    location.state.curriculum_id === 28 ?
-                                    2 :
-                                    location.state.curriculum_id === "7" ||
-                                        location.state.curriculum_id === "27" ||
-                                        location.state.curriculum_id === 7 ||
-                                        location.state.curriculum_id === 27 ?
-                                        3 :
-                                        location.state.curriculum_id === "4" ||
-                                            location.state.curriculum_id === "26" ||
-                                            location.state.curriculum_id === 4 ||
-                                            location.state.curriculum_id === 26 ?
-                                            4 : null
-                        )}><i className="fas fa-edit"></i></Button>
+                    <>        
+                    <Button onClick={() => handleShow(params,
+                        params?.row?.format === "A" ?
+                            1 :
+                            params?.row?.format === "B" ?
+                                2 :
+                                params?.row?.format === "C" ?
+                                    3 :
+                                    params?.row?.format === "D" ?
+                                        4 : null
+                    )}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
                         >
@@ -452,6 +490,10 @@ export default function CurriculumoLessonPlans() {
     const [editorData12, setEditorData12] = useState('')
     const [editorData13, setEditorData13] = useState('')
     const [editorData14, setEditorData14] = useState('')
+    const [editorData15, setEditorData15] = useState('')
+
+
+    const [Format, setFormat] = useState(0)
 
     const [Integration, setIntegration] = useState('')
     const [Objective, setObjective] = useState('')
@@ -481,6 +523,7 @@ export default function CurriculumoLessonPlans() {
     const [Guideline, setGuideline] = useState('')
     const [IntegrationIcon, setIntegrationIcon] = useState('')
     const [KeyWords, setKeyWords] = useState('')
+    const [LessonFormat, setLessonFormat] = useState('')
 
 
     const handelChange = (value, e, t) => {
@@ -718,10 +761,19 @@ export default function CurriculumoLessonPlans() {
                             <div className="section-body">
                                 <div className="row">
                                     <div className="col-12">
-                                        <div className="card">
+                                        <div className="card curriculum_format">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <a onClick={handleShow1} style={{ cursor: "pointer" }}>Add Lesson Plan</a>
+                                                <DropdownButton className="custom-btn"
+                                                    title="Add Lesson Plan"
+                                                    id="dropdown-basic-button"
+                                                    onSelect={(selectedOption) => handleShow1(selectedOption)}
+                                                >
+                                                    <Dropdown.Item eventKey="1">Format A</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="2">Format B</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="3">Format C</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="4">Format D</Dropdown.Item>
+                                                </DropdownButton>
                                             </div>
                                             <div className="card-body">
                                                 <div className="table-responsive newPc">
@@ -778,20 +830,7 @@ export default function CurriculumoLessonPlans() {
                     ></i>
                 </Modal.Header>
                 <Modal.Body>{
-                    location.state.curriculum_id === "1" ||
-                        location.state.curriculum_id === "2" ||
-                        location.state.curriculum_id === "3" ||
-                        location.state.curriculum_id === "22" ||
-                        location.state.curriculum_id === "23" ||
-                        location.state.curriculum_id === "24" ||
-                        location.state.curriculum_id === "25" ||
-                        location.state.curriculum_id === 1 ||
-                        location.state.curriculum_id === 2 ||
-                        location.state.curriculum_id === 3 ||
-                        location.state.curriculum_id === 22 ||
-                        location.state.curriculum_id === 23 ||
-                        location.state.curriculum_id === 24 ||
-                        location.state.curriculum_id === 25 ?
+                    getDetail.format === "A" ?
                         <Formik
                             enableReinitialize={true}
                             initialValues={
@@ -814,6 +853,7 @@ export default function CurriculumoLessonPlans() {
                                     teaching_cues: getDetail.teaching_cues,
                                     teaching_suggestions: getDetail.teaching_suggestions,
                                     vocabulary: getDetail.vocabulary,
+                                    format: getDetail.format
                                 }
                             }
 
@@ -853,6 +893,7 @@ export default function CurriculumoLessonPlans() {
                                 formData.append("teaching_cues", Cues)
                                 formData.append("teaching_suggestions", Suggestion)
                                 formData.append("vocabulary", Vocabulary)
+                                formData.append("format", LessonFormat)
                                 if (getImage.pictureAsFile) {
                                     formData.append("image_url", getImage.pictureAsFile)
                                 }
@@ -933,6 +974,7 @@ export default function CurriculumoLessonPlans() {
                                         setIntegrationIcon("")
                                         setKeyWords("")
                                         setState(false)
+                                        setLessonFormat()
 
                                     }
 
@@ -1001,6 +1043,7 @@ export default function CurriculumoLessonPlans() {
                                         setGuideline("")
                                         setIntegrationIcon("")
                                         setKeyWords("")
+                                        setLessonFormat("")
                                         setState(false)
 
 
@@ -1358,10 +1401,7 @@ export default function CurriculumoLessonPlans() {
                                 </div>
                             </Form>
                         </Formik> :
-                        location.state.curriculum_id === "8" ||
-                            location.state.curriculum_id === "28" ||
-                            location.state.curriculum_id === 8 ||
-                            location.state.curriculum_id === 28 ?
+                        getDetail.format === "B" ?
                             <Formik
                                 enableReinitialize={true}
                                 initialValues={
@@ -1381,6 +1421,7 @@ export default function CurriculumoLessonPlans() {
                                         family_fun: getDetail.family_fun,
                                         lyrics: getDetail.lyrics,
                                         music_credits: getDetail.music_credits,
+                                        format: getDetail.format
                                     }
                                 }
 
@@ -1417,6 +1458,7 @@ export default function CurriculumoLessonPlans() {
                                     formData.append("family_fun", FamilyFun)
                                     formData.append("lyrics", Lyrics)
                                     formData.append("music_credits", MusicCredits)
+                                    formData.append("format", LessonFormat)
                                     if (getImage.pictureAsFile) {
                                         formData.append("filename", getImage.pictureAsFile)
                                     }
@@ -1496,6 +1538,7 @@ export default function CurriculumoLessonPlans() {
                                             setGuideline("")
                                             setIntegrationIcon("")
                                             setKeyWords("")
+                                            setLessonFormat("")
                                             setState(false)
 
 
@@ -1566,6 +1609,7 @@ export default function CurriculumoLessonPlans() {
                                             setGuideline("")
                                             setIntegrationIcon("")
                                             setKeyWords("")
+                                            setLessonFormat("")
                                             setState(false)
 
 
@@ -1850,10 +1894,7 @@ export default function CurriculumoLessonPlans() {
                                     </div>
                                 </Form>
                             </Formik> :
-                            location.state.curriculum_id === "7" ||
-                                location.state.curriculum_id === "27" ||
-                                location.state.curriculum_id === 7 ||
-                                location.state.curriculum_id === 27 ?
+                            getDetail.format === "C" ?
                                 <Formik
                                     enableReinitialize={true}
                                     initialValues={{
@@ -1869,6 +1910,7 @@ export default function CurriculumoLessonPlans() {
                                         home_play: getDetail.home_play,
                                         the_right_fit: getDetail.the_right_fit,
                                         guideline_addressed: getDetail.guideline_addressed,
+                                        format: getDetail.format
                                     }}
 
                                     validationSchema={Yup.object({
@@ -1902,6 +1944,7 @@ export default function CurriculumoLessonPlans() {
                                         formData.append("home_play", HomePlay)
                                         formData.append("the_right_fit", TheRightFit)
                                         formData.append("guideline_addressed", Guideline)
+                                        formData.append("format", LessonFormat)
                                         if (getImage.pictureAsFile) {
                                             formData.append("image_url", getImage.pictureAsFile)
                                         }
@@ -1980,6 +2023,7 @@ export default function CurriculumoLessonPlans() {
                                                 setGuideline("")
                                                 setIntegrationIcon("")
                                                 setKeyWords("")
+                                                setLessonFormat("")
                                                 setState(false)
 
 
@@ -2050,6 +2094,7 @@ export default function CurriculumoLessonPlans() {
                                                 setIntegrationIcon("")
                                                 setKeyWords("")
                                                 setShowEditLessonPlans(false)
+                                                setLessonFormat("")
                                                 setState(false)
 
 
@@ -2288,10 +2333,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                     </Form>
                                 </Formik> :
-                                location.state.curriculum_id === "4" ||
-                                    location.state.curriculum_id === "26" ||
-                                    location.state.curriculum_id === 4 ||
-                                    location.state.curriculum_id === 26 ?
+                                getDetail.format === "D" ?
                                     <Formik
                                         enableReinitialize={true}
                                         initialValues={
@@ -2315,6 +2357,7 @@ export default function CurriculumoLessonPlans() {
                                                 teaching_suggestions: getDetail.teaching_suggestions,
                                                 integration_icon: getDetail.integration_icon,
                                                 key_words: getDetail.key_words,
+                                                format: getDetail.format
                                             }
                                         }
 
@@ -2355,6 +2398,7 @@ export default function CurriculumoLessonPlans() {
                                             formData.append("teaching_suggestions", Suggestion)
                                             formData.append("integration_icon", IntegrationIcon)
                                             formData.append("key_words", KeyWords)
+                                            formData.append("format", LessonFormat)
 
                                             if (getImage.pictureAsFile) {
                                                 formData.append("image_url", getImage.pictureAsFile)
@@ -2435,6 +2479,7 @@ export default function CurriculumoLessonPlans() {
                                                     setIntegrationIcon("")
                                                     setKeyWords("")
                                                     setState(false)
+                                                    setLessonFormat("")
 
 
                                                 }
@@ -2505,8 +2550,7 @@ export default function CurriculumoLessonPlans() {
                                                     setIntegrationIcon("")
                                                     setKeyWords("")
                                                     setState(false)
-
-
+                                                    setLessonFormat("")
                                                 });
                                         }}
                                     >
@@ -2907,20 +2951,7 @@ export default function CurriculumoLessonPlans() {
                     ></i>
                 </Modal.Header>
                 <Modal.Body>{
-                    location.state.curriculum_id === "1" ||
-                        location.state.curriculum_id === "2" ||
-                        location.state.curriculum_id === "3" ||
-                        location.state.curriculum_id === "22" ||
-                        location.state.curriculum_id === "23" ||
-                        location.state.curriculum_id === "24" ||
-                        location.state.curriculum_id === "25" ||
-                        location.state.curriculum_id === 1 ||
-                        location.state.curriculum_id === 2 ||
-                        location.state.curriculum_id === 3 ||
-                        location.state.curriculum_id === 22 ||
-                        location.state.curriculum_id === 23 ||
-                        location.state.curriculum_id === 24 ||
-                        location.state.curriculum_id === 25 ?
+                    Format === "1" ?
                         <Formik
                             enableReinitialize={true}
                             initialValues={
@@ -3487,10 +3518,7 @@ export default function CurriculumoLessonPlans() {
                                 </div>
                             </Form>
                         </Formik> :
-                        location.state.curriculum_id === "8" ||
-                            location.state.curriculum_id === "28" ||
-                            location.state.curriculum_id === 8 ||
-                            location.state.curriculum_id === 28 ?
+                        Format === "2" ?
                             <Formik
                                 enableReinitialize={true}
                                 initialValues={
@@ -3978,10 +4006,7 @@ export default function CurriculumoLessonPlans() {
                                     </div>
                                 </Form>
                             </Formik> :
-                            location.state.curriculum_id === "7" ||
-                                location.state.curriculum_id === "27" ||
-                                location.state.curriculum_id === 7 ||
-                                location.state.curriculum_id === 27 ?
+                            Format === "3" ?
                                 <Formik
                                     enableReinitialize={true}
                                     initialValues={{
@@ -4417,10 +4442,7 @@ export default function CurriculumoLessonPlans() {
                                         </div>
                                     </Form>
                                 </Formik> :
-                                location.state.curriculum_id === "4" ||
-                                    location.state.curriculum_id === "26" ||
-                                    location.state.curriculum_id === 4 ||
-                                    location.state.curriculum_id === 26 ?
+                                Format === "4" ?
                                     <Formik
                                         enableReinitialize={true}
                                         initialValues={
