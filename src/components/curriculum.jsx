@@ -25,6 +25,7 @@ const css = `
         right:0 !important;
         left:auto !important;
         width:auto;
+        padding:0;
     }
 
     .custom-btn{
@@ -138,7 +139,7 @@ export default function Curriculum() {
 
                 Store.addNotification({
                     title: "Success",
-                    message: res?.data?.message,
+                    message: "Curriculum Deleted Successfully",
                     type: "success",
                     insert: "top",
                     container: "top-right",
@@ -243,16 +244,16 @@ export default function Curriculum() {
         {
             field: 'action',
             headerName: "Action",
-            width: 150,
+            width: 200,
             renderCell: (params) => {
                 return (
                     <>
 
                         {params.row.module_id === 1 ? <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_module', { state: { id: params.row.curriculum_id } })}>Sections</Button> : <Button style={{ "width": "-webkit-fill-available" }} onClick={() => navigate('/curriculum_units', { state: { id: params.row.curriculum_id, module_id: 0 } })}>Units</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
-                        {/* <Button color="error" onClick={onDelete(params)}>
+                        <Button color="error" onClick={onDelete(params)}>
                             <i className="fa fa-trash" aria-hidden="true"></i>
-                        </Button> */}
+                        </Button>
 
 
                     </>
@@ -346,7 +347,7 @@ export default function Curriculum() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditCurriculum} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditCurriculum}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -521,7 +522,7 @@ export default function Curriculum() {
 
 
             {/* Modal Add Curriculum */}
-            <Modal show={showAddCurriculum} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddCurriculum}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Curriculum</Modal.Title>
                     <i

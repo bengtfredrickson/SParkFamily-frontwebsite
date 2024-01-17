@@ -29,6 +29,9 @@ const css = `
         right:0 !important;
         left:auto !important;
         width:auto;
+        max-width:500px;
+        min-width:500px;
+        padding:0;
     }
 
     .custom-btn{
@@ -66,11 +69,22 @@ const css = `
         border-bottom: solid 1px #ccc !important;
     }
 
+    .curriculum_format .card-header.d-Fle a .dropdown-info{
+        white-space: normal !important;
+    }
+
     .curriculum_format .card-header.d-Fle a:last-child{
         border-bottom: 0 !important;
     }
     .curriculum_format .card-header.d-Fle a:hover {
         background: #eef4fc !important;
+    }
+
+    .curriculum_format .dropdown-menu a.dropdown-item{
+        display:flex !important;
+        flex-direction:column !important;
+        flex-wrap:wrap !important;
+
     }
     `
 export default function CurriculumoLessonPlans() {
@@ -87,7 +101,7 @@ export default function CurriculumoLessonPlans() {
     const [getbutton, setbutton] = useState(false);
 
     const convertHtmlToDraft = (data) => {
-        if(data){
+        if (data) {
             const blocksFromHTML = htmlToDraft(data);
             const contentState = ContentState.createFromBlockArray(
                 blocksFromHTML.contentBlocks,
@@ -95,7 +109,7 @@ export default function CurriculumoLessonPlans() {
             );
             return EditorState.createWithContent(contentState);
         }
-        
+
     }
 
     // Edit LessonPlans Model
@@ -449,17 +463,17 @@ export default function CurriculumoLessonPlans() {
             width: 450,
             renderCell: (params) => {
                 return (
-                    <>        
-                    <Button onClick={() => handleShow(params,
-                        params?.row?.format === "A" ?
-                            1 :
-                            params?.row?.format === "B" ?
-                                2 :
-                                params?.row?.format === "C" ?
-                                    3 :
-                                    params?.row?.format === "D" ?
-                                        4 : null
-                    )}><i className="fas fa-edit"></i></Button>
+                    <>
+                        <Button onClick={() => handleShow(params,
+                            params?.row?.format === "A" ?
+                                1 :
+                                params?.row?.format === "B" ?
+                                    2 :
+                                    params?.row?.format === "C" ?
+                                        3 :
+                                        params?.row?.format === "D" ?
+                                            4 : null
+                        )}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
                         >
@@ -769,10 +783,10 @@ export default function CurriculumoLessonPlans() {
                                                     id="dropdown-basic-button"
                                                     onSelect={(selectedOption) => handleShow1(selectedOption)}
                                                 >
-                                                    <Dropdown.Item eventKey="1">Format A</Dropdown.Item>
-                                                    <Dropdown.Item eventKey="2">Format B</Dropdown.Item>
-                                                    <Dropdown.Item eventKey="3">Format C</Dropdown.Item>
-                                                    <Dropdown.Item eventKey="4">Format D</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="1" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>Format A- </b> <br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0 text-break'><i>(Name, Integration, Learning Objective, Learning Target, Prep, Reflection questions, SEL, Set, Spark It Up, Standards, Teach, Teaching cues, Teaching suggestions, Vocabulary, Diagram)</i></p> </Dropdown.Item>
+                                                    <Dropdown.Item eventKey="2" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>Format B- </b><br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Ready, Set, Go, Adaptations, Objectives, Academics, Teaching Tips, Family Fun, Lyrics, Music Credits, Image)</i></p></Dropdown.Item>
+                                                    <Dropdown.Item eventKey="3" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>Format C- </b><br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Ready, Set, Go, Safety First, Game Reset, Home Play, The Right Fit, Guideline Addressed, Image)</i> </p> </Dropdown.Item>
+                                                    <Dropdown.Item eventKey="4" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>Format D- </b> <br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Integration, Lesson Objective, Lesson Target, Prep, Reflection Question, Competencies, Lesson Set, Spark It Up, Standard Alignment, Teach, Teaching Cues, Teaching Suggestions, Integration Icons, Key Words, Image</i></p></Dropdown.Item>
                                                 </DropdownButton>
                                             </div>
                                             <div className="card-body">
@@ -820,7 +834,7 @@ export default function CurriculumoLessonPlans() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditLessonPlans} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditLessonPlans} keyboard={false} >
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -1052,6 +1066,8 @@ export default function CurriculumoLessonPlans() {
                         >
                             <Form>
                                 <div className="modal-body">
+                                    <h3 className="format-heading">Format A</h3>
+
                                     <div className="row">
 
                                         <div className="col-lg-4 col-md-12 col-sm-12">
@@ -1618,6 +1634,8 @@ export default function CurriculumoLessonPlans() {
                             >
                                 <Form>
                                     <div className="modal-body">
+                                        <h3 className="format-heading">Format B</h3>
+
                                         <div className="row">
 
                                             <div className="col-lg-4 col-md-12 col-sm-12">
@@ -2104,6 +2122,8 @@ export default function CurriculumoLessonPlans() {
                                 >
                                     <Form>
                                         <div className="modal-body">
+                                            <h3 className="format-heading">Format C</h3>
+
                                             <div className="row">
 
                                                 <div className="col-lg-4 col-md-12 col-sm-12">
@@ -2556,6 +2576,8 @@ export default function CurriculumoLessonPlans() {
                                     >
                                         <Form>
                                             <div className="modal-body">
+                                                <h3 className="format-heading">Format D</h3>
+
                                                 <div className="row">
 
                                                     <div className="col-lg-4 col-md-12 col-sm-12">
@@ -2941,7 +2963,7 @@ export default function CurriculumoLessonPlans() {
 
 
             {/* Modal Add LessonPlans */}
-            <Modal show={showAddLessonPlans} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddLessonPlans}  keyboard={false}  >
                 <Modal.Header>
                     <Modal.Title>Add Lesson Plan</Modal.Title>
                     <i
@@ -3169,6 +3191,7 @@ export default function CurriculumoLessonPlans() {
                         >
                             <Form>
                                 <div className="modal-body">
+                                    <h3 className="format-heading">Format A</h3>
                                     <div className="row">
 
                                         <div className="col-lg-4 col-md-12 col-sm-12">
@@ -3731,6 +3754,8 @@ export default function CurriculumoLessonPlans() {
                             >
                                 <Form>
                                     <div className="modal-body">
+                                        <h3 className="format-heading">Format B</h3>
+
                                         <div className="row">
 
                                             <div className="col-lg-4 col-md-12 col-sm-12">
@@ -4213,6 +4238,8 @@ export default function CurriculumoLessonPlans() {
                                 >
                                     <Form>
                                         <div className="modal-body">
+                                            <h3 className="format-heading">Format C</h3>
+
                                             <div className="row">
 
                                                 <div className="col-lg-4 col-md-12 col-sm-12">
@@ -4661,6 +4688,8 @@ export default function CurriculumoLessonPlans() {
                                     >
                                         <Form>
                                             <div className="modal-body">
+                                                <h3 className="format-heading">Format D</h3>
+
                                                 <div className="row">
 
                                                     <div className="col-lg-4 col-md-12 col-sm-12">

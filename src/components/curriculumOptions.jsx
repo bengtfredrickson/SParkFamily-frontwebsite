@@ -373,7 +373,7 @@ export default function CurriculumoOptions() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditOptions} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditOptions}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -626,7 +626,7 @@ export default function CurriculumoOptions() {
 
 
             {/* Modal Add Options */}
-            <Modal show={showAddOptions} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddOptions}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Resources</Modal.Title>
                     <i
@@ -869,7 +869,7 @@ export default function CurriculumoOptions() {
             </Modal >
             {/* Ends Add Options */}
 
-            <Modal Modal show={showPreview} onHide={handleClose2} keyboard={false} >
+            <Modal Modal show={showPreview}  keyboard={false} >
                 <Modal.Header>
                     <i
                         className="fas fa-cut"

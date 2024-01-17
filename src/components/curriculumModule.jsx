@@ -241,7 +241,7 @@ export default function CurriculumModules() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditModules} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditModules}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -359,7 +359,7 @@ export default function CurriculumModules() {
 
 
             {/* Modal Add Modules */}
-            <Modal show={showAddModules} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddModules}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Section</Modal.Title>
                     <i

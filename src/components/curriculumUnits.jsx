@@ -242,7 +242,7 @@ export default function CurriculumUnits() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditUnits} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditUnits}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -362,7 +362,7 @@ export default function CurriculumUnits() {
 
 
             {/* Modal Add Units */}
-            <Modal show={showAddUnits} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddUnits}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Units</Modal.Title>
                     <i

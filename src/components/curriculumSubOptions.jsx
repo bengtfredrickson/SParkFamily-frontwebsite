@@ -364,7 +364,7 @@ export default function CurriculumoSubOptions() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditSubOptions} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditSubOptions}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -645,7 +645,7 @@ export default function CurriculumoSubOptions() {
 
 
             {/* Modal Add SubOptions */}
-            <Modal show={showAddSubOptions} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddSubOptions}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Lesson Material</Modal.Title>
                     <i
@@ -988,7 +988,7 @@ export default function CurriculumoSubOptions() {
             </Modal>
             {/* Ends Add SubOptions */}
             {/* Modal Add Options */}
-            <Modal show={showPreview} onHide={handleClose2} keyboard={false}>
+            <Modal show={showPreview}  keyboard={false}>
                 <Modal.Header>
                     <i
                         className="fas fa-cut"

@@ -8519,7 +8519,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 }
 
 .theme-white .form-control:focus {
-	border-color: #E91E63
+	border-color: 1px solid #1846b9
 }
 
 .theme-white .card.card-primary {
@@ -12440,9 +12440,9 @@ td.EmailID a {
     border: 1px solid #1846b9;
     color: #333;
 }
-.modal-body {
+/* .modal-body {
     border-top: 1px solid #ccc;
-}
+} */
 
 input.modal-btn {
     background: #1846b9;
@@ -12501,6 +12501,10 @@ div#tableExport_paginate {
 .rnc__notification-container--top-right{
 	right: 110px !important;
 	top: 20px !important;
+}
+
+.format-heading{
+	padding-bottom:20px;
 }
 
 

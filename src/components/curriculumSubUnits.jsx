@@ -24,6 +24,8 @@ const css = `
         right:0 !important;
         left:auto !important;
         width:auto;
+        padding:0;
+
     }
 
     .custom-btn{
@@ -189,13 +191,13 @@ export default function CurriculumSubUnits() {
         },
         {
             field: 'subunit_name',
-            headerName: 'Name',
+            headerName: 'Category',
             width: 500,
 
         },
         {
             field: 'title',
-            headerName: 'Title',
+            headerName: 'Name',
             width: 500,
 
         },
@@ -248,7 +250,7 @@ export default function CurriculumSubUnits() {
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
                                                 <DropdownButton className="custom-btn"
-                                                    title="Add Sub Unit"
+                                                    title="Add Sub Section"
                                                     id="dropdown-basic-button"
                                                     onSelect={(selectedOption) => handleShow1(selectedOption)}
                                                 >
@@ -303,7 +305,7 @@ export default function CurriculumSubUnits() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditSubunits} onHide={handleClose} keyboard={false}>
+            <Modal show={showEditSubunits}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -396,7 +398,7 @@ export default function CurriculumSubUnits() {
 
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
-                                            <label>Name</label>
+                                            <label>Category</label>
                                             <MyTextInput type="text" className="form-control" name="subunit_name" readOnly={true} />
                                         </div>
 
@@ -404,7 +406,7 @@ export default function CurriculumSubUnits() {
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="form-group">
-                                            <label>Title</label>
+                                            <label>Name</label>
                                             <MyTextInput type="text" className="form-control" name="title" />
                                         </div>
 
@@ -432,7 +434,7 @@ export default function CurriculumSubUnits() {
 
 
             {/* Modal Add Subunits */}
-            <Modal show={showAddSubunits} onHide={handleClose1} keyboard={false}>
+            <Modal show={showAddSubunits}  keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Sub Section</Modal.Title>
                     <i
@@ -530,7 +532,7 @@ export default function CurriculumSubUnits() {
 
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Name</label>
+                                                <label>Category</label>
                                                 <MyTextInput type="text" className="form-control" name="subunit_name" readOnly={true} />
                                             </div>
 
@@ -538,7 +540,7 @@ export default function CurriculumSubUnits() {
                                         </div>
                                         <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Title</label>
+                                                <label>Name</label>
                                                 <MyTextInput type="text" className="form-control" name="title" />
                                             </div>
 
