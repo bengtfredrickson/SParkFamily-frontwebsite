@@ -371,7 +371,7 @@ export default function Curriculum() {
 
                         validationSchema={Yup.object({
                             curriculum_id: Yup.number().required("Required"),
-                            name: Yup.string().required("Required"),
+                            name: Yup.string().required("Required").matches(/\S+/, 'Name must contain at least one non-space character'),
                             nav_text: Yup.string().required("Required"),
                             body_text: Yup.string().required("Required"),
                             primary_color: Yup.string().required("Required"),

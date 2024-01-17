@@ -262,7 +262,7 @@ export default function CurriculumUnits() {
                         }}
 
                         validationSchema={Yup.object({
-                            unit_name: Yup.string().required("Required")
+                            unit_name: Yup.string().required("Required").matches(/\S+/, 'Name must contain at least one non-space character')
 
                         })}
                         onSubmit={(values, { resetForm }) => {
@@ -381,7 +381,7 @@ export default function CurriculumUnits() {
                         }}
 
                         validationSchema={Yup.object({
-                            unit_name: Yup.string().required("Required")
+                            unit_name: Yup.string().required("Required").matches(/\S+/, 'Name must contain at least one non-space character')
                         })}
 
                         onSubmit={(values, { resetForm }) => {
