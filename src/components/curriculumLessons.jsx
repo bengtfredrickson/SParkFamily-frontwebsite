@@ -115,6 +115,8 @@ export default function CurriculumoLessonPlans() {
     // Edit LessonPlans Model
     const [showEditLessonPlans, setShowEditLessonPlans] = useState(false);
     const handleClose = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowEditLessonPlans(false);
         setImage({})
         setImageUrl("")
@@ -160,6 +162,7 @@ export default function CurriculumoLessonPlans() {
         setIntegrationIcon("")
         setKeyWords("")
         setLessonFormat("")
+        }
     };
     const handleShow = (e, t) => {
         if (t === 1) {
@@ -298,6 +301,8 @@ export default function CurriculumoLessonPlans() {
 
     const [showAddLessonPlans, setShowAddLessonPlans] = useState(false);
     const handleClose1 = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowAddLessonPlans(false);
         setImage({})
         setImageUrl("")
@@ -343,6 +348,7 @@ export default function CurriculumoLessonPlans() {
         setIntegrationIcon("")
         setKeyWords("")
         setLessonFormat("")
+        }
     };
     const handleShow1 = (format) => {
         setFormat(format)
@@ -783,10 +789,10 @@ export default function CurriculumoLessonPlans() {
                                                     id="dropdown-basic-button"
                                                     onSelect={(selectedOption) => handleShow1(selectedOption)}
                                                 >
-                                                    <Dropdown.Item eventKey="1" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>Format A- </b> <br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0 text-break'><i>(Name, Integration, Learning Objective, Learning Target, Prep, Reflection questions, SEL, Set, Spark It Up, Standards, Teach, Teaching cues, Teaching suggestions, Vocabulary, Diagram)</i></p> </Dropdown.Item>
-                                                    <Dropdown.Item eventKey="2" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>Format B- </b><br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Ready, Set, Go, Adaptations, Objectives, Academics, Teaching Tips, Family Fun, Lyrics, Music Credits, Image)</i></p></Dropdown.Item>
-                                                    <Dropdown.Item eventKey="3" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>Format C- </b><br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Ready, Set, Go, Safety First, Game Reset, Home Play, The Right Fit, Guideline Addressed, Image)</i> </p> </Dropdown.Item>
-                                                    <Dropdown.Item eventKey="4" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>Format D- </b> <br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Integration, Lesson Objective, Lesson Target, Prep, Reflection Question, Competencies, Lesson Set, Spark It Up, Standard Alignment, Teach, Teaching Cues, Teaching Suggestions, Integration Icons, Key Words, Image</i></p></Dropdown.Item>
+                                                    <Dropdown.Item eventKey="1" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>FORMAT A- </b> <br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0 text-break'><i>(Name, Integration, Learning Objective, Learning Target, Prep, Reflection questions, SEL, Set, Spark It Up, Standards, Teach, Teaching cues, Teaching suggestions, Vocabulary, Diagram)</i></p> </Dropdown.Item>
+                                                    <Dropdown.Item eventKey="2" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>FORMAT B- </b><br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Ready, Set, Go, Adaptations, Objectives, Academics, Teaching Tips, Family Fun, Lyrics, Music Credits, Image)</i></p></Dropdown.Item>
+                                                    <Dropdown.Item eventKey="3" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>FORMAT C- </b><br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Ready, Set, Go, Safety First, Game Reset, Home Play, The Right Fit, Guideline Addressed, Image)</i> </p> </Dropdown.Item>
+                                                    <Dropdown.Item eventKey="4" className='word-wrap d-flex flex-column word-wrap align-items-start'><b>FORMAT D- </b> <br /> <p className='dropdown-info text-break word-wrap overflow-wrap mb-0'><i>(Name, Integration, Lesson Objective, Lesson Target, Prep, Reflection Question, Competencies, Lesson Set, Spark It Up, Standard Alignment, Teach, Teaching Cues, Teaching Suggestions, Integration Icons, Key Words, Image</i></p></Dropdown.Item>
                                                 </DropdownButton>
                                             </div>
                                             <div className="card-body">
@@ -1066,7 +1072,7 @@ export default function CurriculumoLessonPlans() {
                         >
                             <Form>
                                 <div className="modal-body">
-                                    <h3 className="format-heading">Format A</h3>
+                                    <h3 className="format-heading">FORMAT A</h3>
 
                                     <div className="row">
 
@@ -1634,7 +1640,7 @@ export default function CurriculumoLessonPlans() {
                             >
                                 <Form>
                                     <div className="modal-body">
-                                        <h3 className="format-heading">Format B</h3>
+                                        <h3 className="format-heading">FORMAT B</h3>
 
                                         <div className="row">
 
@@ -2122,7 +2128,7 @@ export default function CurriculumoLessonPlans() {
                                 >
                                     <Form>
                                         <div className="modal-body">
-                                            <h3 className="format-heading">Format C</h3>
+                                            <h3 className="format-heading">FORMAT C</h3>
 
                                             <div className="row">
 
@@ -2576,7 +2582,7 @@ export default function CurriculumoLessonPlans() {
                                     >
                                         <Form>
                                             <div className="modal-body">
-                                                <h3 className="format-heading">Format D</h3>
+                                                <h3 className="format-heading">FORMAT D</h3>
 
                                                 <div className="row">
 
@@ -3191,7 +3197,7 @@ export default function CurriculumoLessonPlans() {
                         >
                             <Form>
                                 <div className="modal-body">
-                                    <h3 className="format-heading">Format A</h3>
+                                    <h3 className="format-heading">FORMAT A</h3>
                                     <div className="row">
 
                                         <div className="col-lg-4 col-md-12 col-sm-12">
@@ -3754,7 +3760,7 @@ export default function CurriculumoLessonPlans() {
                             >
                                 <Form>
                                     <div className="modal-body">
-                                        <h3 className="format-heading">Format B</h3>
+                                        <h3 className="format-heading">FORMAT B</h3>
 
                                         <div className="row">
 
@@ -4238,7 +4244,7 @@ export default function CurriculumoLessonPlans() {
                                 >
                                     <Form>
                                         <div className="modal-body">
-                                            <h3 className="format-heading">Format C</h3>
+                                            <h3 className="format-heading">FORMAT C</h3>
 
                                             <div className="row">
 
@@ -4688,7 +4694,7 @@ export default function CurriculumoLessonPlans() {
                                     >
                                         <Form>
                                             <div className="modal-body">
-                                                <h3 className="format-heading">Format D</h3>
+                                                <h3 className="format-heading">FORMAT D</h3>
 
                                                 <div className="row">
 

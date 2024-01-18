@@ -35,7 +35,10 @@ export default function CurriculumModules() {
     // Edit Modules Model
     const [showEditModules, setShowEditModules] = useState(false);
     const handleClose = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowEditModules(false);
+        }
     };
     const handleShow = (e) => {
         setDetail(e.row)
@@ -55,7 +58,10 @@ export default function CurriculumModules() {
 
     const [showAddModules, setShowAddModules] = useState(false);
     const handleClose1 = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowAddModules(false);
+        }
     };
     const handleShow1 = () => {
         setShowAddModules(true);

@@ -47,6 +47,8 @@ export default function CurriculumoOptions() {
     // Edit Options Model
     const [showEditOptions, setShowEditOptions] = useState(false);
     const handleClose = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowEditOptions(false);
         setAudio({})
         setVideo({})
@@ -57,6 +59,7 @@ export default function CurriculumoOptions() {
         setState(false)
         setState1(false)
         setState2(false)
+        }
     };
     const handleShow = (e) => {
         setDetail(e.row)
@@ -118,10 +121,13 @@ export default function CurriculumoOptions() {
     const [showAddOptions, setShowAddOptions] = useState(false);
     const [showPreview, setshowPreview] = useState(false);
     const handleClose2 = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setshowPreview(false);
         setState(false)
         setState1(false)
         setState2(false)
+        }
 
     };
     const handleShow2 = (e, flag) => {
@@ -139,6 +145,8 @@ export default function CurriculumoOptions() {
 
     };
     const handleClose1 = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowAddOptions(false);
         setAudio({})
         setVideo({})
@@ -149,6 +157,7 @@ export default function CurriculumoOptions() {
         setState(false)
         setState1(false)
         setState2(false)
+        }
     };
     const handleShow1 = () => {
         setShowAddOptions(true);

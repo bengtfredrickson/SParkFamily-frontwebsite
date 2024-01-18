@@ -88,9 +88,11 @@ export default function Curriculum() {
     // Edit Curriculum Model
     const [showEditCurriculum, setShowEditCurriculum] = useState(false);
     const handleClose = () => {
-        setShowEditCurriculum(false);
-        setImage({})
-        setImageUrl({})
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+            setShowEditCurriculum(false);
+            setImage({})
+            setImageUrl({})
+        }
     };
     const handleShow = (e) => {
         setDetail(e.row)
@@ -111,9 +113,12 @@ export default function Curriculum() {
 
     const [showAddCurriculum, setShowAddCurriculum] = useState(false);
     const handleClose1 = () => {
-        setShowAddCurriculum(false);
-        setImage({})
-        setImageUrl({})
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
+            setShowAddCurriculum(false);
+            setImage({})
+            setImageUrl({})
+        }
     };
     const handleShow1 = (selectedOption) => {
         console.log("=========>", selectedOption)
@@ -130,7 +135,7 @@ export default function Curriculum() {
     }
 
     const onDelete = (params) => () => {
-        if (window.confirm("are your sure?")) {
+        if (window.confirm("Are you sure you want to Delete this curriculum?")) {
             let data = {
                 curriculum_id: params.row.curriculum_id,
                 name: params.row.name
@@ -288,7 +293,7 @@ export default function Curriculum() {
                                         <div className="card curriculum_format">
                                             <div className="card-header d-Fle">
                                                 <h4></h4>
-                                                <DropdownButton className = "custom-btn"
+                                                <DropdownButton className="custom-btn"
                                                     title="Add Curriculum"
                                                     id="dropdown-basic-button"
                                                     onSelect={(selectedOption) => handleShow1(selectedOption)}
@@ -347,7 +352,7 @@ export default function Curriculum() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditCurriculum}  keyboard={false}>
+            <Modal show={showEditCurriculum} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -522,7 +527,7 @@ export default function Curriculum() {
 
 
             {/* Modal Add Curriculum */}
-            <Modal show={showAddCurriculum}  keyboard={false}>
+            <Modal show={showAddCurriculum} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Curriculum</Modal.Title>
                     <i
@@ -646,7 +651,7 @@ export default function Curriculum() {
                                         <div className="col-lg-4 col-md-12 col-sm-12">
                                             <div className="form-group spo">
                                                 <label>Nav Text</label>
-                                                <MyTextInput type="text" className="form-control" name="name" readOnly={true}/>
+                                                <MyTextInput type="text" className="form-control" name="name" readOnly={true} />
                                             </div>
                                         </div>
                                         <div className="col-lg-4 col-md-12 col-sm-12">

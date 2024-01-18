@@ -35,7 +35,10 @@ export default function CurriculumUnits() {
     // Edit Units Model
     const [showEditUnits, setShowEditUnits] = useState(false);
     const handleClose = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowEditUnits(false);
+        }
     };
     const handleShow = (e) => {
         setDetail(e.row)
@@ -55,7 +58,10 @@ export default function CurriculumUnits() {
 
     const [showAddUnits, setShowAddUnits] = useState(false);
     const handleClose1 = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowAddUnits(false);
+        }
     };
     const handleShow1 = () => {
         setShowAddUnits(true);

@@ -87,7 +87,10 @@ export default function CurriculumSubUnits() {
     const [showEditSubunits, setShowEditSubunits] = useState(false);
     const [SubUnitCategory, setSubUnitCategory] = useState("")
     const handleClose = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowEditSubunits(false);
+        }
     };
     const handleShow = (e) => {
         setDetail(e.row)
@@ -107,7 +110,10 @@ export default function CurriculumSubUnits() {
 
     const [showAddSubunits, setShowAddSubunits] = useState(false);
     const handleClose1 = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowAddSubunits(false);
+        }
     };
     const handleShow1 = (value) => {
         setSubUnitCategory(value)

@@ -46,6 +46,8 @@ export default function CurriculumoSubOptions() {
     // Edit SubOptions Model
     const [showEditSubOptions, setShowEditSubOptions] = useState(false);
     const handleClose = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowEditSubOptions(false);
         setPdfUrl("")
         setPdf({})
@@ -54,6 +56,7 @@ export default function CurriculumoSubOptions() {
         setAudioUrl("")
         setVideoUrl("")
         setState(false)
+        }
 
     };
     const handleShow = (e) => {
@@ -113,6 +116,8 @@ export default function CurriculumoSubOptions() {
 
     const [showAddSubOptions, setShowAddSubOptions] = useState(false);
     const handleClose1 = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setShowAddSubOptions(false);
         setPdfUrl("")
         setPdf({})
@@ -123,16 +128,20 @@ export default function CurriculumoSubOptions() {
         setState(false)
         setState1(false)
         setState2(false)
+        }
     };
     const handleShow1 = () => {
         setShowAddSubOptions(true);
     };
     const [showPreview, setshowPreview] = useState(false);
     const handleClose2 = () => {
+        if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
+
         setshowPreview(false);
         setState(false)
         setState1(false)
         setState2(false)
+        }
     };
     const handleShow2 = (e, flag) => {
         setshowPreview(true);
