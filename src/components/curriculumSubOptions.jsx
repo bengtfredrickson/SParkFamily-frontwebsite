@@ -464,6 +464,8 @@ export default function CurriculumoSubOptions() {
                                         onScreen: true,
                                     },
                                 });
+                                setbutton(false);
+
 
 
                             } else {
@@ -734,6 +736,8 @@ export default function CurriculumoSubOptions() {
                                             onScreen: true,
                                         },
                                     });
+                                    setbutton(false);
+
                                 } else {
                                     add_suboption(formData)
                                     .then((res) => {
