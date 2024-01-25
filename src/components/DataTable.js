@@ -110,7 +110,7 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
     autoResetPageIndex: false,
     columns,
     data,
-    enableRowOrdering: true,
+    enableRowOrdering: false,
     enableSorting: true,
     enablePagination: true,
     paginationDisplayMode: "pages",

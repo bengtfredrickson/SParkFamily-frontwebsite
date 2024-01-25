@@ -198,7 +198,9 @@ export const get_lessons = (data) => {
   const token = localStorage.getItem("auth_token");
   return axios({
     method: "post",
+    // url: `${base_uri.base_uri_admin}/admin/getCustomLessonPlan`,
     url: `${base_uri.base_uri_admin}/admin/getLessonPlansList`,
+    // url: "http://localhost:5002/api/v1/admin/getCustomLessonPlan",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

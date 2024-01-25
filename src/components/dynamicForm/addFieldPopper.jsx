@@ -47,7 +47,7 @@ const AddFieldDialog = ({
 
   return (
     // <Dialog onClose={onClose} open={open}>
-    <Box sx={{ border: 1, p: 1, bgcolor: "background.paper" }}>
+    <Box sx={{ border: 0, p: 1, bgcolor: "background.paper" }}>
       <div style={{ textAlign: "end" }}>
         <i
           className="fas fa-cut"
@@ -135,7 +135,13 @@ const AddFieldDialog = ({
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           /> */}
-        <Button color="primary" variant="contained" fullWidth type="submit">
+        <Button
+          sx={{ mt: 2, p: 2 }}
+          color="primary"
+          variant="contained"
+          fullWidth
+          type="submit"
+        >
           Submit
         </Button>
       </form>

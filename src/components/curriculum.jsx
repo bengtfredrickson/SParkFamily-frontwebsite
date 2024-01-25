@@ -423,7 +423,7 @@ export default function Curriculum() {
               <div className="section-header">
                 <h1>Curriculum</h1>
               </div>
-              <DynamicForm formik={formik} />
+              {/* <DynamicForm formik={formik} /> */}
               <div className="section-body">
                 <div className="row">
                   <div className="col-12">

@@ -107,6 +107,34 @@ const css = `
         flex-wrap:wrap !important;
 
     }
+
+    .btn-primary-blue{
+        background-color:#1976d2 !important;
+        color:#fff !important;
+        text-transform: uppercase;
+        font-size:14px;
+        font-weight:500;
+        padding:6px 12px;
+    }
+  
+  .btn-primary-blue:focus:active,.btn-primary-blue:hover{
+        background-color:#0d60b2 !important;
+    }
+    .border-btn {
+      background: #48aee114;
+      padding: 4.5px 12px;
+      display: block;
+      color: #58555E;
+      border-radius: 5px;
+      text-decoration: none;
+      border: 1px solid #1846b9;
+  }
+  
+  .border-btn:hover {
+      background: none;
+      border: 1px solid #1846b9;
+      color: #58555E;
+  }
     `;
 export default function CurriculumoLessonPlans() {
   const navigate = useNavigate();
@@ -121,6 +149,7 @@ export default function CurriculumoLessonPlans() {
   const [getState, setState] = useState(false);
   const [getbutton, setbutton] = useState(false);
   const [openFormModal, setOpenFormModal] = useState();
+  const [newStateForTable, setNewStateForTable] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -430,12 +459,15 @@ export default function CurriculumoLessonPlans() {
             .then((res) => {
               console.log("=======>", res.data.result);
               if (res.data.result !== null) {
+                console.log(res.data.result, "res.data.result");
                 setLessonPlans(
-                  res.data.result.map((el, index) => ({
-                    ...el,
-                    id: el.lesson_id,
-                    i: index,
-                  }))
+                  res.data.result.map((el, index) => {
+                    return {
+                      ...el,
+                      id: el.lesson_id,
+                      i: index,
+                    };
+                  })
                 );
               } else {
                 setLessonPlans([]);
@@ -460,7 +492,7 @@ export default function CurriculumoLessonPlans() {
         suboption_id: location.state.suboption_id,
       })
         .then((res) => {
-          console.log("=======>", res.data.result);
+          console.log("get_lessons", res.data.result);
 
           setLessonPlans(
             res.data.result.map((el, index) => ({
@@ -477,6 +509,7 @@ export default function CurriculumoLessonPlans() {
         });
     }
   }, []);
+
   const columns = [
     {
       field: "sno",
@@ -761,7 +794,10 @@ export default function CurriculumoLessonPlans() {
                     <div className="card curriculum_format">
                       <div className="card-header d-Fle">
                         <h4></h4>
-                        <Button onClick={onOpenCustomForm}>
+                        <Button
+                          className="border-btn"
+                          onClick={onOpenCustomForm}
+                        >
                           Create Custom Form{" "}
                         </Button>
                         {/* <DropdownButton
@@ -854,6 +890,7 @@ export default function CurriculumoLessonPlans() {
 
                                   <DataGrid
                                     rows={LessonPlans}
+                                    // rows={rows}
                                     columns={columns}
                                     pageSize={10}
                                     rowsPerPageLessonPlans={[10]}

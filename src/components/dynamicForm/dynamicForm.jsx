@@ -8,14 +8,82 @@ import {
   addCustomLessonPlan,
 } from "../../services/web/webServices";
 import { Store } from "react-notifications-component";
-import { EditorState } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
+import drag from "../../../src/image/drag.svg";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import RenderFormField from "./renderFormField";
+
+const css = `
+   
+
+    .btn-primary-blue{
+      background-color:#1976d2 !important;
+      color:#fff !important;
+      text-transform: uppercase;
+      font-size:14px;
+      font-weight:500;
+      padding:6px 12px;
+  }
+
+.btn-primary-blue:focus:active,.btn-primary-blue:hover{
+      background-color:#0d60b2 !important;
+  }
+  .border-btn {
+    background: #48aee114;
+    padding: 4.5px 12px;
+    display: block;
+    color: #58555E;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid #1846b9;
+}
+
+.border-btn:hover {
+    background: none;
+    border: 1px solid #1846b9;
+    color: #58555E;
+}
+input.text-feild {
+  padding:13px 8px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  width:100%;
+  max-width:323px;
+}
+.text-feild-input {
+  border-radius: 4px;
+  width:100%;
+  max-width:323px;
+}
+.drag-btn,.drag-btn:hover{
+  background: transparent !important;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 20px;
+}
+.drag-btn img{
+  max-width: 100% !important;
+}
+.label-text{
+  font-weight: 600;
+  color: #34395e;
+  font-size: 14px;
+  letter-spacing: .5px;
+}
+.text-image {
+  max-width: 134px;
+}
+    `;
 
 const DynamicForm = () => {
   const location = useLocation();
 
   const [formFields, setFormFields] = useState([]);
   const [openDialog, setOpenDialog] = useState(null);
-  const [editorData, setEditor] = useState(EditorState.createEmpty());
+  const [editorData, setEditor] = useState();
   const [editData, setEditData] = useState({});
   const [editKey, setEditKey] = useState();
   const [isEdit, setIsEdit] = useState(false);
@@ -25,6 +93,7 @@ const DynamicForm = () => {
   const [getImage, setImage] = useState({});
   const [textField, setTextField] = useState("");
   const [lessonPlanImg, setLessonPlanImg] = useState("");
+  const [editorHtml, setEditorHtml] = useState();
 
   const openAddFieldDialog = () => {
     setOpenDialog(true);
@@ -108,7 +177,7 @@ const DynamicForm = () => {
           item?.fieldType === "text"
             ? textField
             : item?.fieldType === "textArea"
-            ? editorData
+            ? editorHtml
             : lessonPlanImg,
         key_type: item?.fieldType === "text" ? 1 : 2,
         order: i + 1,
@@ -116,9 +185,10 @@ const DynamicForm = () => {
       })),
     };
     console.log(data, "data");
-    if (!getImage?.imageAsFile) return;
 
-    uploadImage(getImage?.imageAsFile);
+    if (getImage?.imageAsFile) {
+      uploadImage(getImage?.imageAsFile);
+    }
 
     if (Object.keys(data)?.length > 0) {
       addCustomLessonPlan(data)
@@ -149,7 +219,7 @@ const DynamicForm = () => {
   };
   // const onChangeEditor = (editorState) => {
   //   console.log(editorState.getCurrentContent(), "editorState");
-  //   setEditor(editorState);
+
   // };
 
   const uploadImage = (image) => {
@@ -177,13 +247,24 @@ const DynamicForm = () => {
     setImageUrl(URL.createObjectURL(e.target.files[0]));
   };
 
-  const handleEditorChange = (editorState) => {
-    const content = editorState.getCurrentContent().getPlainText();
-    console.log(content, "editor content");
-    setEditor(editorState);
+  const handleEditorChange = (value) => {
+    let html = draftToHtml(convertToRaw(value.getCurrentContent()));
+    // console.log(draftToHtml(convertToRaw(value.getCurrentContent())), "data1");
+    // const content = editorState.getCurrentContent();
+    // const rawContentState = convertToRaw(content);
+    // console.log(rawContentState, "rawcontentState");
+    // const plainText = rawContentState.blocks
+    //   .map((block) => block.text)
+    //   .join("\n");
+
+    // console.log(plainText, "editor content");
+    setEditorHtml(html);
+    setEditor(value);
   };
 
   console.log(editorData, "editorData");
+  console.log(editorHtml, "editorHtml");
+
   const renderFormField = (field, i) => {
     if (field.fieldType === "text") {
       return (
@@ -195,12 +276,31 @@ const DynamicForm = () => {
               alignItems: "center",
             }}
           >
-            <Button onClick={() => onEditField(i)}>edit</Button>
-            <Button onClick={() => onDeleteField(i)}>delete</Button>
-            <Button>drag</Button>
+            <Button
+              className="btn-primary-blue"
+              sx={{ mr: 1 }}
+              onClick={() => onEditField(i)}
+            >
+              edit
+            </Button>
+            <Button
+              className="btn-primary-blue"
+              sx={{ mr: 1 }}
+              onClick={() => onDeleteField(i)}
+            >
+              delete
+            </Button>
+            <Button
+              style={{ minWidth: "36px" }}
+              className="drag-btn"
+              sx={{ mt: 1 }}
+            >
+              <img alt="drag" src={drag} />
+            </Button>
           </div>
-          <InputLabel>{field.fieldLabel}</InputLabel>
+          <InputLabel className="label-text">{field.fieldLabel}</InputLabel>
           <TextField
+            className="text-feild-input"
             sx={{ marginTop: 1, marginBottom: 1 }}
             fullWidth
             // id={i}
@@ -226,11 +326,29 @@ const DynamicForm = () => {
               alignItems: "center",
             }}
           >
-            <Button onClick={() => onEditField(i)}>edit</Button>
-            <Button onClick={() => onDeleteField(i)}>delete</Button>
-            <Button>drag</Button>
+            <Button
+              className="btn-primary-blue"
+              sx={{ mr: 1 }}
+              onClick={() => onEditField(i)}
+            >
+              edit
+            </Button>
+            <Button
+              className="btn-primary-blue"
+              sx={{ mr: 1 }}
+              onClick={() => onDeleteField(i)}
+            >
+              delete
+            </Button>
+            <Button
+              style={{ minWidth: "36px" }}
+              className="drag-btn"
+              sx={{ mt: 1 }}
+            >
+              <img alt="drag" src={drag} />
+            </Button>
           </div>
-          <InputLabel>{field.fieldLabel}</InputLabel>
+          <InputLabel className="label-text">{field.fieldLabel}</InputLabel>
           <Editor
             toolbarClassName="toolbarClassName"
             wrapperClassName="wrapperClassName"
@@ -266,20 +384,40 @@ const DynamicForm = () => {
               alignItems: "center",
             }}
           >
-            <Button onClick={() => onEditField(i)}>edit</Button>
-            <Button onClick={() => onDeleteField(i)}>delete</Button>
-            <Button>drag</Button>
+            <Button
+              className="btn-primary-blue"
+              sx={{ mr: 1 }}
+              onClick={() => onEditField(i)}
+            >
+              edit
+            </Button>
+            <Button
+              className="btn-primary-blue"
+              sx={{ mr: 1 }}
+              onClick={() => onDeleteField(i)}
+            >
+              delete
+            </Button>
+            <Button
+              style={{ minWidth: "36px" }}
+              className="drag-btn"
+              sx={{ mt: 1 }}
+            >
+              <img alt="drag" src={drag} />
+            </Button>
           </div>
-          <InputLabel>{field.fieldLabel}</InputLabel>
+          <InputLabel className="label-text">{field.fieldLabel}</InputLabel>
           <input
+            className="text-feild"
             type="file"
             accept="image/*"
-            className="form-control"
             name={field.fieldName}
             onChange={(e) => onChangeImage(e)}
           />
           {getImageUrl !== "" ? (
-            <img src={getImageUrl} className=" w-30 p-3" alt="" />
+            <p>
+              <img src={getImageUrl} className="p-3 text-image" alt="" />
+            </p>
           ) : null}
           {getState ? (
             <p style={{ color: "red" }}>Only Image is allowed !</p>
@@ -290,11 +428,16 @@ const DynamicForm = () => {
 
     return null;
   };
-
+  console.log(editorHtml, "editorhtml");
   return (
     <div>
+      <style>{css}</style>
       {/* DynamicForm */}
-      <Button onClick={openAddFieldDialog} data-dismiss="modal">
+      <Button
+        className="btn-primary-blue"
+        onClick={openAddFieldDialog}
+        data-dismiss="modal"
+      >
         {isEdit ? "Edit Item" : "Add New Item"}
       </Button>
       {openDialog && (
@@ -317,12 +460,34 @@ const DynamicForm = () => {
           onDragOver={handleDragOver}
           onDrop={(e) => handleDrop(e, field)}
         >
-          {renderFormField(field, index)}
+          {/* {renderFormField(field, index)} */}
+          <RenderFormField
+            onEditField={onEditField}
+            onDeleteField={onDeleteField}
+            onChangeText={onChangeText}
+            textField={textField}
+            editorData={editorData}
+            handleEditorChange={handleEditorChange}
+            getState={getState}
+            onChangeImage={onChangeImage}
+            getImageUrl={getImageUrl}
+            field={field}
+            index={index}
+            setImage={setImage}
+            editorHtml={editorHtml}
+            setEditorHtml={setEditorHtml}
+          />
         </div>
       ))}
-      {/* <Button onClick={submitFormData}>Submit Form</Button> */}
+
       {formFields?.length > 0 && (
-        <Button onClick={submitForm}>Submit Form</Button>
+        <Button
+          className="btn-primary-blue"
+          sx={{ mt: 1 }}
+          onClick={submitForm}
+        >
+          Submit Form
+        </Button>
       )}
     </div>
   );
