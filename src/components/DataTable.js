@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const DataTable = ({ tableData, onDelete, handleShow }) => {
   const navigate = useNavigate();
+
   const columns = useMemo(
     //column definitions...
     () => [
@@ -55,6 +56,7 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
         accessorKey: "actions",
         sx: { minWidth: 0, width: "auto", padding: 0 },
         accessorFn: (params) => {
+          console.log(params, "params");
           return (
             <div
               style={{
@@ -68,7 +70,7 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
                   style={{ width: "-webkit-fill-available" }}
                   onClick={() =>
                     navigate("/curriculum_module", {
-                      state: { id: params?.row?.curriculum_id },
+                      state: { id: params?.curriculum_id },
                     })
                   }
                 >
@@ -77,11 +79,12 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
               ) : (
                 <Button
                   style={{ width: "-webkit-fill-available" }}
-                  onClick={() =>
+                  onClick={() => {
+                    console.log(params.curriculum_id, "xxxx");
                     navigate("/curriculum_units", {
-                      state: { id: params?.row?.curriculum_id, module_id: 0 },
-                    })
-                  }
+                      state: { id: params?.curriculum_id, module_id: 0 },
+                    });
+                  }}
                 >
                   Units
                 </Button>
@@ -89,7 +92,7 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
               <Button onClick={() => handleShow(params)}>
                 <i className="fas fa-edit"></i>
               </Button>
-              <Button color="error" onClick={onDelete(params)}>
+              <Button color="error" onClick={() => onDelete(params)}>
                 <i className="fa fa-trash" aria-hidden="true"></i>
               </Button>
             </div>
@@ -108,7 +111,9 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
     columns,
     data,
     enableRowOrdering: true,
-    enableSorting: false,
+    enableSorting: true,
+    enablePagination: true,
+    paginationDisplayMode: "pages",
     muiRowDragHandleProps: ({ table }) => ({
       onDragEnd: () => {
         const { draggingRow, hoveredRow } = table?.getState();

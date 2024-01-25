@@ -11,7 +11,7 @@ import {
 import { Store } from "react-notifications-component";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
-import { Form, Formik, Field } from "formik";
+import { Form, Formik, Field, useFormik } from "formik";
 import Modal from "react-bootstrap/Modal";
 import { MyTextArea, MyTextInput } from "../services/web/inputServices";
 import * as Yup from "yup";
@@ -21,6 +21,7 @@ import moment from "moment/moment";
 import { DropdownButton, Dropdown } from "react-bootstrap";
 
 import DataTable from "./DataTable";
+import DynamicForm from "./dynamicForm/dynamicForm";
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
@@ -194,8 +195,6 @@ export default function Curriculum() {
     if (curriculum?.length === 0 || location?.state?.reloadcurriculum) {
       get_all_curriculums()
         .then((res) => {
-          console.log(res.data.result, "@@@@@@@@@@@@@@@");
-
           setCurriculum(
             res.data.result.map((el, index) => ({
               ...el,
@@ -271,6 +270,7 @@ export default function Curriculum() {
         headerName: "Action",
         width: 200,
         renderCell: (params) => {
+          console.log(params, "params.row.curriculum_id");
           return (
             <>
               {params.row.module_id === 1 ? (
@@ -403,7 +403,14 @@ export default function Curriculum() {
   //     ],
   //     []
   //   );
-
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      type: "",
+      label: "",
+    },
+    onSubmit: (values) => {},
+  });
   return (
     <>
       <style>{css}</style>
@@ -416,13 +423,12 @@ export default function Curriculum() {
               <div className="section-header">
                 <h1>Curriculum</h1>
               </div>
-
+              <DynamicForm formik={formik} />
               <div className="section-body">
                 <div className="row">
                   <div className="col-12">
                     <div className="card curriculum_format">
                       <div className="card-header d-Fle">
-                        <h4></h4>
                         <DropdownButton
                           className="custom-btn"
                           title="Add Curriculum"
@@ -462,15 +468,6 @@ export default function Curriculum() {
                                     onDelete={onDelete}
                                     handleShow={handleShow}
                                   />
-                                  {/* <DataGrid
-                                    rows={curriculum}
-                                    columns={columns}
-                                    pageSize={10}
-                                    rowsPerPageOptions={[10]}
-                                    onSelectionChange={(newSelection) => {
-                                      setSelection(newSelection.rows);
-                                    }}
-                                  /> */}
                                 </>
                               )}
                             </Box>
@@ -703,7 +700,7 @@ export default function Curriculum() {
           ></i>
         </Modal.Header>
         <Modal.Body>
-          <Formik
+          {/* <Formik
             initialValues={{
               name: "",
               nav_text: "",
@@ -888,7 +885,7 @@ export default function Curriculum() {
                 </div>
               </Form>
             )}
-          </Formik>
+          </Formik> */}
         </Modal.Body>
       </Modal>
       {/* Ends Add Curriculum */}
