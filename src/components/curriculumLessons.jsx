@@ -149,7 +149,6 @@ export default function CurriculumoLessonPlans() {
   const [getState, setState] = useState(false);
   const [getbutton, setbutton] = useState(false);
   const [openFormModal, setOpenFormModal] = useState();
-  const [newStateForTable, setNewStateForTable] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -6891,7 +6890,7 @@ export default function CurriculumoLessonPlans() {
                           onChange={(e) => onHandle(e)}
                           required
                         />
-                        {getImageUrl != "" ? (
+                        {getImageUrl !== "" ? (
                           <img src={getImageUrl} className=" w-30 p-3" alt="" />
                         ) : null}
                         {getState ? (
