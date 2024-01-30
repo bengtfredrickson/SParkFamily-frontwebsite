@@ -15,7 +15,7 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
       {
         accessorKey: "curriculum_id",
         header: "S.NO.",
-        size: 70,
+        size: 40,
         muiTableHeadCellProps: {
           align: "center",
         },
@@ -37,7 +37,7 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
       {
         accessorKey: "primary_color",
         header: "Primary Color",
-        size: 100,
+        size: 50,
         muiTableHeadCellProps: {
           align: "center",
         },

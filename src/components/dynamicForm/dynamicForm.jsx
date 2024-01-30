@@ -78,7 +78,7 @@ input.text-feild {
 }
     `;
 
-const DynamicForm = () => {
+const DynamicForm = ({ closeModal }) => {
   const location = useLocation();
 
   const [formFields, setFormFields] = useState([]);
@@ -207,6 +207,7 @@ const DynamicForm = () => {
               onScreen: true,
             },
           });
+          closeModal();
         })
         .catch((err) => {
           console.log(err);
