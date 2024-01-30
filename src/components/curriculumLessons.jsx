@@ -149,7 +149,6 @@ export default function CurriculumoLessonPlans() {
     const [getState, setState] = useState(false);
     const [getbutton, setbutton] = useState(false);
     const [openFormModal, setOpenFormModal] = useState();
-    const [newStateForTable, setNewStateForTable] = useState([]);
 
     const formik = useFormik({
         initialValues: {
@@ -6939,11 +6938,16 @@ export default function CurriculumoLessonPlans() {
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}
-                        onClick={() => setOpenFormModal(false)}
+                        onClick={() => {if ( 
+                            window.confirm(
+                                "Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!"
+                            )
+                        ) { setOpenFormModal(false) }}
+                        }
                     ></i>
                 </Modal.Header>
                 <Modal.Body>
-                    <DynamicForm closeModal={() => setOpenFormModal(false)}/>
+                    <DynamicForm closeModal={() => setOpenFormModal(false)} />
                 </Modal.Body>
             </Modal>
             <Footer />

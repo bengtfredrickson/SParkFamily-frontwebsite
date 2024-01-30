@@ -1,16 +1,12 @@
-import { Button, InputLabel, TextField } from "@mui/material";
-import { React, useState } from "react";
+import { Button } from "@mui/material";
+import { React, memo, useState } from "react";
 import AddFieldPopper from "./addFieldPopper";
-import { Editor } from "react-draft-wysiwyg";
 import { useLocation } from "react-router-dom";
 import {
   uploadAddLessonPlanImage,
   addCustomLessonPlan,
 } from "../../services/web/webServices";
 import { Store } from "react-notifications-component";
-import { EditorState, convertToRaw } from "draft-js";
-import drag from "../../../src/image/drag.svg";
-import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import RenderFormField from "./renderFormField";
 
@@ -65,7 +61,8 @@ input.text-feild {
     max-width: 20px;
 }
 .drag-btn img{
-  max-width: 100% !important;
+  max-width: 80% !important;
+  margin-bottom:7px;
 }
 .label-text{
   font-weight: 600;
@@ -83,14 +80,11 @@ const DynamicForm = ({ closeModal }) => {
 
   const [formFields, setFormFields] = useState([]);
   const [openDialog, setOpenDialog] = useState(null);
-  const [editorData, setEditor] = useState();
   const [editData, setEditData] = useState({});
   const [editKey, setEditKey] = useState();
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
-  const [getImageUrl, setImageUrl] = useState("");
-  const [getState, setState] = useState(false);
-  const [getImage, setImage] = useState({});
+  const [imageAsFile, setImageAsFile] = useState({});
   const [textField, setTextField] = useState("");
   const [lessonPlanImg, setLessonPlanImg] = useState("");
   const [editorHtml, setEditorHtml] = useState();
@@ -98,16 +92,9 @@ const DynamicForm = ({ closeModal }) => {
   const openAddFieldDialog = () => {
     setOpenDialog(true);
   };
+
   const closeAddFieldDialog = () => {
     setOpenDialog(false);
-  };
-
-  const addNewField = (values) => {
-    const { name, type, label } = values;
-    setFormFields([
-      ...formFields,
-      { fieldName: name, fieldType: type, fieldLabel: label },
-    ]);
   };
 
   const onEditField = (index) => {
@@ -120,10 +107,10 @@ const DynamicForm = ({ closeModal }) => {
   };
 
   const onEditSave = (value) => {
-    const { name, type, label } = value;
+    const { type, label } = value;
 
     let data = [...formFields];
-    data[editKey] = { fieldName: name, fieldType: type, fieldLabel: label };
+    data[editKey] = { fieldType: type, fieldLabel: label, value: "" };
 
     setFormFields([...data]);
     setEditData({});
@@ -150,7 +137,7 @@ const DynamicForm = ({ closeModal }) => {
 
   const handleDragStart = (e, item) => {
     setDraggingItem(item);
-    e.dataTransfer.setData("text/plain", "");
+    e?.dataTransfer?.setData("text/html", "");
   };
 
   const handleDrop = (e, targetItem) => {
@@ -163,35 +150,87 @@ const DynamicForm = ({ closeModal }) => {
       const newItems = [...formFields];
       newItems.splice(currentIndex, 1);
       newItems.splice(targetIndex, 0, draggingItem);
+
       setFormFields(newItems);
     }
   };
+  console.log(formFields, "formFields");
 
-  const submitForm = () => {
-    let data = {
-      curriculum_id: location.state.curriculum_id,
-      suboption_id: location.state.suboption_id,
-      data: formFields.map((item, i) => ({
-        key: item?.fieldLabel,
-        value:
-          item?.fieldType === "text"
-            ? textField
-            : item?.fieldType === "textArea"
-            ? editorHtml
-            : lessonPlanImg,
-        key_type: item?.fieldType === "text" ? 1 : 2,
-        order: i + 1,
-        position: "top",
-      })),
-    };
-    console.log(data, "data");
+  const submitForm = async () => {
+    if (imageAsFile?.imageAsFile) {
+      // uploadImage(imageAsFile?.imageAsFile);
 
-    if (getImage?.imageAsFile) {
-      uploadImage(getImage?.imageAsFile);
-    }
+      let formData = new FormData();
+      formData.append("image_url", imageAsFile?.imageAsFile);
 
-    if (Object.keys(data)?.length > 0) {
-      addCustomLessonPlan(data)
+      await uploadAddLessonPlanImage(formData)
+        .then(async (res) => {
+          setLessonPlanImg(res.data.result.data);
+          setImageAsFile({});
+          if (res?.data?.result?.data) {
+            let data = {
+              curriculum_id: location.state.curriculum_id,
+              suboption_id: location.state.suboption_id,
+
+              data: formFields.map((item, i) => ({
+                key: item?.fieldLabel,
+                value:
+                  item?.fieldType === "text"
+                    ? item.value
+                    : item?.fieldType === "textArea"
+                    ? item.value
+                    : item.value,
+                key_type: item?.fieldType === "text" ? 1 : 2,
+                order: i + 1,
+                position: "top",
+              })),
+            };
+
+            await addCustomLessonPlan(data)
+              .then((res) => {
+                Store.addNotification({
+                  title: "Success",
+                  message: res?.data?.message,
+                  type: "success",
+                  insert: "top",
+                  container: "top-right",
+                  className: "rnc__notification-container--top-right",
+                  animationIn: ["animate__animated", "animate__fadeIn"],
+                  animationOut: ["animate__animated", "animate__fadeOut"],
+                  dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                  },
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+    } else {
+      let data = {
+        curriculum_id: location.state.curriculum_id,
+        suboption_id: location.state.suboption_id,
+
+        data: formFields.map((item, i) => ({
+          key: item?.fieldLabel,
+          value:
+            item?.fieldType === "text"
+              ? item.value
+              : item?.fieldType === "textArea"
+              ? item.value
+              : item.value,
+          key_type: item?.fieldType === "text" ? 1 : 2,
+          order: i + 1,
+          position: "top",
+        })),
+      };
+
+      await addCustomLessonPlan(data)
         .then((res) => {
           Store.addNotification({
             title: "Success",
@@ -213,227 +252,63 @@ const DynamicForm = ({ closeModal }) => {
           console.log(err);
         });
     }
+
+    // if (Object.keys(data)?.length > 0) {
+    //   addCustomLessonPlan(data)
+    //     .then((res) => {
+    //       Store.addNotification({
+    //         title: "Success",
+    //         message: res?.data?.message,
+    //         type: "success",
+    //         insert: "top",
+    //         container: "top-right",
+    //         className: "rnc__notification-container--top-right",
+    //         animationIn: ["animate__animated", "animate__fadeIn"],
+    //         animationOut: ["animate__animated", "animate__fadeOut"],
+    //         dismiss: {
+    //           duration: 5000,
+    //           onScreen: true,
+    //         },
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // }
   };
 
-  const onChangeText = (e) => {
-    setTextField(e.target.value);
-  };
-  // const onChangeEditor = (editorState) => {
-  //   console.log(editorState.getCurrentContent(), "editorState");
+  // const uploadImage = (image) => {
+  //   if (image) {
+  //     let formData = new FormData();
+  //     formData.append("image_url", image);
 
+  //     uploadAddLessonPlanImage(formData)
+  //       .then((res) => {
+  //         setLessonPlanImg(res.data.result.data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err, "err");
+  //       });
+  //   }
   // };
 
-  const uploadImage = (image) => {
-    if (image) {
-      let formData = new FormData();
-      formData.append("image_url", image);
+  const addNewField = (values) => {
+    try {
+      const { type, label } = values;
 
-      uploadAddLessonPlanImage(formData)
-        .then((res) => {
-          setLessonPlanImg(res.data.result.data);
-        })
-        .catch((err) => {
-          console.log(err, "err");
-        });
+      setFormFields([
+        ...formFields,
+        { fieldType: type, fieldLabel: label, value: "" },
+      ]);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const onChangeImage = (e) => {
-    if (e.target.files[0].type.includes("image")) {
-      setImage({ imageAsFile: e.target.files[0] });
-      setState(false);
-    } else {
-      setState(true);
-    }
-    setImageUrl(URL.createObjectURL(e.target.files[0]));
-  };
-
-  const handleEditorChange = (value) => {
-    let html = draftToHtml(convertToRaw(value.getCurrentContent()));
-    // console.log(draftToHtml(convertToRaw(value.getCurrentContent())), "data1");
-    // const content = editorState.getCurrentContent();
-    // const rawContentState = convertToRaw(content);
-    // console.log(rawContentState, "rawcontentState");
-    // const plainText = rawContentState.blocks
-    //   .map((block) => block.text)
-    //   .join("\n");
-
-    // console.log(plainText, "editor content");
-    setEditorHtml(html);
-    setEditor(value);
-  };
-
-  console.log(editorData, "editorData");
-  console.log(editorHtml, "editorHtml");
-
-  const renderFormField = (field, i) => {
-    if (field.fieldType === "text") {
-      return (
-        <div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
-              onClick={() => onEditField(i)}
-            >
-              edit
-            </Button>
-            <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
-              onClick={() => onDeleteField(i)}
-            >
-              delete
-            </Button>
-            <Button
-              style={{ minWidth: "36px" }}
-              className="drag-btn"
-              sx={{ mt: 1 }}
-            >
-              <img alt="drag" src={drag} />
-            </Button>
-          </div>
-          <InputLabel className="label-text">{field.fieldLabel}</InputLabel>
-          <TextField
-            className="text-feild-input"
-            sx={{ marginTop: 1, marginBottom: 1 }}
-            fullWidth
-            // id={i}
-            name={field.fieldName}
-            // label={field.fieldLabel}
-            value={textField}
-            onChange={onChangeText}
-            // onBlur={formData.handleBlur}
-            // error={formik.touched.name && Boolean(formik.errors.name)}
-            // helperText={formik.touched.name && formik.errors.name}
-          />
-        </div>
-      );
-    }
-
-    if (field.fieldType === "textArea") {
-      return (
-        <div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
-              onClick={() => onEditField(i)}
-            >
-              edit
-            </Button>
-            <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
-              onClick={() => onDeleteField(i)}
-            >
-              delete
-            </Button>
-            <Button
-              style={{ minWidth: "36px" }}
-              className="drag-btn"
-              sx={{ mt: 1 }}
-            >
-              <img alt="drag" src={drag} />
-            </Button>
-          </div>
-          <InputLabel className="label-text">{field.fieldLabel}</InputLabel>
-          <Editor
-            toolbarClassName="toolbarClassName"
-            wrapperClassName="wrapperClassName"
-            editorClassName="editorClassName"
-            wrapperStyle={{
-              border: "1px solid #d6d6d6",
-              padding: 10,
-              borderRadius: 10,
-            }}
-            toolbarStyle={{
-              border: 0,
-              borderBottom: "1px solid #d6d6d6",
-            }}
-            editorState={editorData}
-            // onEditorStateChange={(editorState) =>
-            //   onChangeEditor(editorState, 1, 1)
-            // }
-            onEditorStateChange={handleEditorChange}
-
-            // onBlur={() => helpers.setTouched(true)}
-          />
-        </div>
-      );
-    }
-
-    if (field.fieldType === "image") {
-      return (
-        <div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
-              onClick={() => onEditField(i)}
-            >
-              edit
-            </Button>
-            <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
-              onClick={() => onDeleteField(i)}
-            >
-              delete
-            </Button>
-            <Button
-              style={{ minWidth: "36px" }}
-              className="drag-btn"
-              sx={{ mt: 1 }}
-            >
-              <img alt="drag" src={drag} />
-            </Button>
-          </div>
-          <InputLabel className="label-text">{field.fieldLabel}</InputLabel>
-          <input
-            className="text-feild"
-            type="file"
-            accept="image/*"
-            name={field.fieldName}
-            onChange={(e) => onChangeImage(e)}
-          />
-          {getImageUrl !== "" ? (
-            <p>
-              <img src={getImageUrl} className="p-3 text-image" alt="" />
-            </p>
-          ) : null}
-          {getState ? (
-            <p style={{ color: "red" }}>Only Image is allowed !</p>
-          ) : null}
-        </div>
-      );
-    }
-
-    return null;
-  };
-  console.log(editorHtml, "editorhtml");
   return (
     <div>
       <style>{css}</style>
-      {/* DynamicForm */}
+
       <Button
         className="btn-primary-blue"
         onClick={openAddFieldDialog}
@@ -441,6 +316,7 @@ const DynamicForm = ({ closeModal }) => {
       >
         {isEdit ? "Edit Item" : "Add New Item"}
       </Button>
+
       {openDialog && (
         <AddFieldPopper
           open={openDialog}
@@ -451,6 +327,7 @@ const DynamicForm = ({ closeModal }) => {
           editData={editData}
         />
       )}
+
       {formFields.map((field, index) => (
         <div
           key={index}
@@ -461,22 +338,19 @@ const DynamicForm = ({ closeModal }) => {
           onDragOver={handleDragOver}
           onDrop={(e) => handleDrop(e, field)}
         >
-          {/* {renderFormField(field, index)} */}
           <RenderFormField
             onEditField={onEditField}
             onDeleteField={onDeleteField}
-            onChangeText={onChangeText}
             textField={textField}
-            editorData={editorData}
-            handleEditorChange={handleEditorChange}
-            getState={getState}
-            onChangeImage={onChangeImage}
-            getImageUrl={getImageUrl}
+            setTextField={setTextField}
             field={field}
             index={index}
-            setImage={setImage}
+            setImageAsFile={setImageAsFile}
             editorHtml={editorHtml}
             setEditorHtml={setEditorHtml}
+            formFields={formFields}
+            setFormFields={setFormFields}
+            fieldValue={field?.value}
           />
         </div>
       ))}
@@ -484,7 +358,7 @@ const DynamicForm = ({ closeModal }) => {
       {formFields?.length > 0 && (
         <Button
           className="btn-primary-blue"
-          sx={{ mt: 1 }}
+          sx={{ mt: 2 }}
           onClick={submitForm}
         >
           Submit Form
@@ -493,4 +367,4 @@ const DynamicForm = ({ closeModal }) => {
     </div>
   );
 };
-export default DynamicForm;
+export default memo(DynamicForm);
