@@ -13,6 +13,7 @@ import {
     edit_HighLesson,
     edit_lesson,
     get_lessons,
+    getCustomLessonPlan,
 } from "../services/web/webServices";
 import { Store } from "react-notifications-component";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -149,6 +150,8 @@ export default function CurriculumoLessonPlans() {
     const [getState, setState] = useState(false);
     const [getbutton, setbutton] = useState(false);
     const [openFormModal, setOpenFormModal] = useState();
+    const [ViewModel, setViewModel] = useState(false)
+    const [ViewData, setViewData] = useState({})
 
     const formik = useFormik({
         initialValues: {
@@ -225,6 +228,7 @@ export default function CurriculumoLessonPlans() {
             setLessonFormat("");
         }
     };
+
     const handleShow = (e, t) => {
         if (t === 1) {
             setDetail(e.row);
@@ -486,20 +490,21 @@ export default function CurriculumoLessonPlans() {
     // ends
     useEffect(() => {
         if (LessonPlans.length === 0 || location?.state?.reloadLessonPlans) {
-            get_lessons({
+            getCustomLessonPlan({
                 curriculum_id: location.state.curriculum_id,
                 suboption_id: location.state.suboption_id,
             })
                 .then((res) => {
                     console.log("get_lessons", res.data.result);
-
-                    setLessonPlans(
-                        res.data.result.map((el, index) => ({
-                            ...el,
-                            id: el.lesson_id,
-                            i: index,
-                        }))
-                    );
+                    let data = JSON.parse(res.data.result[0].lesson_data.replace(/\\"/g, '"'))
+                    // setLessonPlans(
+                    const re = data.map((el, index) => ({
+                        ...el,
+                        id: el.id,
+                        i: index
+                    }));
+                    setLessonPlans(re);
+                    // );
                     setLoader(false);
                 })
                 .catch((err) => {
@@ -508,6 +513,13 @@ export default function CurriculumoLessonPlans() {
                 });
         }
     }, []);
+
+    const handleView = (data) => {
+        console.log(data.row,'dastatata');
+        setViewData(data.row)
+        setViewModel(true);
+       
+    }
 
     const columns = [
         {
@@ -518,37 +530,15 @@ export default function CurriculumoLessonPlans() {
             renderCell: (index) => `${index.row.i + 1}`,
         },
         {
-            field: "title",
+            field: "id",
             headerName: "Name",
-            width: 120,
-        },
-        {
-            field: "image_url",
-            headerName: "Image",
-            width: 120,
+            width: 220,
             renderCell: (params) => {
                 return (
-                    <div>
-                        {params?.row?.image_url == "" ? (
-                            <img
-                                className="circular_image"
-                                style={{ width: "62px" }}
-                                src="images/splash.png"
-                                alt="Not Found "
-                            />
-                        ) : (
-                            <img
-                                className="circular_image"
-                                style={{ width: "62px" }}
-                                src={params?.row?.image_url}
-                                alt=""
-                            />
-                        )}
-                    </div>
-                );
-            },
+                    `Lesson ${params.row.i + 1}`
+                )
+            }
         },
-
         {
             field: "action",
             headerName: "Action",
@@ -556,6 +546,13 @@ export default function CurriculumoLessonPlans() {
             renderCell: (params) => {
                 return (
                     <>
+                        <Button
+                            onClick={() =>
+                                handleView(params)
+                            }
+                        >
+                            <i className="fas fa-eye"></i>
+                        </Button>
                         <Button
                             onClick={() =>
                                 handleShow(
@@ -773,6 +770,8 @@ export default function CurriculumoLessonPlans() {
     const onOpenCustomForm = () => {
         setOpenFormModal(true);
     };
+
+
 
     return (
         <>
@@ -6938,16 +6937,43 @@ export default function CurriculumoLessonPlans() {
                     <i
                         className="fas fa-cut"
                         style={{ cursor: "pointer" }}
-                        onClick={() => {if ( 
-                            window.confirm(
-                                "Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!"
-                            )
-                        ) { setOpenFormModal(false) }}
+                        onClick={() => {
+                            if (
+                                window.confirm(
+                                    "Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!"
+                                )
+                            ) { setOpenFormModal(false) }
+                        }
                         }
                     ></i>
                 </Modal.Header>
                 <Modal.Body>
                     <DynamicForm closeModal={() => setOpenFormModal(false)} />
+                </Modal.Body>
+            </Modal>
+
+
+            {/* View Lesson Plan Model */}
+
+            <Modal show={ViewModel} keyboard={false}>
+                <Modal.Header>
+                    LESSON PLAN
+                    <i
+                        className="fas fa-cut"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                            if (
+                                window.confirm(
+                                    "Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!"
+                                )
+                            ) { setViewModel(false) }
+                        }
+                        }
+                    ></i>
+                </Modal.Header>
+                <Modal.Body>
+                    <>{ViewData?.id}</>
+                    {/* <>{ViewData?.data[0]?.key}</> */}
                 </Modal.Body>
             </Modal>
             <Footer />
