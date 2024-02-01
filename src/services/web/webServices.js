@@ -477,3 +477,16 @@ export const getCustomLessonPlan = (data) => {
     data,
   });
 };
+
+export const updateCustomLessonPlan = (data) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: "put",
+    url: `${base_uri.base_uri_admin}/admin/updateCustomLessonPlan`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  });
+};

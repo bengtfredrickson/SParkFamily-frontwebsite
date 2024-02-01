@@ -1,10 +1,11 @@
 import { Button } from "@mui/material";
-import { React, memo, useState } from "react";
+import { React, memo, useEffect, useState } from "react";
 import AddFieldPopper from "./addFieldPopper";
 import { useLocation } from "react-router-dom";
 import {
   uploadAddLessonPlanImage,
   addCustomLessonPlan,
+  updateCustomLessonPlan,
 } from "../../services/web/webServices";
 import { Store } from "react-notifications-component";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -75,7 +76,12 @@ input.text-feild {
 }
     `;
 
-const DynamicForm = ({ closeModal }) => {
+const DynamicForm = ({
+  closeModal,
+  dynamicFormEditData,
+  lessonPlanData,
+  getCustomLessons,
+}) => {
   const location = useLocation();
 
   const [formFields, setFormFields] = useState([]);
@@ -85,9 +91,17 @@ const DynamicForm = ({ closeModal }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
   const [imageAsFile, setImageAsFile] = useState({});
-  const [textField, setTextField] = useState("");
-  const [lessonPlanImg, setLessonPlanImg] = useState("");
+  const [textField, setTextField] = useState(
+    dynamicFormEditData?.data[0]?.value
+  );
+  // const [lessonPlanImg, setLessonPlanImg] = useState("");
   const [editorHtml, setEditorHtml] = useState();
+  const [editFormFields, setEditFormFields] = useState([]);
+
+  useEffect(() => {
+    // setEditFormFields(dynamicFormEditData?.data);
+    createEditFormData();
+  }, []);
 
   const openAddFieldDialog = () => {
     setOpenDialog(true);
@@ -127,6 +141,32 @@ const DynamicForm = ({ closeModal }) => {
     }
   };
 
+  const addNewField = (values) => {
+    try {
+      const { type, label } = values;
+
+      setFormFields([
+        ...formFields,
+        { fieldType: type, fieldLabel: label, value: "" },
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const createEditFormData = () => {
+    const data =
+      dynamicFormEditData &&
+      dynamicFormEditData?.data?.length > 0 &&
+      dynamicFormEditData?.data.map((item) => ({
+        fieldType: item?.key_type === 1 ? "text" : "image",
+        fieldLabel: item?.key,
+        value: item?.value,
+      }));
+
+    setEditFormFields(data);
+  };
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -154,63 +194,117 @@ const DynamicForm = ({ closeModal }) => {
       setFormFields(newItems);
     }
   };
-  console.log(formFields, "formFields");
+
+  const showNotification = (message, type) => {
+    Store.addNotification({
+      title: "Success",
+      message: message,
+      type: type,
+      insert: "top",
+      container: "top-right",
+      className: "rnc__notification-container--top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
+  };
+
+  const addCustomLesson = async (data) => {
+    await addCustomLessonPlan(data)
+      .then((res) => {
+        if (res?.data) {
+          closeModal();
+          showNotification();
+          getCustomLessons();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const uploadImage = async (formData) => {
+    await uploadAddLessonPlanImage(formData)
+      .then((res) => {
+        if (res?.data?.message) {
+          console.log(res.data);
+
+          let data = {
+            curriculum_id: location.state.curriculum_id,
+            suboption_id: location.state.suboption_id,
+
+            data: formFields.map((item, i) => ({
+              key: item?.fieldLabel,
+              value:
+                item?.fieldType === "text"
+                  ? item.value
+                  : item?.fieldType === "textArea"
+                  ? item.value
+                  : res?.data?.result?.data,
+              key_type: item?.fieldType === "text" ? 1 : 2,
+              order: i + 1,
+              position: "top",
+            })),
+          };
+
+          addCustomLesson(data);
+        }
+      })
+      .catch((err) => {
+        console.log(err, "err");
+      });
+  };
 
   const submitForm = async () => {
     if (imageAsFile?.imageAsFile) {
-      // uploadImage(imageAsFile?.imageAsFile);
+      console.log(imageAsFile.imageAsFile, "XXXXX");
 
       let formData = new FormData();
       formData.append("image_url", imageAsFile?.imageAsFile);
 
-      await uploadAddLessonPlanImage(formData)
-        .then(async (res) => {
-          setLessonPlanImg(res.data.result.data);
-          setImageAsFile({});
-          if (res?.data?.result?.data) {
-            let data = {
-              curriculum_id: location.state.curriculum_id,
-              suboption_id: location.state.suboption_id,
+      uploadImage(formData);
 
-              data: formFields.map((item, i) => ({
-                key: item?.fieldLabel,
-                value:
-                  item?.fieldType === "text"
-                    ? item.value
-                    : item?.fieldType === "textArea"
-                    ? item.value
-                    : item.value,
-                key_type: item?.fieldType === "text" ? 1 : 2,
-                order: i + 1,
-                position: "top",
-              })),
-            };
+      // await uploadAddLessonPlanImage(formData)
+      //   .then(async (res) => {
+      //     // setLessonPlanImg(res.data.result.data);
+      //     setImageAsFile({});
+      //     console.log(res, "res res");
+      //     if (res?.data?.result?.data) {
+      //       let data = {
+      //         curriculum_id: location.state.curriculum_id,
+      //         suboption_id: location.state.suboption_id,
 
-            await addCustomLessonPlan(data)
-              .then((res) => {
-                Store.addNotification({
-                  title: "Success",
-                  message: res?.data?.message,
-                  type: "success",
-                  insert: "top",
-                  container: "top-right",
-                  className: "rnc__notification-container--top-right",
-                  animationIn: ["animate__animated", "animate__fadeIn"],
-                  animationOut: ["animate__animated", "animate__fadeOut"],
-                  dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                  },
-                });
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log(err, "err");
-        });
+      //         data: formFields.map((item, i) => ({
+      //           key: item?.fieldLabel,
+      //           value:
+      //             item?.fieldType === "text"
+      //               ? item.value
+      //               : item?.fieldType === "textArea"
+      //               ? item.value
+      //               : item?.fieldType === "image"
+      //               ? res?.data?.result?.data
+      //               : "",
+      //           key_type: item?.fieldType === "text" ? 1 : 2,
+      //           order: i + 1,
+      //           position: "top",
+      //         })),
+      //       };
+
+      //       await addCustomLessonPlan(data)
+      //         .then((res) => {
+      //           showNotification();
+      //         })
+      //         .catch((err) => {
+      //           console.log(err);
+      //         });
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err, "err");
+      //   });
     } else {
       let data = {
         curriculum_id: location.state.curriculum_id,
@@ -230,92 +324,154 @@ const DynamicForm = ({ closeModal }) => {
         })),
       };
 
-      await addCustomLessonPlan(data)
-        .then((res) => {
-          Store.addNotification({
-            title: "Success",
-            message: res?.data?.message,
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            className: "rnc__notification-container--top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-            },
-          });
-          closeModal();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      addCustomLesson(data);
     }
-
-    // if (Object.keys(data)?.length > 0) {
-    //   addCustomLessonPlan(data)
-    //     .then((res) => {
-    //       Store.addNotification({
-    //         title: "Success",
-    //         message: res?.data?.message,
-    //         type: "success",
-    //         insert: "top",
-    //         container: "top-right",
-    //         className: "rnc__notification-container--top-right",
-    //         animationIn: ["animate__animated", "animate__fadeIn"],
-    //         animationOut: ["animate__animated", "animate__fadeOut"],
-    //         dismiss: {
-    //           duration: 5000,
-    //           onScreen: true,
-    //         },
-    //       });
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // }
   };
 
-  // const uploadImage = (image) => {
-  //   if (image) {
-  //     let formData = new FormData();
-  //     formData.append("image_url", image);
+  const submitEditForm = async () => {
+    let data = {
+      id: lessonPlanData?.id,
+      lesson_id: dynamicFormEditData?.id,
+      lesson_data: editFormFields?.map((item, i) => ({
+        key: item?.fieldLabel,
+        value: item.value,
+        // item?.fieldType === "text"
+        //   ? item.value
+        //   : item?.fieldType === "textArea"
+        //   ? item.value
+        //   : item.value,
+        key_type: item?.fieldType === "text" ? 1 : 2,
+        order: i + 1,
+        position: "top",
+      })),
+    };
 
-  //     uploadAddLessonPlanImage(formData)
-  //       .then((res) => {
-  //         setLessonPlanImg(res.data.result.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err, "err");
-  //       });
-  //   }
-  // };
+    await updateCustomLessonPlan(data)
+      .then((res) => {
+        if (res?.data?.message) {
+          showNotification(res?.data?.message, "success");
+          closeModal();
+          getCustomLessons();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const addNewField = (values) => {
-    try {
-      const { type, label } = values;
+  const renderEditFormFields = (editFormFields) => {
+    return editFormFields?.map((field, index) => (
+      <div
+        key={index}
+        className={`item ${field === draggingItem ? "dragging" : ""}`}
+        draggable="true"
+        onDragStart={(e) => handleDragStart(e, field)}
+        onDragEnd={handleDragEnd}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, field)}
+      >
+        <RenderFormField
+          onEditField={onEditField}
+          onDeleteField={onDeleteField}
+          textField={textField}
+          setTextField={setTextField}
+          field={field}
+          index={index}
+          setImageAsFile={setImageAsFile}
+          editorHtml={editorHtml}
+          setEditorHtml={setEditorHtml}
+          formFields={formFields}
+          // setFormFields={setFormFields}
+          fieldValue={field?.value}
+          setEditFormFields={setEditFormFields}
+          editFormFields={editFormFields}
+        />
+      </div>
+    ));
+  };
 
-      setFormFields([
-        ...formFields,
-        { fieldType: type, fieldLabel: label, value: "" },
-      ]);
-    } catch (error) {
-      console.log(error);
+  const renderAddFormFields = () => {
+    return formFields?.map((field, index) => (
+      <div
+        key={index}
+        className={`item ${field === draggingItem ? "dragging" : ""}`}
+        draggable="true"
+        onDragStart={(e) => handleDragStart(e, field)}
+        onDragEnd={handleDragEnd}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, field)}
+      >
+        <RenderFormField
+          onEditField={onEditField}
+          onDeleteField={onDeleteField}
+          textField={textField}
+          setTextField={setTextField}
+          field={field}
+          index={index}
+          setImageAsFile={setImageAsFile}
+          editorHtml={editorHtml}
+          setEditorHtml={setEditorHtml}
+          formFields={formFields}
+          setFormFields={setFormFields}
+          fieldValue={field?.value}
+        />
+      </div>
+    ));
+  };
+
+  const renderSubmitFormButton = () => {
+    if (formFields && formFields?.length > 0) {
+      return (
+        <Button
+          className="btn-primary-blue"
+          sx={{ mt: 2 }}
+          onClick={submitForm}
+        >
+          Submit Form
+        </Button>
+      );
     }
+
+    if (editFormFields && editFormFields?.length > 0) {
+      return (
+        <Button
+          className="btn-primary-blue"
+          sx={{ mt: 2 }}
+          onClick={submitEditForm}
+        >
+          Submit Form
+        </Button>
+      );
+    }
+
+    return null;
+  };
+
+  const renderForms = (editFormFields) => {
+    if (formFields?.length > 0) {
+      return renderAddFormFields();
+    }
+
+    if (editFormFields?.length > 0) {
+      return renderEditFormFields(editFormFields);
+    }
+
+    return null;
   };
 
   return (
     <div>
       <style>{css}</style>
 
-      <Button
-        className="btn-primary-blue"
-        onClick={openAddFieldDialog}
-        data-dismiss="modal"
-      >
-        {isEdit ? "Edit Item" : "Add New Item"}
-      </Button>
+      {!editFormFields?.length && (
+        <Button
+          className="btn-primary-blue"
+          onClick={openAddFieldDialog}
+          data-dismiss="modal"
+        >
+          {isEdit ? "Edit Item" : "Add New Item"}
+        </Button>
+      )}
 
       {openDialog && (
         <AddFieldPopper
@@ -328,42 +484,9 @@ const DynamicForm = ({ closeModal }) => {
         />
       )}
 
-      {formFields.map((field, index) => (
-        <div
-          key={index}
-          className={`item ${field === draggingItem ? "dragging" : ""}`}
-          draggable="true"
-          onDragStart={(e) => handleDragStart(e, field)}
-          onDragEnd={handleDragEnd}
-          onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e, field)}
-        >
-          <RenderFormField
-            onEditField={onEditField}
-            onDeleteField={onDeleteField}
-            textField={textField}
-            setTextField={setTextField}
-            field={field}
-            index={index}
-            setImageAsFile={setImageAsFile}
-            editorHtml={editorHtml}
-            setEditorHtml={setEditorHtml}
-            formFields={formFields}
-            setFormFields={setFormFields}
-            fieldValue={field?.value}
-          />
-        </div>
-      ))}
+      {renderForms(editFormFields)}
 
-      {formFields?.length > 0 && (
-        <Button
-          className="btn-primary-blue"
-          sx={{ mt: 2 }}
-          onClick={submitForm}
-        >
-          Submit Form
-        </Button>
-      )}
+      {renderSubmitFormButton()}
     </div>
   );
 };

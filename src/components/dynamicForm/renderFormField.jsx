@@ -17,15 +17,29 @@ const RenderFormField = ({
   formFields,
   fieldValue,
   setImageAsFile,
+  editFormFields,
+  setEditFormFields,
 }) => {
   const [editorData, setEditor] = useState(EditorState.createEmpty());
   const [getState, setState] = useState(false);
 
   const updateFormField = (data) => {
-    console.log(data, "updateFormField");
-    let prevData = [...formFields];
-    prevData[index].value = data;
-    setFormFields(prevData);
+    if (editFormFields && editFormFields?.length > 0) {
+      let prevEditFormData = [...editFormFields];
+
+      prevEditFormData[index].value = data;
+
+      setEditFormFields(prevEditFormData);
+    }
+    if (formFields && formFields?.length > 0) {
+      let prevAddFormData = [...formFields];
+
+      prevAddFormData[index].value = data;
+
+      setFormFields(prevAddFormData);
+      console.log(data, "updateFormField");
+    }
+    return null;
   };
 
   const onChangeText = (e) => {
@@ -50,6 +64,7 @@ const RenderFormField = ({
 
     updateFormField(URL.createObjectURL(e.target.files[0]));
   };
+  console.log(editFormFields, "editFormFields");
 
   const renderFormField = (field, i) => {
     if (field.fieldType === "text") {
@@ -84,20 +99,21 @@ const RenderFormField = ({
               <img alt="drag" src={drag} />
             </Button>
           </div>
-          <InputLabel className="label-text">{field.fieldLabel}</InputLabel>
+          <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
           <TextField
             className="text-feild-input"
             sx={{ marginTop: 1, marginBottom: 1 }}
             fullWidth
-            name={field.fieldLabel}
-            value={textField}
+            name={field?.fieldLabel}
+            defaultValue={fieldValue}
+            value={fieldValue || textField}
             onChange={onChangeText}
           />
         </div>
       );
     }
 
-    if (field.fieldType === "textArea") {
+    if (field?.fieldType === "textArea") {
       return (
         <div>
           <div
@@ -129,7 +145,7 @@ const RenderFormField = ({
               <img alt="drag" src={drag} />
             </Button>
           </div>
-          <InputLabel className="label-text">{field.fieldLabel}</InputLabel>
+          <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
           <Editor
             toolbarClassName="toolbarClassName"
             wrapperClassName="wrapperClassName"
@@ -143,14 +159,14 @@ const RenderFormField = ({
               border: 0,
               borderBottom: "1px solid #d6d6d6",
             }}
-            editorState={editorData}
+            editorState={fieldValue || editorData}
             onEditorStateChange={handleEditorChange}
           />
         </div>
       );
     }
 
-    if (field.fieldType === "image") {
+    if (field?.fieldType === "image") {
       return (
         <div>
           <div
@@ -185,6 +201,7 @@ const RenderFormField = ({
           <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
           <input
             className="text-feild"
+            // defaultValue={fieldValue}
             type="file"
             accept="image/*"
             name={field?.fieldLabel}
@@ -193,8 +210,7 @@ const RenderFormField = ({
           {fieldValue !== "" ? (
             <p>
               <img
-                draggable={true}
-                src={fieldValue}
+                src={fieldValue || ""}
                 className="p-3 text-image"
                 alt={field?.fieldLabel}
               />
