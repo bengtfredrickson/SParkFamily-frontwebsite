@@ -104,20 +104,48 @@ const RenderFormField = ({
           <div
             style={{
               display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
+              flexDirection:"column",
+              justifyContent: "flex-start",
+              alignItems: "start",
+              width: "100%",
+              margin:"10px 0",
+              borderBottom:"solid 1px #ccc",
+              paddingBottom: "15px",
+              paddingTop:"15px",
             }}
           >
-            <Button
-              className="btn-primary-blue"
+            <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+              flexDirection: "row",
+              margin: "10px"
+            }}
+            >
+              <div>
+              <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
+              </div>
+              <div 
+                style={{
+                display: "flex",
+                marginRight:"0",
+                marginLeft:"auto",
+                justifyContent: "center",
+              }}
+              >
+                <Button
+              color="primary"
+              className="custom_hyperlink"
               sx={{ mr: 1 }}
               onClick={() => onEditField(i)}
+             
             >
               edit
             </Button>
             <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
+              color="primary"
+              className="custom_hyperlink"
               onClick={() => onDeleteField(i)}
             >
               delete
@@ -129,9 +157,14 @@ const RenderFormField = ({
             >
               <img alt="drag" src={drag} />
             </Button>
-          </div>
-          <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
-          <TextField
+              </div>
+            </div>
+            {/* <PositionDropdown
+              fieldPosition={fieldPosition}
+              setFieldPosition={setFieldPosition}
+            /> */}
+              <div>
+                 <TextField
             className="text-feild-input"
             sx={{ marginTop: 1, marginBottom: 1 }}
             fullWidth
@@ -140,6 +173,10 @@ const RenderFormField = ({
             value={fieldValue}
             onChange={onChangeText}
           />
+              </div>
+          </div>
+          
+         
         </div>
       );
     }
@@ -150,19 +187,54 @@ const RenderFormField = ({
           <div
             style={{
               display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
+              flexDirection:"column",
+              justifyContent: "flex-start",
+              alignItems: "start",
+              width: "100%",
+              margin:"10px 0",
+              borderBottom:"solid 1px #ccc",
+              paddingBottom: "15px",
+              paddingTop:"15px",
             }}
           >
+            {/* <PositionDropdown
+              fieldPosition={fieldPosition}
+              setFieldPosition={setFieldPosition}
+            /> */}
+            <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              margin: "10px"
+            }}
+            >
+              <div>
+                <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
+              </div>
+              <div 
+                style={{
+                display: "flex",
+                marginRight:"0",
+                marginLeft:"auto",
+              }}
+              >
+                
             <Button
-              className="btn-primary-blue"
+              // className="btn-primary-blue"
+              color="primary"
+              className="custom_hyperlink"
               sx={{ mr: 1 }}
               onClick={() => onEditField(i)}
             >
               edit
             </Button>
             <Button
-              className="btn-primary-blue"
+              // className="btn-primary-blue"
+              color="primary"
+              className="custom_hyperlink"
               sx={{ mr: 1 }}
               onClick={() => onDeleteField(i)}
             >
@@ -175,9 +247,10 @@ const RenderFormField = ({
             >
               <img alt="drag" src={drag} />
             </Button>
-          </div>
-          <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
-          <Editor
+              </div>
+            </div>
+            <div>
+            <Editor
             toolbarClassName="toolbarClassName"
             wrapperClassName="wrapperClassName"
             editorClassName="editorClassName"
@@ -193,6 +266,10 @@ const RenderFormField = ({
             editorState={editorData}
             onEditorStateChange={handleEditorChange}
           />
+            </div>
+          </div>
+          
+          
         </div>
       );
     }
@@ -203,35 +280,69 @@ const RenderFormField = ({
           <div
             style={{
               display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
+              flexDirection:"column",
+              justifyContent: "flex-start",
+              alignItems: "start",
+              width: "100%",
+              margin:"10px 0",
+              borderBottom:"solid 1px #ccc",
+              paddingBottom: "15px",
+              paddingTop:"15px",
             }}
           >
-            <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
-              onClick={() => onEditField(i)}
+            {/* <PositionDropdown
+              fieldPosition={fieldPosition}
+              setFieldPosition={setFieldPosition}
+            /> */}
+
+            <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
             >
-              edit
-            </Button>
-            <Button
-              className="btn-primary-blue"
-              sx={{ mr: 1 }}
-              onClick={() => onDeleteField(i)}
-            >
-              delete
-            </Button>
-            <Button
-              style={{ minWidth: "36px" }}
-              className="drag-btn"
-              sx={{ mt: 1 }}
-            >
-              <img alt="drag" src={drag} />
-            </Button>
-          </div>
-          <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
-          <input
-            ref={imageRef}
+              <div>
+                <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
+              </div>
+            
+
+              <div 
+                style={{
+                display: "flex",
+                marginRight:"0",
+                marginLeft:"auto",
+              }}
+              >
+              <Button
+                color="primary"
+                className="custom_hyperlink"
+                sx={{ mr: 1 }}
+                onClick={() => onEditField(i)}
+              >
+                edit
+              </Button>
+              <Button
+                color="primary"
+                className="custom_hyperlink"
+                sx={{ mr: 1 }}
+                onClick={() => onDeleteField(i)}
+              >
+                delete
+              </Button>
+              <Button
+                style={{ minWidth: "36px" }}
+                className="drag-btn"
+                sx={{ mt: 1 }}
+              >
+                <img alt="drag" src={drag} />
+              </Button>
+              </div>
+            </div>
+            <div >
+            <input
             className="text-feild"
             type="file"
             accept="image/*"
@@ -251,6 +362,10 @@ const RenderFormField = ({
           {getState ? (
             <p style={{ color: "red" }}>Only Image is allowed !</p>
           ) : null}
+            </div>
+          </div>
+         
+          
         </div>
       );
     }

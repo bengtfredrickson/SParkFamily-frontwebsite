@@ -15,7 +15,8 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
       {
         accessorKey: "curriculum_id",
         header: "S.NO.",
-        size: 40,
+        // width: "15%",
+        size: 10,
         muiTableHeadCellProps: {
           align: "center",
         },

@@ -430,6 +430,10 @@ export default function Curriculum() {
                     <div className="card curriculum_format">
                       <div className="card-header d-Fle">
                         <DropdownButton
+                          style={{
+                            marginRight:"0",
+                            marginLeft:"auto",
+                          }}
                           className="custom-btn"
                           title="Add Curriculum"
                           id="dropdown-basic-button"

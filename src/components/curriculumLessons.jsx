@@ -118,11 +118,25 @@ const css = `
         font-size:14px;
         font-weight:500;
         padding:6px 12px;
+        height:40px;
     }
+
+     
   
   .btn-primary-blue:focus:active,.btn-primary-blue:hover{
         background-color:#0d60b2 !important;
     }
+
+    button.custom_hyperlink{
+      background-color:none !important;
+     }
+
+     button.custom_hyperlink:hover{
+      text-decoration:underline !important;
+      background-color:none !important;
+     }
+
+
     .border-btn {
       background: #48aee114;
       padding: 4.5px 12px;
