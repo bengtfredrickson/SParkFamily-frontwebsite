@@ -8,6 +8,7 @@ import {
   add_HighLesson,
   add_lesson,
   delete_lesson,
+  deleteCustomLessonPlan,
   edit_afterLesson,
   edit_earlyChild,
   edit_HighLesson,
@@ -171,6 +172,7 @@ export default function CurriculumoLessonPlans() {
   const [ViewData, setViewData] = useState({});
   const [dynamicFormEditData, setDynamicFormEditData] = useState({});
   const [lessonPlanData, setLessonPlanData] = useState({});
+  const [deleteLessonId, setDeleteLessonId] = useState();
 
   // const formik = useFormik({
   //   initialValues: {
@@ -460,17 +462,67 @@ export default function CurriculumoLessonPlans() {
   // }
 
   const onDelete = (params) => () => {
+    console.log(params, "onDelete params");
     if (window.confirm("Are your sure? You want to delete this?")) {
       let data = {
-        curriculum_id: location.state.curriculum_id,
-        lesson_id: params.row.lesson_id,
-        format: params.row.format,
+        id: deleteLessonId,
+        lesson_id: params?.row?.id,
       };
-      delete_lesson(data)
+      // delete_lesson(data)
+      //   .then((res) => {
+      //     Store.addNotification({
+      //       title: "Success",
+      //       message: "Record Deleted Successfully",
+      //       type: "success",
+      //       insert: "top",
+      //       container: "top-right",
+      //       className: "rnc__notification-container--top-right",
+      //       animationIn: ["animate__animated", "animate__fadeIn"],
+      //       animationOut: ["animate__animated", "animate__fadeOut"],
+      //       dismiss: {
+      //         duration: 5000,
+      //         onScreen: true,
+      //       },
+      //     });
+      //     // get_lessons({
+      //     //   curriculum_id: location.state.curriculum_id,
+      //     //   suboption_id: location.state.suboption_id,
+      //     // })
+      //     //   .then((res) => {
+      //     //     console.log("=======>", res.data.result);
+      //     //     if (res.data.result !== null) {
+      //     //       console.log(res.data.result, "res.data.result");
+      //     //       setLessonPlans(
+      //     //         res.data.result.map((el, index) => {
+      //     //           return {
+      //     //             ...el,
+      //     //             id: el.lesson_id,
+      //     //             i: index,
+      //     //           };
+      //     //         })
+      //     //       );
+      //     //     } else {
+      //     //       setLessonPlans([]);
+      //     //     }
+      //     //     setLoader(false);
+      //     //   })
+      //     //   .catch((err) => {
+      //     //     setLoader(false);
+      //     //     console.log(err);
+      //     //   });
+      //     getCustomLessons();
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+
+      deleteCustomLessonPlan(data)
         .then((res) => {
+          getCustomLessons();
+
           Store.addNotification({
-            title: "Success",
-            message: "Record Deleted Successfully",
+            title: "success",
+            message: res?.data?.message,
             type: "success",
             insert: "top",
             container: "top-right",
@@ -482,32 +534,6 @@ export default function CurriculumoLessonPlans() {
               onScreen: true,
             },
           });
-          get_lessons({
-            curriculum_id: location.state.curriculum_id,
-            suboption_id: location.state.suboption_id,
-          })
-            .then((res) => {
-              console.log("=======>", res.data.result);
-              if (res.data.result !== null) {
-                console.log(res.data.result, "res.data.result");
-                setLessonPlans(
-                  res.data.result.map((el, index) => {
-                    return {
-                      ...el,
-                      id: el.lesson_id,
-                      i: index,
-                    };
-                  })
-                );
-              } else {
-                setLessonPlans([]);
-              }
-              setLoader(false);
-            })
-            .catch((err) => {
-              setLoader(false);
-              console.log(err);
-            });
         })
         .catch((err) => {
           console.log(err);
@@ -557,25 +583,26 @@ export default function CurriculumoLessonPlans() {
       suboption_id: location.state.suboption_id,
     })
       .then((res) => {
-        console.log("get_lessons", res.data.result);
+        setDeleteLessonId(res?.data?.result?.[0]?.id);
+
         let data = JSON.parse(
           res.data.result[0].lesson_data.replace(/\\"/g, '"')
         );
+
         let resData = {
           ...res.data.result[0],
           lesson_data: data,
         };
-        setLessonPlanData(resData);
-        console.log(resData, "resData");
 
-        console.log(data, "get_lessons data");
+        setLessonPlanData(resData);
+
         const re = data.map((el, index) => ({
           ...el,
           id: el.id,
           i: index,
         }));
-        setLessonPlans(re);
 
+        setLessonPlans(re);
         setLoader(false);
       })
       .catch((err) => {
@@ -1158,13 +1185,19 @@ export default function CurriculumoLessonPlans() {
                       .then((res) => {
                         console.log("=======>", res.data.result);
 
-                        setLessonPlans(
-                          res.data.result.map((el, index) => ({
-                            ...el,
-                            id: el.lesson_id,
-                            i: index,
-                          }))
-                        );
+                        // setLessonPlans(
+                        //   res.data.result.map((el, index) => ({
+                        //     ...el,
+                        //     id: el.lesson_id,
+                        //     i: index,
+                        //   }))
+                        // );
+                        const re = res.data.result.map((el, index) => ({
+                          ...el,
+                          id: el.id,
+                          i: index,
+                        }));
+                        setLessonPlans(re);
                         setLoader(false);
                       })
                       .catch((err) => {

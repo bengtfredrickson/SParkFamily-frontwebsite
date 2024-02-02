@@ -1,11 +1,10 @@
 import { Button, InputLabel, TextField } from "@mui/material";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import drag from "../../../src/image/drag.svg";
 import { Editor } from "react-draft-wysiwyg";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
-// import PositionDropdown from "./positionDropdown";
 
 const RenderFormField = ({
   onDeleteField,
@@ -13,8 +12,7 @@ const RenderFormField = ({
   field,
   index,
   setEditorHtml,
-  // setTextField,
-  // textField,
+
   setFormFields,
   formFields,
   fieldValue,
@@ -22,10 +20,10 @@ const RenderFormField = ({
   editFormFields,
   setEditFormFields,
 }) => {
-  // const [editorData, setEditor] = useState("");
   const [getState, setState] = useState(false);
-
   const [editorData, setEditor] = useState("");
+
+  const imageRef = useRef();
 
   const convertHtmlToDraft = (data) => {
     if (data) {
@@ -55,7 +53,6 @@ const RenderFormField = ({
       let prevData = [...formFields];
       prevData[index].value = data;
       setFormFields(prevData);
-      // setTextField(data);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,7 +76,6 @@ const RenderFormField = ({
   };
 
   const onChangeText = (e) => {
-    // setTextField(e.target.value);
     updateFormField(e.target.value);
   };
 
@@ -91,14 +87,14 @@ const RenderFormField = ({
   };
 
   const onChangeImage = (e) => {
-    if (e.target.files[0].type.includes("image")) {
-      setImageAsFile({ imageAsFile: e.target.files[0] });
+    if (e?.target?.files?.[0]?.type?.includes("image")) {
+      setImageAsFile({ imageAsFile: e?.target?.files?.[0] });
       setState(false);
     } else {
       setState(true);
     }
 
-    updateFormField(URL.createObjectURL(e.target.files[0]));
+    updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
   };
 
   const renderFormField = (field, i) => {
