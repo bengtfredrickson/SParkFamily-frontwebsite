@@ -870,15 +870,31 @@ export default function CurriculumoLessonPlans() {
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "70px",
+            width: "100%",
+            alignItems: "start",
+            justifyContent: "flex-start",
+            margin: "10px 0",
+            
+            wordBreak:"break-all"
           }}
           key={index}
         >
-          <p>{item?.key}:</p>
-
+          <div 
+             style={{
+              width: "15%",
+             }}
+            >
+            <p>{item?.key}:</p>
+          </div>
+          
+          <div
+            style={{
+              width: "85%",
+             }}
+          >
           <p>{item?.value}</p>
+          </div>
+          
         </div>
       );
     }
@@ -888,19 +904,36 @@ export default function CurriculumoLessonPlans() {
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "70px",
+            width: "100%",
+            alignItems: "start",
+            justifyContent: "flex-start",
+            margin: "10px 0",
+            wordBreak:"break-all"
           }}
           key={index}
         >
-          <p>{item?.key}:</p>
+          <div 
+             style={{
+              width: "15%",
+             }}
+            >
+              <p>{item?.key}:</p>
+            </div>
+             
+            <div
+            style={{
+              width: "85%",
+             }}
+            >
 
-          <img
+<img
             style={{ height: "50px", width: "50px" }}
             src={item?.value}
             alt=""
           />
+            </div>
+
+         
         </div>
       );
     }
@@ -909,9 +942,12 @@ export default function CurriculumoLessonPlans() {
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "70px",
+            alignItems: "start",
+            justifyContent: "flex-start",
+            margin: "10px 0",
+            width: "100%",
+            margin: "10px 0",
+            wordBreak:"break-all"
           }}
           key={index}
         >
@@ -6244,7 +6280,7 @@ export default function CurriculumoLessonPlans() {
                 curriculum_id: location.state.curriculum_id,
                 suboption_id: location.state.suboption_id,
                 title: "",
-                integration: "",
+                Integration: "",
                 lesson_objective: "",
                 lesson_target: "",
                 prep: "",
