@@ -822,30 +822,86 @@ export default function CurriculumoLessonPlans() {
   };
 
   const renderViewData = (item, index) => {
-    console.log(isImage(item.value));
-    return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "70px",
-        }}
-        key={index}
-      >
-        <p>{item?.key}:</p>
+    console.log(item, "item");
+    if (item.key_type === 1) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "70px",
+          }}
+          key={index}
+        >
+          <p>{item?.key}:</p>
 
-        {isImage(item.value) ? (
+          <p>{item?.value}</p>
+        </div>
+      );
+    }
+
+    if (item.key_type === 2) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "70px",
+          }}
+          key={index}
+        >
+          <p>{item?.key}:</p>
+
           <img
             style={{ height: "50px", width: "50px" }}
             src={item?.value}
-            alt={item?.key}
+            alt=""
           />
-        ) : (
-          item?.value
-        )}
-      </div>
-    );
+        </div>
+      );
+    }
+    if (item.key_type === 3) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "70px",
+          }}
+          key={index}
+        >
+          <p>{item?.key}:</p>
+          <p dangerouslySetInnerHTML={{ __html: item?.value }} />
+        </div>
+      );
+    }
+
+    // return (
+    //   <div
+    //     style={{
+    //       display: "flex",
+    //       alignItems: "center",
+    //       justifyContent: "space-between",
+    //       width: "70px",
+    //     }}
+    //     key={index}
+    //   >
+    //     <p>{item?.key}:</p>
+
+    //     {isImage(item.value) ? (
+    //       <img
+    //         style={{ height: "50px", width: "50px" }}
+    //         src={item?.value}
+    //         alt={item?.key}
+    //       />
+    //     ) : (
+    //       item?.value
+    //     )}
+    //   </div>
+    // );
   };
 
   return (

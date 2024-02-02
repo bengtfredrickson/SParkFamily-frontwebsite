@@ -10,6 +10,8 @@ import {
 import { Store } from "react-notifications-component";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import RenderFormField from "./renderFormField";
+import htmlToDraft from "html-to-draftjs";
+import { ContentState, EditorState } from "draft-js";
 
 const css = `
    
@@ -97,6 +99,7 @@ const DynamicForm = ({
   // const [lessonPlanImg, setLessonPlanImg] = useState("");
   const [editorHtml, setEditorHtml] = useState();
   const [editFormFields, setEditFormFields] = useState([]);
+  const [fieldPosition, setFieldPosition] = useState("");
 
   useEffect(() => {
     // setEditFormFields(dynamicFormEditData?.data);
@@ -109,10 +112,12 @@ const DynamicForm = ({
 
   const closeAddFieldDialog = () => {
     setOpenDialog(false);
+    setIsEdit(false);
   };
 
   const onEditField = (index) => {
     let data = formFields[index];
+    // let editData = editFormFields[index];
 
     setEditData(data);
     setEditKey(index);
@@ -123,10 +128,23 @@ const DynamicForm = ({
   const onEditSave = (value) => {
     const { type, label } = value;
 
-    let data = [...formFields];
-    data[editKey] = { fieldType: type, fieldLabel: label, value: "" };
+    let addData = [...formFields];
+    let editData = [...editFormFields];
 
-    setFormFields([...data]);
+    addData[editKey] = {
+      fieldType: type,
+      fieldLabel: label,
+      value: formFields?.[editKey]?.value,
+    };
+
+    editData[editKey] = {
+      fieldType: type,
+      fieldLabel: label,
+      value: editFormFields?.[editKey]?.value,
+    };
+
+    setFormFields([...addData]);
+    setEditFormFields([...editData]);
     setEditData({});
     setEditKey();
     setIsEdit(false);
@@ -134,21 +152,33 @@ const DynamicForm = ({
 
   const onDeleteField = (index) => {
     let data = [...formFields];
+    let editData = [...editFormFields];
 
     if (index > -1) {
       data.splice(index, 1); // 2nd parameter means remove one item only
       setFormFields([...data]);
+      setEditFormFields([...editData]);
     }
   };
 
   const addNewField = (values) => {
+    console.log(values, "values");
     try {
       const { type, label } = values;
 
-      setFormFields([
-        ...formFields,
-        { fieldType: type, fieldLabel: label, value: "" },
-      ]);
+      if (dynamicFormEditData?.id) {
+        console.log(editFormFields, "editFormFields");
+
+        setEditFormFields([
+          ...editFormFields,
+          { fieldType: type, fieldLabel: label, value: "" },
+        ]);
+      } else {
+        setFormFields([
+          ...formFields,
+          { fieldType: type, fieldLabel: label, value: "" },
+        ]);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -168,21 +198,25 @@ const DynamicForm = ({
   };
 
   const handleDragOver = (e) => {
-    e.preventDefault();
+    console.log(e, "handleDragOver");
+    e?.preventDefault();
   };
 
   const handleDragEnd = () => {
+    console.log("handleDragEnd");
     setDraggingItem(null);
   };
 
   const handleDragStart = (e, item) => {
+    console.log(e, item, "handleDragStart");
+
     setDraggingItem(item);
     e?.dataTransfer?.setData("text/html", "");
   };
 
-  const handleDrop = (e, targetItem) => {
+  const handleDrop = (e, targetItem, isEditItem) => {
     if (!draggingItem) return;
-
+    console.log(e, targetItem, "handleDrop");
     const currentIndex = formFields.indexOf(draggingItem);
     const targetIndex = formFields.indexOf(targetItem);
 
@@ -191,7 +225,11 @@ const DynamicForm = ({
       newItems.splice(currentIndex, 1);
       newItems.splice(targetIndex, 0, draggingItem);
 
+      // if (isEditItem) {
+      // setEditFormFields(newItems);
+      // } else {
       setFormFields(newItems);
+      // }
     }
   };
 
@@ -214,43 +252,73 @@ const DynamicForm = ({
 
   const addCustomLesson = async (data) => {
     await addCustomLessonPlan(data)
-      .then((res) => {
-        if (res?.data) {
-          closeModal();
-          showNotification();
-          getCustomLessons();
-        }
+      .then(async () => {
+        await getCustomLessons();
+        await closeModal();
+        showNotification();
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const uploadImage = async (formData) => {
+  const uploadImage = async (formData, formType) => {
     await uploadAddLessonPlanImage(formData)
-      .then((res) => {
+      .then(async (res) => {
         if (res?.data?.message) {
-          console.log(res.data);
+          if (formType === "addForm") {
+            let data = {
+              curriculum_id: location.state.curriculum_id,
+              suboption_id: location.state.suboption_id,
 
-          let data = {
-            curriculum_id: location.state.curriculum_id,
-            suboption_id: location.state.suboption_id,
+              data: formFields.map((item, i) => ({
+                key: item?.fieldLabel,
+                value:
+                  item?.fieldType === "text"
+                    ? item.value
+                    : item?.fieldType === "textArea"
+                    ? item.value
+                    : res?.data?.result?.data,
+                key_type: item?.fieldType === "text" ? 1 : 2,
+                order: i + 1,
+                position: fieldPosition,
+              })),
+            };
 
-            data: formFields.map((item, i) => ({
-              key: item?.fieldLabel,
-              value:
-                item?.fieldType === "text"
-                  ? item.value
-                  : item?.fieldType === "textArea"
-                  ? item.value
-                  : res?.data?.result?.data,
-              key_type: item?.fieldType === "text" ? 1 : 2,
-              order: i + 1,
-              position: "top",
-            })),
-          };
+            await addCustomLesson(data);
+          } else {
+            let data = {
+              id: lessonPlanData?.id,
+              lesson_id: dynamicFormEditData?.id,
+              lesson_data: editFormFields?.map((item, i) => ({
+                key: item?.fieldLabel,
+                value: item.value,
+                // item?.fieldType === "text"
+                //   ? item.value
+                //   : item?.fieldType === "textArea"
+                //   ? item.value
+                //   : item.value,
+                key_type:
+                  item?.fieldType === "text"
+                    ? 1
+                    : item?.fieldType === "image"
+                    ? 2
+                    : 3,
+                order: i + 1,
+                position: fieldPosition,
+              })),
+            };
 
-          addCustomLesson(data);
+            await updateCustomLessonPlan(data)
+              .then(async (res) => {
+                await getCustomLessons();
+                showNotification(res?.data?.message, "success");
+                await closeModal();
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
         }
       })
       .catch((err) => {
@@ -260,51 +328,10 @@ const DynamicForm = ({
 
   const submitForm = async () => {
     if (imageAsFile?.imageAsFile) {
-      console.log(imageAsFile.imageAsFile, "XXXXX");
-
       let formData = new FormData();
       formData.append("image_url", imageAsFile?.imageAsFile);
 
-      uploadImage(formData);
-
-      // await uploadAddLessonPlanImage(formData)
-      //   .then(async (res) => {
-      //     // setLessonPlanImg(res.data.result.data);
-      //     setImageAsFile({});
-      //     console.log(res, "res res");
-      //     if (res?.data?.result?.data) {
-      //       let data = {
-      //         curriculum_id: location.state.curriculum_id,
-      //         suboption_id: location.state.suboption_id,
-
-      //         data: formFields.map((item, i) => ({
-      //           key: item?.fieldLabel,
-      //           value:
-      //             item?.fieldType === "text"
-      //               ? item.value
-      //               : item?.fieldType === "textArea"
-      //               ? item.value
-      //               : item?.fieldType === "image"
-      //               ? res?.data?.result?.data
-      //               : "",
-      //           key_type: item?.fieldType === "text" ? 1 : 2,
-      //           order: i + 1,
-      //           position: "top",
-      //         })),
-      //       };
-
-      //       await addCustomLessonPlan(data)
-      //         .then((res) => {
-      //           showNotification();
-      //         })
-      //         .catch((err) => {
-      //           console.log(err);
-      //         });
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.log(err, "err");
-      //   });
+      await uploadImage(formData, "addForm");
     } else {
       let data = {
         curriculum_id: location.state.curriculum_id,
@@ -318,45 +345,71 @@ const DynamicForm = ({
               : item?.fieldType === "textArea"
               ? item.value
               : item.value,
-          key_type: item?.fieldType === "text" ? 1 : 2,
+          key_type:
+            item?.fieldType === "text"
+              ? 1
+              : item?.fieldType === "image"
+              ? 2
+              : 3,
           order: i + 1,
           position: "top",
         })),
       };
 
-      addCustomLesson(data);
+      await addCustomLesson(data);
     }
   };
 
   const submitEditForm = async () => {
-    let data = {
-      id: lessonPlanData?.id,
-      lesson_id: dynamicFormEditData?.id,
-      lesson_data: editFormFields?.map((item, i) => ({
-        key: item?.fieldLabel,
-        value: item.value,
-        // item?.fieldType === "text"
-        //   ? item.value
-        //   : item?.fieldType === "textArea"
-        //   ? item.value
-        //   : item.value,
-        key_type: item?.fieldType === "text" ? 1 : 2,
-        order: i + 1,
-        position: "top",
-      })),
-    };
+    if (imageAsFile?.imageAsFile) {
+      let formData = new FormData();
+      formData.append("image_url", imageAsFile?.imageAsFile);
 
-    await updateCustomLessonPlan(data)
-      .then((res) => {
-        if (res?.data?.message) {
+      await uploadImage(formData);
+    } else {
+      let data = {
+        id: lessonPlanData?.id,
+        lesson_id: dynamicFormEditData?.id,
+        lesson_data: editFormFields?.map((item, i) => ({
+          key: item?.fieldLabel,
+          value: item.value,
+          // item?.fieldType === "text"
+          //   ? item.value
+          //   : item?.fieldType === "textArea"
+          //   ? item.value
+          //   : item.value,
+          key_type:
+            item?.fieldType === "text"
+              ? 1
+              : item?.fieldType === "image"
+              ? 2
+              : 3,
+          order: i + 1,
+          position: fieldPosition,
+        })),
+      };
+
+      await updateCustomLessonPlan(data)
+        .then(async (res) => {
+          await getCustomLessons();
           showNotification(res?.data?.message, "success");
-          closeModal();
-          getCustomLessons();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          await closeModal();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const convertHtmlToDraft = (data) => {
+    if (data) {
+      const blocksFromHTML = htmlToDraft(data);
+      const contentState = ContentState.createFromBlockArray(
+        blocksFromHTML.contentBlocks,
+        blocksFromHTML.entityMap
+      );
+      return EditorState.createWithContent(contentState);
+    }
   };
 
   const renderEditFormFields = (editFormFields) => {
@@ -365,10 +418,10 @@ const DynamicForm = ({
         key={index}
         className={`item ${field === draggingItem ? "dragging" : ""}`}
         draggable="true"
-        onDragStart={(e) => handleDragStart(e, field)}
-        onDragEnd={handleDragEnd}
+        onDragStart={(e) => handleDragStart(e, field, "isEdit")}
+        onDragEnd={() => handleDragEnd("isEdit")}
         onDragOver={handleDragOver}
-        onDrop={(e) => handleDrop(e, field)}
+        onDrop={(e) => handleDrop(e, field, "isEdit")}
       >
         <RenderFormField
           onEditField={onEditField}
@@ -381,16 +434,20 @@ const DynamicForm = ({
           editorHtml={editorHtml}
           setEditorHtml={setEditorHtml}
           formFields={formFields}
-          // setFormFields={setFormFields}
+          setFieldPosition={setFieldPosition}
+          fieldPosition={fieldPosition}
           fieldValue={field?.value}
+          fieldType={field?.fieldType}
           setEditFormFields={setEditFormFields}
           editFormFields={editFormFields}
+          convertHtmlToDraft={convertHtmlToDraft}
         />
       </div>
     ));
   };
 
   const renderAddFormFields = () => {
+    console.log(formFields, "formFields");
     return formFields?.map((field, index) => (
       <div
         key={index}
@@ -414,6 +471,8 @@ const DynamicForm = ({
           formFields={formFields}
           setFormFields={setFormFields}
           fieldValue={field?.value}
+          setFieldPosition={setFieldPosition}
+          fieldPosition={fieldPosition}
         />
       </div>
     ));
@@ -447,7 +506,7 @@ const DynamicForm = ({
     return null;
   };
 
-  const renderForms = (editFormFields) => {
+  const renderForms = (editFormFields, formFields) => {
     if (formFields?.length > 0) {
       return renderAddFormFields();
     }
@@ -463,15 +522,13 @@ const DynamicForm = ({
     <div>
       <style>{css}</style>
 
-      {!editFormFields?.length && (
-        <Button
-          className="btn-primary-blue"
-          onClick={openAddFieldDialog}
-          data-dismiss="modal"
-        >
-          {isEdit ? "Edit Item" : "Add New Item"}
-        </Button>
-      )}
+      <Button
+        className="btn-primary-blue"
+        onClick={openAddFieldDialog}
+        data-dismiss="modal"
+      >
+        {isEdit ? "Edit Item" : "Add New Item"}
+      </Button>
 
       {openDialog && (
         <AddFieldPopper
@@ -484,7 +541,7 @@ const DynamicForm = ({
         />
       )}
 
-      {renderForms(editFormFields)}
+      {renderForms(editFormFields, formFields)}
 
       {renderSubmitFormButton()}
     </div>

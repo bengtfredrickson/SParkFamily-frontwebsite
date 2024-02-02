@@ -1,9 +1,11 @@
 import { Button, InputLabel, TextField } from "@mui/material";
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import drag from "../../../src/image/drag.svg";
 import { Editor } from "react-draft-wysiwyg";
-import { convertToRaw, EditorState } from "draft-js";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import PositionDropdown from "./positionDropdown";
 
 const RenderFormField = ({
   onDeleteField,
@@ -19,9 +21,45 @@ const RenderFormField = ({
   setImageAsFile,
   editFormFields,
   setEditFormFields,
+  fieldPosition,
+  setFieldPosition,
 }) => {
-  const [editorData, setEditor] = useState(EditorState.createEmpty());
+  // const [editorData, setEditor] = useState("");
   const [getState, setState] = useState(false);
+
+  const [editorData, setEditor] = useState("");
+
+  const convertHtmlToDraft = (data) => {
+    if (data) {
+      const blocksFromHTML = htmlToDraft(data);
+      const contentState = ContentState.createFromBlockArray(
+        blocksFromHTML.contentBlocks,
+        blocksFromHTML.entityMap
+      );
+      return EditorState.createWithContent(contentState);
+    }
+  };
+
+  const removeHtmlTags = (str) => {
+    if (str === null || str === "") return false;
+    else str = str.toString();
+
+    return str.replace(/(<([^>]+)>)/gi, "");
+  };
+
+  useEffect(() => {
+    const { fieldType } = field;
+    console.log(fieldValue, "ddddd", fieldType, field);
+    if (fieldType === "textArea" && fieldValue && fieldType !== "image") {
+      const data = convertHtmlToDraft(fieldValue);
+      setEditor(data);
+    } else if (fieldType === "text" && fieldValue && fieldType !== "image") {
+      const data = removeHtmlTags(fieldValue);
+      setTextField(data);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [field]);
 
   const updateFormField = (data) => {
     if (editFormFields && editFormFields?.length > 0) {
@@ -30,8 +68,7 @@ const RenderFormField = ({
       prevEditFormData[index].value = data;
 
       setEditFormFields(prevEditFormData);
-    }
-    if (formFields && formFields?.length > 0) {
+    } else if (formFields && formFields?.length > 0) {
       let prevAddFormData = [...formFields];
 
       prevAddFormData[index].value = data;
@@ -77,6 +114,10 @@ const RenderFormField = ({
               alignItems: "center",
             }}
           >
+            <PositionDropdown
+              fieldPosition={fieldPosition}
+              setFieldPosition={setFieldPosition}
+            />
             <Button
               className="btn-primary-blue"
               sx={{ mr: 1 }}
@@ -123,6 +164,10 @@ const RenderFormField = ({
               alignItems: "center",
             }}
           >
+            <PositionDropdown
+              fieldPosition={fieldPosition}
+              setFieldPosition={setFieldPosition}
+            />
             <Button
               className="btn-primary-blue"
               sx={{ mr: 1 }}
@@ -159,7 +204,7 @@ const RenderFormField = ({
               border: 0,
               borderBottom: "1px solid #d6d6d6",
             }}
-            editorState={fieldValue || editorData}
+            editorState={editorData}
             onEditorStateChange={handleEditorChange}
           />
         </div>
@@ -176,6 +221,10 @@ const RenderFormField = ({
               alignItems: "center",
             }}
           >
+            <PositionDropdown
+              fieldPosition={fieldPosition}
+              setFieldPosition={setFieldPosition}
+            />
             <Button
               className="btn-primary-blue"
               sx={{ mr: 1 }}
@@ -201,7 +250,6 @@ const RenderFormField = ({
           <InputLabel className="label-text">{field?.fieldLabel}</InputLabel>
           <input
             className="text-feild"
-            // defaultValue={fieldValue}
             type="file"
             accept="image/*"
             name={field?.fieldLabel}
