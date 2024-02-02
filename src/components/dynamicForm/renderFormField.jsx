@@ -5,7 +5,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
-import PositionDropdown from "./positionDropdown";
+// import PositionDropdown from "./positionDropdown";
 
 const RenderFormField = ({
   onDeleteField,
@@ -13,16 +13,14 @@ const RenderFormField = ({
   field,
   index,
   setEditorHtml,
-  setTextField,
-  textField,
+  // setTextField,
+  // textField,
   setFormFields,
   formFields,
   fieldValue,
   setImageAsFile,
   editFormFields,
   setEditFormFields,
-  fieldPosition,
-  setFieldPosition,
 }) => {
   // const [editorData, setEditor] = useState("");
   const [getState, setState] = useState(false);
@@ -49,13 +47,15 @@ const RenderFormField = ({
 
   useEffect(() => {
     const { fieldType } = field;
-    console.log(fieldValue, "ddddd", fieldType, field);
     if (fieldType === "textArea" && fieldValue && fieldType !== "image") {
       const data = convertHtmlToDraft(fieldValue);
       setEditor(data);
     } else if (fieldType === "text" && fieldValue && fieldType !== "image") {
       const data = removeHtmlTags(fieldValue);
-      setTextField(data);
+      let prevData = [...formFields];
+      prevData[index].value = data;
+      setFormFields(prevData);
+      // setTextField(data);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,13 +74,12 @@ const RenderFormField = ({
       prevAddFormData[index].value = data;
 
       setFormFields(prevAddFormData);
-      console.log(data, "updateFormField");
     }
     return null;
   };
 
   const onChangeText = (e) => {
-    setTextField(e.target.value);
+    // setTextField(e.target.value);
     updateFormField(e.target.value);
   };
 
@@ -101,7 +100,6 @@ const RenderFormField = ({
 
     updateFormField(URL.createObjectURL(e.target.files[0]));
   };
-  console.log(editFormFields, "editFormFields");
 
   const renderFormField = (field, i) => {
     if (field.fieldType === "text") {
@@ -114,10 +112,10 @@ const RenderFormField = ({
               alignItems: "center",
             }}
           >
-            <PositionDropdown
+            {/* <PositionDropdown
               fieldPosition={fieldPosition}
               setFieldPosition={setFieldPosition}
-            />
+            /> */}
             <Button
               className="btn-primary-blue"
               sx={{ mr: 1 }}
@@ -147,7 +145,7 @@ const RenderFormField = ({
             fullWidth
             name={field?.fieldLabel}
             defaultValue={fieldValue}
-            value={fieldValue || textField}
+            value={fieldValue}
             onChange={onChangeText}
           />
         </div>
@@ -164,10 +162,10 @@ const RenderFormField = ({
               alignItems: "center",
             }}
           >
-            <PositionDropdown
+            {/* <PositionDropdown
               fieldPosition={fieldPosition}
               setFieldPosition={setFieldPosition}
-            />
+            /> */}
             <Button
               className="btn-primary-blue"
               sx={{ mr: 1 }}
@@ -221,10 +219,10 @@ const RenderFormField = ({
               alignItems: "center",
             }}
           >
-            <PositionDropdown
+            {/* <PositionDropdown
               fieldPosition={fieldPosition}
               setFieldPosition={setFieldPosition}
-            />
+            /> */}
             <Button
               className="btn-primary-blue"
               sx={{ mr: 1 }}

@@ -27,7 +27,11 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function PositionDropdown({ fieldPosition, setFieldPosition }) {
+export default function PositionDropdown({
+  fieldPosition,
+  setFieldPosition,
+  fieldValue,
+}) {
   const theme = useTheme();
 
   const handleChange = (event) => {
@@ -45,6 +49,7 @@ export default function PositionDropdown({ fieldPosition, setFieldPosition }) {
       <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
         <Select
           displayEmpty
+          defaultValue={fieldValue}
           value={fieldPosition}
           onChange={handleChange}
           input={<OutlinedInput />}

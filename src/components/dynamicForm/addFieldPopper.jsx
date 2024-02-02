@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
+import PositionDropdown from "./positionDropdown";
 
 const AddFieldDialog = ({
   addNewField,
@@ -15,6 +16,9 @@ const AddFieldDialog = ({
   isEdit,
   onEditSave,
   editData,
+  fieldPosition,
+  setFieldPosition,
+  // editData2,
 }) => {
   const fieldTypes = [
     {
@@ -31,15 +35,33 @@ const AddFieldDialog = ({
     },
   ];
 
+  const names = [
+    {
+      value: "top",
+      label: "top",
+    },
+    {
+      value: "middle",
+      label: "middle",
+    },
+    {
+      value: "bottom",
+      label: "bottom",
+    },
+  ];
+  console.log("====111=", isEdit, editData);
   const formik = useFormik({
     initialValues: {
-      type: editData?.fieldType,
-      label: editData?.fieldLabel,
+      type: editData?.fieldType || "",
+      label: editData?.fieldLabel || "",
+      position: editData?.position || "",
     },
+
     onSubmit: (values) => {
       isEdit ? onEditSave(values) : addNewField(values);
       onClose();
     },
+    enableReinitialize: true,
   });
 
   return (
@@ -82,6 +104,29 @@ const AddFieldDialog = ({
           ))}
         </Select>
 
+        <InputLabel id="position">Add Position of the field</InputLabel>
+        <Select
+          fullWidth
+          labelId="position"
+          id="position"
+          name="position"
+          value={formik.values.position}
+          label="Position"
+          onChange={formik.handleChange}
+        >
+          {names.map((option, index) => (
+            <MenuItem key={index} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+
+        {/* <PositionDropdown
+          fieldValue={formik.values.position}
+          onChange={formik.handleChange}
+          fieldPosition={fieldPosition}
+          setFieldPosition={setFieldPosition}
+        /> */}
         <Button
           sx={{ mt: 2, p: 2 }}
           color="primary"
