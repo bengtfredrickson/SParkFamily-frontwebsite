@@ -528,7 +528,9 @@ export default function CurriculumoLessonPlans() {
   };
   // ends
   useEffect(() => {
-    if (LessonPlans.length === 0 || location?.state?.reloadLessonPlans) {
+    if (LessonPlans?.length === 0 || location?.state?.reloadLessonPlans) {
+      getCustomLessons();
+
       // getCustomLessonPlan({
       //   curriculum_id: location.state.curriculum_id,
       //   suboption_id: location.state.suboption_id,
@@ -559,24 +561,23 @@ export default function CurriculumoLessonPlans() {
       //     setLoader(false);
       //     console.log(err);
       //   });
-      getCustomLessons();
     }
   }, []);
 
   const getCustomLessons = async () => {
+    console.log("test");
     await getCustomLessonPlan({
       curriculum_id: location.state.curriculum_id,
       suboption_id: location.state.suboption_id,
     })
       .then((res) => {
+        console.log(res, "========> res");
         setDeleteLessonId(res?.data?.result?.[0]?.id);
 
-        let data = JSON.parse(
-          res.data.result[0].lesson_data.replace(/\\"/g, '"')
-        );
-
+        let data = JSON.parse(res?.data?.result?.[0]?.lesson_data);
+        console.log(data, "=========> data");
         let resData = {
-          ...res.data.result[0],
+          ...res?.data?.result?.[0],
           lesson_data: data,
         };
 
@@ -593,7 +594,7 @@ export default function CurriculumoLessonPlans() {
       })
       .catch((err) => {
         setLoader(false);
-        console.log(err);
+        console.log("custom lesson err", err);
       });
   };
 
