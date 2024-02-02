@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
-import PositionDropdown from "./positionDropdown";
 
 const AddFieldDialog = ({
   addNewField,
@@ -16,9 +15,6 @@ const AddFieldDialog = ({
   isEdit,
   onEditSave,
   editData,
-  fieldPosition,
-  setFieldPosition,
-  // editData2,
 }) => {
   const fieldTypes = [
     {
@@ -49,7 +45,7 @@ const AddFieldDialog = ({
       label: "bottom",
     },
   ];
-  console.log("====111=", isEdit, editData);
+
   const formik = useFormik({
     initialValues: {
       type: editData?.fieldType || "",
@@ -121,12 +117,6 @@ const AddFieldDialog = ({
           ))}
         </Select>
 
-        {/* <PositionDropdown
-          fieldValue={formik.values.position}
-          onChange={formik.handleChange}
-          fieldPosition={fieldPosition}
-          setFieldPosition={setFieldPosition}
-        /> */}
         <Button
           sx={{ mt: 2, p: 2 }}
           color="primary"
