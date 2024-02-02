@@ -142,7 +142,7 @@ const DynamicForm = ({
     addData[editKey] = {
       fieldType: type,
       fieldLabel: label,
-      value: htmlToPlainText(formFields?.[editKey]?.value),
+      value: formFields?.[editKey]?.value,
       position: formFields?.[editKey]?.position,
     };
 
@@ -293,17 +293,17 @@ const DynamicForm = ({
               })),
             };
 
-            const stringData = JSON.stringify(data);
-
-            await updateCustomLessonPlan(stringData)
-              .then(async (res) => {
-                await getCustomLessons();
-                showNotification(res?.data?.message, "success", "success");
-                await closeModal();
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            // const stringData = JSON.stringify(data);
+            console.log(data);
+            // await updateCustomLessonPlan(data)
+            //   .then(async (res) => {
+            //     await getCustomLessons();
+            //     showNotification(res?.data?.message, "success", "success");
+            //     await closeModal();
+            //   })
+            //   .catch((err) => {
+            //     console.log(err);
+            //   });
           }
         }
       })
@@ -359,10 +359,10 @@ const DynamicForm = ({
         })),
       };
 
-      const stringUpdateData = JSON.stringify(updateData);
-
+      // const stringUpdateData = JSON.stringify(updateData);
+      console.log("updateData", updateData);
       dynamicFormEditData?.id
-        ? await updateCustomLessonPlan(stringUpdateData)
+        ? await updateCustomLessonPlan(updateData)
             .then(async (res) => {
               await getCustomLessons();
               showNotification(res?.data?.message, "success", "success");
