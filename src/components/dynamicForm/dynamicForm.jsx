@@ -23,6 +23,7 @@ const css = `
       font-size:14px;
       font-weight:500;
       padding:6px 12px;
+      height:40px;
   }
 
 .btn-primary-blue:focus:active,.btn-primary-blue:hover{
