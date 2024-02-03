@@ -51,6 +51,7 @@ const AddFieldDialog = ({
       type: editData?.fieldType || "",
       label: editData?.fieldLabel || "",
       position: editData?.position || "",
+      title: "",
     },
 
     onSubmit: (values) => {
@@ -61,7 +62,15 @@ const AddFieldDialog = ({
   });
 
   return (
-    <Box sx={{ border: 0, borderBottom: "solid 1px #ccc", p: "0px 0px 15px 0", m: "2", bgcolor: "background.paper" }}>
+    <Box
+      sx={{
+        border: 0,
+        borderBottom: "solid 1px #ccc",
+        p: "0px 0px 15px 0",
+        m: "2",
+        bgcolor: "background.paper",
+      }}
+    >
       <div style={{ textAlign: "end" }}>
         <i
           className="fas fa-cut"
@@ -77,6 +86,26 @@ const AddFieldDialog = ({
         }}
       >
         <form onSubmit={formik.handleSubmit}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+            }}
+          >
+            <InputLabel id="name">Add Title of the field</InputLabel>
+            <TextField
+              sx={{ marginTop: 1, marginBottom: 1 }}
+              fullWidth
+              id="title"
+              name="title"
+              value={formik.values.title}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.title && Boolean(formik.errors.title)}
+              helperText={formik.touched.title && formik.errors.title}
+            />
+          </div>
           <div
             style={{
               display: "flex",
@@ -130,7 +159,7 @@ const AddFieldDialog = ({
               style={{
                 width: "49%",
                 marginRight: "0",
-                marginLeft:"auto",
+                marginLeft: "auto",
               }}
             >
               <InputLabel id="position">Add Position of the field</InputLabel>
@@ -152,12 +181,6 @@ const AddFieldDialog = ({
             </div>
           </div>
 
-          {/* <PositionDropdown
-          fieldValue={formik.values.position}
-          onChange={formik.handleChange}
-          fieldPosition={fieldPosition}
-          setFieldPosition={setFieldPosition}
-        /> */}
           <Button
             sx={{ mt: 2, p: 2 }}
             color="primary"

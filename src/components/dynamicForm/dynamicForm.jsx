@@ -85,6 +85,7 @@ const DynamicForm = ({
   lessonPlanData,
   getCustomLessons,
 }) => {
+  // const keyTypeArr = ["text", "image", "textArea"];
   const location = useLocation();
 
   const [formFields, setFormFields] = useState([]);
@@ -94,9 +95,8 @@ const DynamicForm = ({
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
   const [imageAsFile, setImageAsFile] = useState({});
-
+  const [fieldTitle, setFieldTitle] = useState("");
   const [editorHtml, setEditorHtml] = useState();
-
   const [fieldPosition, setFieldPosition] = useState("");
 
   useEffect(() => {
@@ -121,17 +121,6 @@ const DynamicForm = ({
     setEditKey(index);
     setIsEdit(true);
     openAddFieldDialog();
-  };
-
-  const htmlToPlainText = (html) => {
-    // Create a temporary element
-    const tempElement = document.createElement("div");
-    tempElement.innerHTML = html;
-
-    // Remove newline characters
-    let plainText = (tempElement.textContent || tempElement.innerText).trim();
-
-    return plainText.replace(/\n/g, "");
   };
 
   const onEditSave = (values) => {
@@ -163,11 +152,18 @@ const DynamicForm = ({
 
   const addNewField = (values) => {
     try {
-      const { type, label, position } = values;
+      const { type, label, position, title } = values;
       let data = formFields?.length > 0 ? [...formFields] : [];
-      data.push({ fieldType: type, fieldLabel: label, value: "", position });
+      data.push({
+        fieldType: type,
+        fieldLabel: label,
+        value: "",
+        position,
+        // title,
+      });
 
       setFormFields(data);
+      setFieldTitle(title);
     } catch (error) {
       console.log(error);
     }
@@ -248,63 +244,99 @@ const DynamicForm = ({
   const uploadImage = async (formData, formType) => {
     await uploadAddLessonPlanImage(formData)
       .then(async (res) => {
+        // let keyTypeArr = ["text", "image", "textArea"];
         if (res?.data?.message) {
           if (formType === "addForm") {
-            let data = {
-              curriculum_id: location.state.curriculum_id,
-              suboption_id: location.state.suboption_id,
+            if (dynamicFormEditData?.id) {
+              let data = {
+                id: lessonPlanData?.id,
+                lesson_id: dynamicFormEditData?.id,
+                title: fieldTitle,
 
-              data: formFields.map((item, i) => ({
-                key: item?.fieldLabel,
-                value:
-                  item?.fieldType === "text"
-                    ? item.value
-                    : item?.fieldType === "textArea"
-                    ? item.value
-                    : res?.data?.result?.data,
-                key_type:
-                  item?.fieldType === "text"
-                    ? 1
-                    : item?.fieldType === "image"
-                    ? 2
-                    : 3,
-                order: i + 1,
-                position: item.position,
-              })),
-            };
+                lesson_data: formFields?.map((item, i) => ({
+                  key: item?.fieldLabel,
+                  value:
+                    item?.fieldType === "text"
+                      ? item.value
+                      : item?.fieldType === "textArea"
+                      ? item.value
+                      : res?.data?.result?.data,
+                  key_type:
+                    item?.fieldType === "text"
+                      ? 1
+                      : item?.fieldType === "image"
+                      ? 2
+                      : 3,
+                  order: i + 1,
+                  position: item.position,
+                })),
+              };
 
-            await addCustomLesson(data);
-          } else {
-            let data = {
-              id: lessonPlanData?.id,
-              lesson_id: dynamicFormEditData?.id,
-              lesson_data: formFields?.map((item, i) => ({
-                key: item?.fieldLabel,
-                value: item?.value,
+              await updateCustomLessonPlan(data)
+                .then(async (res) => {
+                  await getCustomLessons();
+                  showNotification(res?.data?.message, "success", "success");
+                  await closeModal();
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            } else {
+              let data = {
+                curriculum_id: location.state.curriculum_id,
+                suboption_id: location.state.suboption_id,
+                title: fieldTitle,
 
-                key_type:
-                  item?.fieldType === "text"
-                    ? 1
-                    : item?.fieldType === "image"
-                    ? 2
-                    : 3,
-                order: i + 1,
-                position: item.position,
-              })),
-            };
+                data: formFields.map((item, i) => ({
+                  key: item?.fieldLabel,
+                  value:
+                    item?.fieldType === "text"
+                      ? item.value
+                      : item?.fieldType === "textArea"
+                      ? item.value
+                      : res?.data?.result?.data,
+                  key_type:
+                    item?.fieldType === "text"
+                      ? 1
+                      : item?.fieldType === "image"
+                      ? 2
+                      : 3,
+                  order: i + 1,
+                  position: item.position,
+                })),
+              };
 
-            // const stringData = JSON.stringify(data);
-            console.log(data);
-            // await updateCustomLessonPlan(data)
-            //   .then(async (res) => {
-            //     await getCustomLessons();
-            //     showNotification(res?.data?.message, "success", "success");
-            //     await closeModal();
-            //   })
-            //   .catch((err) => {
-            //     console.log(err);
-            //   });
+              await addCustomLesson(data);
+            }
           }
+          // else {
+          //   let data = {
+          //     id: lessonPlanData?.id,
+          //     lesson_id: dynamicFormEditData?.id,
+          //     lesson_data: formFields?.map((item, i) => ({
+          //       key: item?.fieldLabel,
+          //       value: item?.value,
+          //       key_type:
+          //         item?.fieldType === "text"
+          //           ? 1
+          //           : item?.fieldType === "image"
+          //           ? 2
+          //           : 3,
+          //       order: i + 1,
+          //       position: item.position,
+          //     })),
+          //   };
+
+          //   await updateCustomLessonPlan(data)
+          //     .then(async (res) => {
+          //       await getCustomLessons();
+          //       showNotification(res?.data?.message, "success", "success");
+          //       await closeModal();
+          //     })
+          //     .catch((err) => {
+          //       console.log(err);
+          //     });
+          // }
         }
       })
       .catch((err) => {
@@ -322,6 +354,7 @@ const DynamicForm = ({
       let data = {
         curriculum_id: location.state.curriculum_id,
         suboption_id: location.state.suboption_id,
+        title: fieldTitle,
 
         data: formFields.map((item, i) => ({
           key: item?.fieldLabel,
@@ -345,6 +378,8 @@ const DynamicForm = ({
       let updateData = {
         id: lessonPlanData?.id,
         lesson_id: dynamicFormEditData?.id,
+        title: fieldTitle,
+
         lesson_data: formFields?.map((item, i) => ({
           key: item?.fieldLabel,
           value: item.value,
@@ -359,8 +394,6 @@ const DynamicForm = ({
         })),
       };
 
-      // const stringUpdateData = JSON.stringify(updateData);
-      console.log("updateData", updateData);
       dynamicFormEditData?.id
         ? await updateCustomLessonPlan(updateData)
             .then(async (res) => {
