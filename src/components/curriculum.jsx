@@ -148,7 +148,7 @@ export default function Curriculum() {
     }
   }
 
-  const onDelete = (params) => () => {
+  const onDelete = (params)  => {
     if (window.confirm("Are you sure you want to Delete this curriculum?")) {
       let data = {
         curriculum_id: params.row.curriculum_id,
@@ -310,99 +310,6 @@ export default function Curriculum() {
     []
   );
 
-  //   const columns2 = useMemo(
-  //     () => [
-  //       {
-  //         // first group - TV Show
-  //         // Header: "1",
-  //         // First group columns
-  //         columns: [
-  //           {
-  //             Header: "S.NO.",
-  //             accessor: "curriculum_id",
-  //           },
-  //           {
-  //             Header: "Name",
-  //             accessor: "name",
-  //           },
-  //           {
-  //             Header: "Primary Colour",
-  //             accessor: "primary_color",
-  //           },
-  //           {
-  //             Header: "Action",
-  //             accessor: "action",
-  //           },
-  //         ],
-  //       },
-  //     //   {
-  //     //     // Second group - Details
-  //     //     // Header: "Details",
-  //     //     // Second group columns
-  //     //     columns: [
-  //     //       {
-  //     //         Header: "Language",
-  //     //         accessor: "show.language",
-  //     //       },
-  //     //       {
-  //     //         Header: "Genre(s)",
-  //     //         accessor: "show.genres",
-  //     //       },
-  //     //       {
-  //     //         Header: "Runtime",
-  //     //         accessor: "show.runtime",
-  //     //       },
-  //     //       {
-  //     //         Header: "Status",
-  //     //         accessor: "show.status",
-  //     //       },
-  //     //     ],
-  //     //   },
-  //     ],
-  //     []
-  //   );
-  //     () => [
-  //       {
-  //         // first group - TV Show
-  //         Header: "TV Show",
-  //         // First group columns
-  //         columns: [
-  //           {
-  //             Header: "Name",
-  //             accessor: "show.name",
-  //           },
-  //           {
-  //             Header: "Type",
-  //             accessor: "show.type",
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         // Second group - Details
-  //         Header: "Details",
-  //         // Second group columns
-  //         columns: [
-  //           {
-  //             Header: "Language",
-  //             accessor: "show.language",
-  //           },
-  //           {
-  //             Header: "Genre(s)",
-  //             accessor: "show.genres",
-  //           },
-  //           {
-  //             Header: "Runtime",
-  //             accessor: "show.runtime",
-  //           },
-  //           {
-  //             Header: "Status",
-  //             accessor: "show.status",
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //     []
-  //   );
   const formik = useFormik({
     initialValues: {
       name: "",
