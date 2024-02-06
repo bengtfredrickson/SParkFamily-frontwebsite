@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, InputLabel, TextField } from "@mui/material";
 import { React, memo, useEffect, useState } from "react";
 import AddFieldPopper from "./addFieldPopper";
 import { useLocation } from "react-router-dom";
@@ -10,8 +10,6 @@ import {
 import { Store } from "react-notifications-component";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import RenderFormField from "./renderFormField";
-// import htmlToDraft from "html-to-draftjs";
-// import { ContentState, EditorState } from "draft-js";
 
 const css = `
    
@@ -85,7 +83,6 @@ const DynamicForm = ({
   lessonPlanData,
   getCustomLessons,
 }) => {
-  // const keyTypeArr = ["text", "image", "textArea"];
   const location = useLocation();
 
   const [formFields, setFormFields] = useState([]);
@@ -95,7 +92,7 @@ const DynamicForm = ({
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
   const [imageAsFile, setImageAsFile] = useState({});
-  const [fieldTitle, setFieldTitle] = useState("");
+  const [lessonTitle, setLessonTitle] = useState(dynamicFormEditData?.title);
   const [editorHtml, setEditorHtml] = useState();
   const [fieldPosition, setFieldPosition] = useState("");
 
@@ -152,18 +149,16 @@ const DynamicForm = ({
 
   const addNewField = (values) => {
     try {
-      const { type, label, position, title } = values;
+      const { type, label, position } = values;
       let data = formFields?.length > 0 ? [...formFields] : [];
       data.push({
         fieldType: type,
         fieldLabel: label,
         value: "",
         position,
-        // title,
       });
 
       setFormFields(data);
-      setFieldTitle(title);
     } catch (error) {
       console.log(error);
     }
@@ -211,6 +206,9 @@ const DynamicForm = ({
       setFormFields(newItems);
     }
   };
+  const onChangeTitle = (e) => {
+    setLessonTitle(e.target.value);
+  };
 
   const showNotification = (message, type, title) => {
     Store.addNotification({
@@ -244,14 +242,13 @@ const DynamicForm = ({
   const uploadImage = async (formData, formType) => {
     await uploadAddLessonPlanImage(formData)
       .then(async (res) => {
-        // let keyTypeArr = ["text", "image", "textArea"];
         if (res?.data?.message) {
           if (formType === "addForm") {
             if (dynamicFormEditData?.id) {
               let data = {
                 id: lessonPlanData?.id,
                 lesson_id: dynamicFormEditData?.id,
-                title: fieldTitle,
+                title: lessonTitle,
 
                 lesson_data: formFields?.map((item, i) => ({
                   key: item?.fieldLabel,
@@ -285,7 +282,7 @@ const DynamicForm = ({
               let data = {
                 curriculum_id: location.state.curriculum_id,
                 suboption_id: location.state.suboption_id,
-                title: fieldTitle,
+                title: lessonTitle,
 
                 data: formFields.map((item, i) => ({
                   key: item?.fieldLabel,
@@ -309,34 +306,6 @@ const DynamicForm = ({
               await addCustomLesson(data);
             }
           }
-          // else {
-          //   let data = {
-          //     id: lessonPlanData?.id,
-          //     lesson_id: dynamicFormEditData?.id,
-          //     lesson_data: formFields?.map((item, i) => ({
-          //       key: item?.fieldLabel,
-          //       value: item?.value,
-          //       key_type:
-          //         item?.fieldType === "text"
-          //           ? 1
-          //           : item?.fieldType === "image"
-          //           ? 2
-          //           : 3,
-          //       order: i + 1,
-          //       position: item.position,
-          //     })),
-          //   };
-
-          //   await updateCustomLessonPlan(data)
-          //     .then(async (res) => {
-          //       await getCustomLessons();
-          //       showNotification(res?.data?.message, "success", "success");
-          //       await closeModal();
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //     });
-          // }
         }
       })
       .catch((err) => {
@@ -354,7 +323,7 @@ const DynamicForm = ({
       let data = {
         curriculum_id: location.state.curriculum_id,
         suboption_id: location.state.suboption_id,
-        title: fieldTitle,
+        title: lessonTitle,
 
         data: formFields.map((item, i) => ({
           key: item?.fieldLabel,
@@ -378,7 +347,7 @@ const DynamicForm = ({
       let updateData = {
         id: lessonPlanData?.id,
         lesson_id: dynamicFormEditData?.id,
-        title: fieldTitle,
+        title: lessonTitle,
 
         lesson_data: formFields?.map((item, i) => ({
           key: item?.fieldLabel,
@@ -462,6 +431,24 @@ const DynamicForm = ({
   return (
     <div>
       <style>{css}</style>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          marginBottom: "10px",
+        }}
+      >
+        <InputLabel id="name">Add Title </InputLabel>
+        <TextField
+          sx={{ marginTop: 1, marginBottom: 1 }}
+          fullWidth
+          id="title"
+          name="title"
+          value={lessonTitle}
+          onChange={onChangeTitle}
+        />
+      </div>
 
       <Button
         className="btn-primary-blue"

@@ -7198,7 +7198,6 @@ export default function CurriculumoLessonPlans() {
             {ViewData &&
               ViewData?.data?.length > 0 &&
               ViewData?.data?.map((item, index) => {
-                console.log(item, "===> renderViewData");
                 return renderViewData(item, index);
               })}
           </>

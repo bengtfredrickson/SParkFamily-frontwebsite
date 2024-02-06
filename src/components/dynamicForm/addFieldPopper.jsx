@@ -51,7 +51,6 @@ const AddFieldDialog = ({
       type: editData?.fieldType || "",
       label: editData?.fieldLabel || "",
       position: editData?.position || "",
-      title: "",
     },
 
     onSubmit: (values) => {
@@ -86,7 +85,7 @@ const AddFieldDialog = ({
         }}
       >
         <form onSubmit={formik.handleSubmit}>
-          <div
+          {/* <div
             style={{
               display: "flex",
               flexDirection: "column",
@@ -105,7 +104,7 @@ const AddFieldDialog = ({
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
             />
-          </div>
+          </div> */}
           <div
             style={{
               display: "flex",
@@ -126,7 +125,6 @@ const AddFieldDialog = ({
               helperText={formik.touched.label && formik.errors.label}
             />
           </div>
-
           <div
             style={{
               display: "flex",
