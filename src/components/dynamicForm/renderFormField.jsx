@@ -1,5 +1,5 @@
 import { Button, InputLabel, TextField } from "@mui/material";
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import drag from "../../../src/image/drag.svg";
 import { Editor } from "react-draft-wysiwyg";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
@@ -23,8 +23,6 @@ const RenderFormField = ({
   const [getState, setState] = useState(false);
   const [editorData, setEditor] = useState("");
 
-  const imageRef = useRef();
-
   const convertHtmlToDraft = (data) => {
     if (data) {
       const blocksFromHTML = htmlToDraft(data);
@@ -47,14 +45,18 @@ const RenderFormField = ({
     const { fieldType } = field;
     if (fieldType === "textArea" && fieldValue && fieldType !== "image") {
       const data = convertHtmlToDraft(fieldValue);
+
       let prevData = [...formFields];
       prevData[index].value = `<p>${fieldValue}</p>`;
+
       setFormFields(prevData);
       setEditor(data);
     } else if (fieldType === "text" && fieldValue && fieldType !== "image") {
       const data = removeHtmlTags(fieldValue);
+
       let prevData = [...formFields];
       prevData[index].value = data;
+
       setFormFields(prevData);
     }
 
@@ -93,11 +95,13 @@ const RenderFormField = ({
     if (e?.target?.files?.[0]?.type?.includes("image")) {
       setImageAsFile({ imageAsFile: e?.target?.files?.[0] });
       setState(false);
+      updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
     } else {
       setState(true);
+      // updateFormField("");
     }
 
-    updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
+    // updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
   };
 
   const renderFormField = (field, i) => {
@@ -163,10 +167,7 @@ const RenderFormField = ({
                 </Button>
               </div>
             </div>
-            {/* <PositionDropdown
-              fieldPosition={fieldPosition}
-              setFieldPosition={setFieldPosition}
-            /> */}
+
             <div>
               <TextField
                 className="text-feild-input"
@@ -199,10 +200,6 @@ const RenderFormField = ({
               paddingTop: "15px",
             }}
           >
-            {/* <PositionDropdown
-              fieldPosition={fieldPosition}
-              setFieldPosition={setFieldPosition}
-            /> */}
             <div
               style={{
                 display: "flex",
@@ -226,7 +223,6 @@ const RenderFormField = ({
                 }}
               >
                 <Button
-                  // className="btn-primary-blue"
                   color="primary"
                   className="custom_hyperlink"
                   sx={{ mr: 1 }}
@@ -235,7 +231,6 @@ const RenderFormField = ({
                   edit
                 </Button>
                 <Button
-                  // className="btn-primary-blue"
                   color="primary"
                   className="custom_hyperlink"
                   sx={{ mr: 1 }}
@@ -291,11 +286,6 @@ const RenderFormField = ({
               paddingTop: "15px",
             }}
           >
-            {/* <PositionDropdown
-              fieldPosition={fieldPosition}
-              setFieldPosition={setFieldPosition}
-            /> */}
-
             <div
               style={{
                 display: "flex",
@@ -361,7 +351,7 @@ const RenderFormField = ({
                 </p>
               ) : null}
 
-              {getState ? (
+              {!fieldValue && getState ? (
                 <p style={{ color: "red" }}>Only Image is allowed !</p>
               ) : null}
             </div>

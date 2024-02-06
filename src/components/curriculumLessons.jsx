@@ -251,7 +251,6 @@ export default function CurriculumoLessonPlans() {
   };
 
   const handleShow = (e, t) => {
-    console.log(e.row, t, "ZZZZZZZZZZZZZZ");
     if (t === 1) {
       setDetail(e.row);
       setShowEditLessonPlans(true);
@@ -579,7 +578,6 @@ export default function CurriculumoLessonPlans() {
   }, []);
 
   const getCustomLessons = async () => {
-    console.log("test");
     await getCustomLessonPlan({
       curriculum_id: location.state.curriculum_id,
       suboption_id: location.state.suboption_id,
@@ -602,7 +600,7 @@ export default function CurriculumoLessonPlans() {
           id: el.id,
           i: index,
         }));
-
+        console.log(re, "====> re getCustomLessons");
         setLessonPlans(re);
         setLoader(false);
       })
@@ -626,12 +624,12 @@ export default function CurriculumoLessonPlans() {
       renderCell: (index) => `${index.row.i + 1}`,
     },
     {
-      field: "id",
+      field: "title",
       headerName: "Name",
       width: 220,
-      renderCell: (params) => {
-        return `Lesson ${params.row.i + 1}`;
-      },
+      // renderCell: (params) => {
+      //   return `Lesson ${params.row.i + 1}`;
+      // },
     },
     {
       field: "action",
@@ -864,7 +862,6 @@ export default function CurriculumoLessonPlans() {
   };
 
   const renderViewData = (item, index) => {
-    console.log(item, "item");
     if (item.key_type === 1) {
       return (
         <div
@@ -874,27 +871,26 @@ export default function CurriculumoLessonPlans() {
             alignItems: "start",
             justifyContent: "flex-start",
             margin: "10px 0",
-            
-            wordBreak:"break-all"
+
+            wordBreak: "break-all",
           }}
           key={index}
         >
-          <div 
-             style={{
+          <div
+            style={{
               width: "15%",
-             }}
-            >
+            }}
+          >
             <p>{item?.key}:</p>
           </div>
-          
+
           <div
             style={{
               width: "85%",
-             }}
+            }}
           >
-          <p>{item?.value}</p>
+            <p>{item?.value}</p>
           </div>
-          
         </div>
       );
     }
@@ -908,32 +904,29 @@ export default function CurriculumoLessonPlans() {
             alignItems: "start",
             justifyContent: "flex-start",
             margin: "10px 0",
-            wordBreak:"break-all"
+            wordBreak: "break-all",
           }}
           key={index}
         >
-          <div 
-             style={{
+          <div
+            style={{
               width: "15%",
-             }}
-            >
-              <p>{item?.key}:</p>
-            </div>
-             
-            <div
+            }}
+          >
+            <p>{item?.key}:</p>
+          </div>
+
+          <div
             style={{
               width: "85%",
-             }}
-            >
-
-<img
-            style={{ height: "50px", width: "50px" }}
-            src={item?.value}
-            alt=""
-          />
-            </div>
-
-         
+            }}
+          >
+            <img
+              style={{ height: "50px", width: "50px" }}
+              src={item?.value}
+              alt=""
+            />
+          </div>
         </div>
       );
     }
@@ -946,8 +939,7 @@ export default function CurriculumoLessonPlans() {
             justifyContent: "flex-start",
             margin: "10px 0",
             width: "100%",
-            margin: "10px 0",
-            wordBreak:"break-all"
+            wordBreak: "break-all",
           }}
           key={index}
         >
@@ -956,30 +948,6 @@ export default function CurriculumoLessonPlans() {
         </div>
       );
     }
-
-    // return (
-    //   <div
-    //     style={{
-    //       display: "flex",
-    //       alignItems: "center",
-    //       justifyContent: "space-between",
-    //       width: "70px",
-    //     }}
-    //     key={index}
-    //   >
-    //     <p>{item?.key}:</p>
-
-    //     {isImage(item.value) ? (
-    //       <img
-    //         style={{ height: "50px", width: "50px" }}
-    //         src={item?.value}
-    //         alt={item?.key}
-    //       />
-    //     ) : (
-    //       item?.value
-    //     )}
-    //   </div>
-    // );
   };
 
   return (
@@ -1220,7 +1188,7 @@ export default function CurriculumoLessonPlans() {
                       suboption_id: location.state.suboption_id,
                     })
                       .then((res) => {
-                        console.log("=======>", res.data.result);
+                        // console.log("=======>", res.data.result);
 
                         // setLessonPlans(
                         //   res.data.result.map((el, index) => ({
@@ -7189,20 +7157,23 @@ export default function CurriculumoLessonPlans() {
                 )
               ) {
                 setOpenEditFormModal(false);
-                // setDynamicFormEditData({});
+                setDynamicFormEditData({});
               }
             }}
           ></i>
         </Modal.Header>
         <Modal.Body>
           <DynamicForm
-            closeModal={() => setOpenEditFormModal(false)}
+            closeModal={() => {
+              setOpenEditFormModal(false);
+            }}
             dynamicFormEditData={dynamicFormEditData}
             lessonPlanData={lessonPlanData}
             getCustomLessons={getCustomLessons}
           />
         </Modal.Body>
       </Modal>
+
       {/* View Lesson Plan Model */}
 
       <Modal show={ViewModel} keyboard={false}>
@@ -7227,34 +7198,8 @@ export default function CurriculumoLessonPlans() {
             {ViewData &&
               ViewData?.data?.length > 0 &&
               ViewData?.data?.map((item, index) => {
+                console.log(item, "===> renderViewData");
                 return renderViewData(item, index);
-                // return (
-                //   <div
-                //     style={{
-                //       display: "flex",
-                //       alignItems: "center",
-                //       justifyContent: "space-between",
-                //       width: "70px",
-                //     }}
-                //     key={index}
-                //   >
-                //     <p>{item?.key}:</p>
-                //     <p>
-                //       {/* {item?.value?.endsWith("png") ? ( */}
-                //       <img
-                //         // style={{ height: "30px" }}
-                //         src={item?.value}
-                //         alt={item?.key}
-                //       />
-                //       {/* {item?.value} */}
-                //       {/* )  */}
-                //       {/* : (
-                //         item?.value
-                //       ) */}
-                //       {/* } */}
-                //     </p>
-                //   </div>
-                // );
               })}
           </>
         </Modal.Body>
