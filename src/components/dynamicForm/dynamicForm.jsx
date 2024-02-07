@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, InputLabel, TextField } from "@mui/material";
 import { React, memo, useEffect, useState } from "react";
 import AddFieldPopper from "./addFieldPopper";
 import { useLocation } from "react-router-dom";
@@ -10,8 +10,8 @@ import {
 import { Store } from "react-notifications-component";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import RenderFormField from "./renderFormField";
-// import htmlToDraft from "html-to-draftjs";
-// import { ContentState, EditorState } from "draft-js";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const css = `
    
@@ -94,13 +94,26 @@ const DynamicForm = ({
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
   const [imageAsFile, setImageAsFile] = useState({});
-
+  // const [lessonTitle, setLessonTitle] = useState(dynamicFormEditData?.title);
   const [editorHtml, setEditorHtml] = useState();
-
   const [fieldPosition, setFieldPosition] = useState("");
+  // const [isError, setIsError] = useState(false);
+
+  const formik = useFormik({
+    validateOnMount: true,
+    initialValues: {
+      lessonTitle: dynamicFormEditData?.title || "",
+    },
+    validationSchema: Yup.object({
+      lessonTitle: Yup.string().required("Required"),
+    }),
+
+    enableReinitialize: true,
+  });
 
   useEffect(() => {
     createEditFormData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const openAddFieldDialog = () => {
@@ -112,6 +125,7 @@ const DynamicForm = ({
     setIsEdit(false);
     setEditData({});
     setFieldPosition("");
+    // setIsError(false);
   };
 
   const onEditField = (index) => {
@@ -123,17 +137,6 @@ const DynamicForm = ({
     openAddFieldDialog();
   };
 
-  const htmlToPlainText = (html) => {
-    // Create a temporary element
-    const tempElement = document.createElement("div");
-    tempElement.innerHTML = html;
-
-    // Remove newline characters
-    let plainText = (tempElement.textContent || tempElement.innerText).trim();
-
-    return plainText.replace(/\n/g, "");
-  };
-
   const onEditSave = (values) => {
     const { type, label } = values;
 
@@ -142,7 +145,7 @@ const DynamicForm = ({
     addData[editKey] = {
       fieldType: type,
       fieldLabel: label,
-      value: htmlToPlainText(formFields?.[editKey]?.value),
+      value: formFields?.[editKey]?.value,
       position: formFields?.[editKey]?.position,
     };
 
@@ -165,7 +168,12 @@ const DynamicForm = ({
     try {
       const { type, label, position } = values;
       let data = formFields?.length > 0 ? [...formFields] : [];
-      data.push({ fieldType: type, fieldLabel: label, value: "", position });
+      data.push({
+        fieldType: type,
+        fieldLabel: label,
+        value: "",
+        position,
+      });
 
       setFormFields(data);
     } catch (error) {
@@ -216,6 +224,12 @@ const DynamicForm = ({
     }
   };
 
+  // const onChangeTitle = (e, p) => {
+  //   console.log(p, "onChangeTitle");
+  //   setLessonTitle(e.target.value);
+
+  // };
+
   const showNotification = (message, type, title) => {
     Store.addNotification({
       title: title,
@@ -250,60 +264,67 @@ const DynamicForm = ({
       .then(async (res) => {
         if (res?.data?.message) {
           if (formType === "addForm") {
-            let data = {
-              curriculum_id: location.state.curriculum_id,
-              suboption_id: location.state.suboption_id,
+            if (dynamicFormEditData?.id) {
+              let data = {
+                id: lessonPlanData?.id,
+                lesson_id: dynamicFormEditData?.id,
+                title: formik?.values?.lessonTitle,
 
-              data: formFields.map((item, i) => ({
-                key: item?.fieldLabel,
-                value:
-                  item?.fieldType === "text"
-                    ? item.value
-                    : item?.fieldType === "textArea"
-                    ? item.value
-                    : res?.data?.result?.data,
-                key_type:
-                  item?.fieldType === "text"
-                    ? 1
-                    : item?.fieldType === "image"
-                    ? 2
-                    : 3,
-                order: i + 1,
-                position: item.position,
-              })),
-            };
+                lesson_data: formFields?.map((item, i) => ({
+                  key: item?.fieldLabel,
+                  value:
+                    item?.fieldType === "text"
+                      ? item.value
+                      : item?.fieldType === "textArea"
+                      ? item.value
+                      : res?.data?.result?.data,
+                  key_type:
+                    item?.fieldType === "text"
+                      ? 1
+                      : item?.fieldType === "image"
+                      ? 2
+                      : 3,
+                  order: i + 1,
+                  position: item.position,
+                })),
+              };
 
-            await addCustomLesson(data);
-          } else {
-            let data = {
-              id: lessonPlanData?.id,
-              lesson_id: dynamicFormEditData?.id,
-              lesson_data: formFields?.map((item, i) => ({
-                key: item?.fieldLabel,
-                value: item?.value,
+              await updateCustomLessonPlan(data)
+                .then(async (res) => {
+                  await getCustomLessons();
+                  showNotification(res?.data?.message, "success", "success");
+                  await closeModal();
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            } else {
+              let data = {
+                curriculum_id: location.state.curriculum_id,
+                suboption_id: location.state.suboption_id,
+                title: formik?.values?.lessonTitle,
 
-                key_type:
-                  item?.fieldType === "text"
-                    ? 1
-                    : item?.fieldType === "image"
-                    ? 2
-                    : 3,
-                order: i + 1,
-                position: item.position,
-              })),
-            };
+                data: formFields.map((item, i) => ({
+                  key: item?.fieldLabel,
+                  value:
+                    item?.fieldType === "text"
+                      ? item.value
+                      : item?.fieldType === "textArea"
+                      ? item.value
+                      : res?.data?.result?.data,
+                  key_type:
+                    item?.fieldType === "text"
+                      ? 1
+                      : item?.fieldType === "image"
+                      ? 2
+                      : 3,
+                  order: i + 1,
+                  position: item.position,
+                })),
+              };
 
-            const stringData = JSON.stringify(data);
-
-            await updateCustomLessonPlan(stringData)
-              .then(async (res) => {
-                await getCustomLessons();
-                showNotification(res?.data?.message, "success", "success");
-                await closeModal();
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+              await addCustomLesson(data);
+            }
           }
         }
       })
@@ -322,6 +343,7 @@ const DynamicForm = ({
       let data = {
         curriculum_id: location.state.curriculum_id,
         suboption_id: location.state.suboption_id,
+        title: formik?.values?.lessonTitle,
 
         data: formFields.map((item, i) => ({
           key: item?.fieldLabel,
@@ -345,6 +367,8 @@ const DynamicForm = ({
       let updateData = {
         id: lessonPlanData?.id,
         lesson_id: dynamicFormEditData?.id,
+        title: formik?.values?.lessonTitle,
+
         lesson_data: formFields?.map((item, i) => ({
           key: item?.fieldLabel,
           value: item.value,
@@ -359,10 +383,8 @@ const DynamicForm = ({
         })),
       };
 
-      const stringUpdateData = JSON.stringify(updateData);
-
       dynamicFormEditData?.id
-        ? await updateCustomLessonPlan(stringUpdateData)
+        ? await updateCustomLessonPlan(updateData)
             .then(async (res) => {
               await getCustomLessons();
               showNotification(res?.data?.message, "success", "success");
@@ -429,6 +451,31 @@ const DynamicForm = ({
   return (
     <div>
       <style>{css}</style>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          marginBottom: "10px",
+        }}
+      >
+        <>
+          <InputLabel id="name">Add Title </InputLabel>
+          <TextField
+            sx={{ marginTop: 1, marginBottom: 1 }}
+            fullWidth
+            id="lessonTitle"
+            name="lessonTitle"
+            value={formik.values.lessonTitle}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.lessonTitle && Boolean(formik.errors.lessonTitle)
+            }
+            helperText={formik.touched.lessonTitle && formik.errors.lessonTitle}
+          />
+        </>
+      </div>
 
       <Button
         className="btn-primary-blue"
@@ -448,6 +495,7 @@ const DynamicForm = ({
           editData={editData}
           setFieldPosition={setFieldPosition}
           fieldPosition={fieldPosition}
+          lessonTitle={formik?.values?.lessonTitle}
         />
       )}
 
