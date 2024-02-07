@@ -874,7 +874,6 @@ export default function CurriculumoLessonPlans() {
             alignItems: "start",
             justifyContent: "flex-start",
             margin: "10px 0",
-            
             wordBreak:"break-all"
           }}
           key={index}
@@ -882,17 +881,30 @@ export default function CurriculumoLessonPlans() {
           <div 
              style={{
               width: "15%",
+              borderRight:"solid 1px #cccccc",
              }}
             >
-            <p>{item?.key}:</p>
+            <p 
+            style={{
+              fontWeight:"500",
+              margin:"0",
+             }}>
+                {item?.key}:
+            </p>
           </div>
           
           <div
             style={{
               width: "85%",
+              paddingLeft: "10px",
              }}
           >
-          <p>{item?.value}</p>
+          <p
+             style={{
+              fontWeight:"500",
+              margin:"0",
+             }}
+          >{item?.value}</p>
           </div>
           
         </div>
@@ -915,14 +927,21 @@ export default function CurriculumoLessonPlans() {
           <div 
              style={{
               width: "15%",
+              borderRight:"solid 1px #cccccc",
              }}
             >
-              <p>{item?.key}:</p>
+              <p
+               style={{
+              fontWeight:"500",
+              margin:"0",
+             }}
+              >{item?.key}:</p>
             </div>
              
             <div
             style={{
               width: "85%",
+              paddingLeft: "10px",
              }}
             >
 
@@ -951,8 +970,28 @@ export default function CurriculumoLessonPlans() {
           }}
           key={index}
         >
-          <p>{item?.key}:</p>
+          <div 
+             style={{
+              width: "15%",
+              borderRight:"solid 1px #cccccc",
+             }}
+            >
+              <p
+               style={{
+              fontWeight:"500",
+              margin:"0",
+             }}
+              >{item?.key}:</p>
+            </div>
+          
+            <div
+            style={{
+              width: "85%",
+              paddingLeft: "10px",
+             }}
+            >
           <p dangerouslySetInnerHTML={{ __html: item?.value }} />
+          </div>
         </div>
       );
     }
