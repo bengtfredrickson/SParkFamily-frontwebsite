@@ -107,6 +107,7 @@ export default function Curriculum() {
     }
   };
   const handleShow = (row) => {
+    console.log(row);
     setDetail(row);
     setShowEditCurriculum(true);
     setImageUrl(row.banner_link);
@@ -151,9 +152,10 @@ export default function Curriculum() {
   const onDelete = (params)  => {
     if (window.confirm("Are you sure you want to Delete this curriculum?")) {
       let data = {
-        curriculum_id: params.row.curriculum_id,
-        name: params.row.name,
+        curriculum_id: params.curriculum_id,
+        name: params.name,
       };
+      console.log("111",data)
       delete_curriculum(data)
         .then((res) => {
           Store.addNotification({
@@ -611,7 +613,7 @@ export default function Curriculum() {
           ></i>
         </Modal.Header>
         <Modal.Body>
-          {/* <Formik
+          <Formik
             initialValues={{
               name: "",
               nav_text: "",
@@ -796,7 +798,7 @@ export default function Curriculum() {
                 </div>
               </Form>
             )}
-          </Formik> */}
+          </Formik>
         </Modal.Body>
       </Modal>
       {/* Ends Add Curriculum */}

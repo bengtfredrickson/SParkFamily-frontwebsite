@@ -6,7 +6,7 @@ import {
 import { Button, TablePagination } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const DataTable = ({ tableData, handleDelete, handleShow }) => {
+const DataTable = ({ tableData, onDelete, handleShow }) => {
   const navigate = useNavigate();
   const itemsPerPageOptions = [10, 25, 50, 100]; // Define your desired options
 
@@ -92,7 +92,7 @@ const DataTable = ({ tableData, handleDelete, handleShow }) => {
               <Button onClick={() => handleShow(params)}>
                 <i className="fas fa-edit"></i>
               </Button>
-              <Button color="error" onClick={() => handleDelete(params)}>
+              <Button color="error" onClick={() => onDelete(params)}>
                 <i className="fa fa-trash" aria-hidden="true"></i>
               </Button>
             </div>
