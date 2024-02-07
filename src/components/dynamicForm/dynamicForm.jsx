@@ -10,6 +10,8 @@ import {
 import { Store } from "react-notifications-component";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import RenderFormField from "./renderFormField";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const css = `
    
@@ -92,12 +94,26 @@ const DynamicForm = ({
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
   const [imageAsFile, setImageAsFile] = useState({});
-  const [lessonTitle, setLessonTitle] = useState(dynamicFormEditData?.title);
+  // const [lessonTitle, setLessonTitle] = useState(dynamicFormEditData?.title);
   const [editorHtml, setEditorHtml] = useState();
   const [fieldPosition, setFieldPosition] = useState("");
+  // const [isError, setIsError] = useState(false);
+
+  const formik = useFormik({
+    validateOnMount: true,
+    initialValues: {
+      lessonTitle: dynamicFormEditData?.title || "",
+    },
+    validationSchema: Yup.object({
+      lessonTitle: Yup.string().required("Required"),
+    }),
+
+    enableReinitialize: true,
+  });
 
   useEffect(() => {
     createEditFormData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const openAddFieldDialog = () => {
@@ -109,6 +125,7 @@ const DynamicForm = ({
     setIsEdit(false);
     setEditData({});
     setFieldPosition("");
+    // setIsError(false);
   };
 
   const onEditField = (index) => {
@@ -206,9 +223,12 @@ const DynamicForm = ({
       setFormFields(newItems);
     }
   };
-  const onChangeTitle = (e) => {
-    setLessonTitle(e.target.value);
-  };
+
+  // const onChangeTitle = (e, p) => {
+  //   console.log(p, "onChangeTitle");
+  //   setLessonTitle(e.target.value);
+
+  // };
 
   const showNotification = (message, type, title) => {
     Store.addNotification({
@@ -248,7 +268,7 @@ const DynamicForm = ({
               let data = {
                 id: lessonPlanData?.id,
                 lesson_id: dynamicFormEditData?.id,
-                title: lessonTitle,
+                title: formik?.values?.lessonTitle,
 
                 lesson_data: formFields?.map((item, i) => ({
                   key: item?.fieldLabel,
@@ -282,7 +302,7 @@ const DynamicForm = ({
               let data = {
                 curriculum_id: location.state.curriculum_id,
                 suboption_id: location.state.suboption_id,
-                title: lessonTitle,
+                title: formik?.values?.lessonTitle,
 
                 data: formFields.map((item, i) => ({
                   key: item?.fieldLabel,
@@ -323,7 +343,7 @@ const DynamicForm = ({
       let data = {
         curriculum_id: location.state.curriculum_id,
         suboption_id: location.state.suboption_id,
-        title: lessonTitle,
+        title: formik?.values?.lessonTitle,
 
         data: formFields.map((item, i) => ({
           key: item?.fieldLabel,
@@ -347,7 +367,7 @@ const DynamicForm = ({
       let updateData = {
         id: lessonPlanData?.id,
         lesson_id: dynamicFormEditData?.id,
-        title: lessonTitle,
+        title: formik?.values?.lessonTitle,
 
         lesson_data: formFields?.map((item, i) => ({
           key: item?.fieldLabel,
@@ -439,15 +459,22 @@ const DynamicForm = ({
           marginBottom: "10px",
         }}
       >
-        <InputLabel id="name">Add Title </InputLabel>
-        <TextField
-          sx={{ marginTop: 1, marginBottom: 1 }}
-          fullWidth
-          id="title"
-          name="title"
-          value={lessonTitle}
-          onChange={onChangeTitle}
-        />
+        <>
+          <InputLabel id="name">Add Title </InputLabel>
+          <TextField
+            sx={{ marginTop: 1, marginBottom: 1 }}
+            fullWidth
+            id="lessonTitle"
+            name="lessonTitle"
+            value={formik.values.lessonTitle}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.lessonTitle && Boolean(formik.errors.lessonTitle)
+            }
+            helperText={formik.touched.lessonTitle && formik.errors.lessonTitle}
+          />
+        </>
       </div>
 
       <Button
@@ -468,6 +495,7 @@ const DynamicForm = ({
           editData={editData}
           setFieldPosition={setFieldPosition}
           fieldPosition={fieldPosition}
+          lessonTitle={formik?.values?.lessonTitle}
         />
       )}
 

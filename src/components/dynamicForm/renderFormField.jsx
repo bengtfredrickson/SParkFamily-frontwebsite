@@ -12,7 +12,6 @@ const RenderFormField = ({
   field,
   index,
   setEditorHtml,
-
   setFormFields,
   formFields,
   fieldValue,
@@ -20,8 +19,11 @@ const RenderFormField = ({
   editFormFields,
   setEditFormFields,
 }) => {
-  const [getState, setState] = useState(false);
+  // const [getState, setState] = useState(false);
   const [editorData, setEditor] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  // const [isSuccess, setIsSuccess] = useState(false);
 
   const convertHtmlToDraft = (data) => {
     if (data) {
@@ -91,17 +93,36 @@ const RenderFormField = ({
     updateFormField(html);
   };
 
-  const onChangeImage = (e) => {
-    if (e?.target?.files?.[0]?.type?.includes("image")) {
-      setImageAsFile({ imageAsFile: e?.target?.files?.[0] });
-      setState(false);
-      updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
-    } else {
-      setState(true);
-      // updateFormField("");
+  // const onChangeImage = (e) => {
+  //   console.log(e, "onChangeImage");
+  //   if (e?.target?.files?.[0]?.type?.includes("image")) {
+  //     setImageAsFile({ imageAsFile: e?.target?.files?.[0] });
+  //     setState(false);
+  //     updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
+  //   } else {
+  //     setState(true);
+  //     updateFormField("");
+  //   }
+
+  //   updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
+  // };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    // setIsSuccess(false);
+
+    // Checking if the file type is allowed or not
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedTypes.includes(selectedFile?.type)) {
+      setIsError(true);
+      setErrorMsg("Only images are allowed.");
+      return;
     }
 
-    // updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
+    setIsError(false);
+    // setIsSuccess(true);
+    setImageAsFile({ imageAsFile: selectedFile });
+    updateFormField(URL?.createObjectURL(event?.target?.files?.[0]));
   };
 
   const renderFormField = (field, i) => {
@@ -339,7 +360,7 @@ const RenderFormField = ({
                 type="file"
                 accept="image/*"
                 name={field?.fieldLabel}
-                onChange={(e) => onChangeImage(e)}
+                onChange={(e) => handleFileChange(e)}
               />
               {fieldValue !== "" ? (
                 <p>
@@ -351,9 +372,11 @@ const RenderFormField = ({
                 </p>
               ) : null}
 
-              {!fieldValue && getState ? (
+              {/* {!fieldValue && getState ? (
                 <p style={{ color: "red" }}>Only Image is allowed !</p>
-              ) : null}
+              ) : null} */}
+
+              {isError && <div style={{ color: "red" }}>{errorMsg}</div>}
             </div>
           </div>
         </div>

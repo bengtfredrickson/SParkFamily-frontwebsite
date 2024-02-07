@@ -6,6 +6,7 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
+import * as Yup from "yup";
 import React from "react";
 import { useFormik } from "formik";
 
@@ -15,6 +16,7 @@ const AddFieldDialog = ({
   isEdit,
   onEditSave,
   editData,
+  lessonTitle,
 }) => {
   const fieldTypes = [
     {
@@ -47,11 +49,15 @@ const AddFieldDialog = ({
   ];
 
   const formik = useFormik({
+    validateOnMount: true,
     initialValues: {
       type: editData?.fieldType || "",
       label: editData?.fieldLabel || "",
       position: editData?.position || "",
     },
+    validationSchema: Yup.object({
+      label: Yup.string().required("Required"),
+    }),
 
     onSubmit: (values) => {
       isEdit ? onEditSave(values) : addNewField(values);
@@ -185,6 +191,7 @@ const AddFieldDialog = ({
             variant="contained"
             fullWidth
             type="submit"
+            disabled={!formik.isValid && !lessonTitle}
           >
             Submit
           </Button>
