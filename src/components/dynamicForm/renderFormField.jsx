@@ -2,6 +2,7 @@ import { Button, InputLabel, TextField } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import drag from "../../../src/image/drag.svg";
 import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
@@ -18,11 +19,14 @@ const RenderFormField = ({
   setImageAsFile,
   editFormFields,
   setEditFormFields,
+  handleFileChange,
+  imageErrorMsg,
+  isImageError,
 }) => {
   // const [getState, setState] = useState(false);
   const [editorData, setEditor] = useState("");
-  const [isError, setIsError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  // const [isError, setIsError] = useState(false);
+  // const [errorMsg, setErrorMsg] = useState("");
   // const [isSuccess, setIsSuccess] = useState(false);
 
   const convertHtmlToDraft = (data) => {
@@ -93,6 +97,11 @@ const RenderFormField = ({
     updateFormField(html);
   };
 
+  const onChangeImg = (e) => {
+    handleFileChange(e);
+    updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
+  };
+
   // const onChangeImage = (e) => {
   //   console.log(e, "onChangeImage");
   //   if (e?.target?.files?.[0]?.type?.includes("image")) {
@@ -107,23 +116,23 @@ const RenderFormField = ({
   //   updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
   // };
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    // setIsSuccess(false);
+  // const handleFileChange = (event) => {
+  //   const selectedFile = event.target.files[0];
+  //   // setIsSuccess(false);
 
-    // Checking if the file type is allowed or not
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    if (!allowedTypes.includes(selectedFile?.type)) {
-      setIsError(true);
-      setErrorMsg("Only images are allowed.");
-      return;
-    }
-
-    setIsError(false);
-    // setIsSuccess(true);
-    setImageAsFile({ imageAsFile: selectedFile });
-    updateFormField(URL?.createObjectURL(event?.target?.files?.[0]));
-  };
+  //   // Checking if the file type is allowed or not
+  //   const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  //   if (!allowedTypes.includes(selectedFile?.type)) {
+  //     setIsError(true);
+  //     setErrorMsg("Only images are allowed.");
+  //     return;
+  //   }
+  //   console.log("$$$$$$$$$$$$$");
+  //   setIsError(false);
+  //   setIsSuccess(true);
+  //   setImageAsFile({ imageAsFile: selectedFile });
+  //   updateFormField(URL?.createObjectURL(event?.target?.files?.[0]));
+  // };
 
   const renderFormField = (field, i) => {
     if (field.fieldType === "text") {
@@ -358,9 +367,10 @@ const RenderFormField = ({
               <input
                 className="text-feild"
                 type="file"
-                accept="image/*"
+                // accept="image/*"
+                accept="image/x-png,image/gif,image/jpeg,image/heic"
                 name={field?.fieldLabel}
-                onChange={(e) => handleFileChange(e)}
+                onChange={(e) => onChangeImg(e)}
               />
               {fieldValue !== "" ? (
                 <p>
@@ -376,7 +386,9 @@ const RenderFormField = ({
                 <p style={{ color: "red" }}>Only Image is allowed !</p>
               ) : null} */}
 
-              {isError && <div style={{ color: "red" }}>{errorMsg}</div>}
+              {isImageError && (
+                <div style={{ color: "red" }}>{imageErrorMsg}</div>
+              )}
             </div>
           </div>
         </div>

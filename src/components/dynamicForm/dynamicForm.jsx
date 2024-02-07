@@ -94,10 +94,10 @@ const DynamicForm = ({
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
   const [imageAsFile, setImageAsFile] = useState({});
-  // const [lessonTitle, setLessonTitle] = useState(dynamicFormEditData?.title);
   const [editorHtml, setEditorHtml] = useState();
   const [fieldPosition, setFieldPosition] = useState("");
-  // const [isError, setIsError] = useState(false);
+  const [isImageError, setIsImageError] = useState(false);
+  const [imageErrorMsg, setImageErrorMsg] = useState("");
 
   const formik = useFormik({
     validateOnMount: true,
@@ -222,13 +222,26 @@ const DynamicForm = ({
 
       setFormFields(newItems);
     }
+    e.preventDefault();
   };
 
-  // const onChangeTitle = (e, p) => {
-  //   console.log(p, "onChangeTitle");
-  //   setLessonTitle(e.target.value);
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    // setIsSuccess(false);
 
-  // };
+    // Checking if the file type is allowed or not
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedTypes.includes(selectedFile?.type)) {
+      setIsImageError(true);
+      setImageErrorMsg("Only images are allowed.");
+      return;
+    }
+
+    setIsImageError(false);
+    // setIsSuccess(true);
+    setImageAsFile({ imageAsFile: selectedFile });
+    // updateFormField(URL?.createObjectURL(event?.target?.files?.[0]));
+  };
 
   const showNotification = (message, type, title) => {
     Store.addNotification({
@@ -260,6 +273,8 @@ const DynamicForm = ({
   };
 
   const uploadImage = async (formData, formType) => {
+    if (isImageError) return;
+
     await uploadAddLessonPlanImage(formData)
       .then(async (res) => {
         if (res?.data?.message) {
@@ -335,11 +350,15 @@ const DynamicForm = ({
 
   const submitForm = async () => {
     if (imageAsFile?.imageAsFile) {
+      if (isImageError) return;
+
       let formData = new FormData();
       formData.append("image_url", imageAsFile?.imageAsFile);
 
       await uploadImage(formData, "addForm");
     } else {
+      if (isImageError) return;
+
       let data = {
         curriculum_id: location.state.curriculum_id,
         suboption_id: location.state.suboption_id,
@@ -419,6 +438,9 @@ const DynamicForm = ({
           formFields={formFields}
           setFormFields={setFormFields}
           fieldValue={field?.value}
+          handleFileChange={handleFileChange}
+          isImageError={isImageError}
+          imageErrorMsg={imageErrorMsg}
         />
       </div>
     ));
@@ -431,6 +453,7 @@ const DynamicForm = ({
           className="btn-primary-blue"
           sx={{ mt: 2 }}
           onClick={submitForm}
+          disabled={isImageError}
         >
           Submit Form
         </Button>
@@ -448,6 +471,7 @@ const DynamicForm = ({
     return null;
   };
 
+  console.log(isImageError, "isImageError");
   return (
     <div>
       <style>{css}</style>
