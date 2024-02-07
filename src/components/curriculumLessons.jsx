@@ -864,132 +864,50 @@ export default function CurriculumoLessonPlans() {
   const renderViewData = (item, index) => {
     if (item.key_type === 1) {
       return (
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            alignItems: "start",
-            justifyContent: "flex-start",
-            margin: "10px 0",
-            wordBreak:"break-all"
-          }}
-          key={index}
-        >
-          <div
-            style={{
-              width: "15%",
-              borderRight:"solid 1px #cccccc",
-             }}
-            >
-            <p 
-            style={{
-              fontWeight:"500",
-              margin:"0",
-             }}>
-                {item?.key}:
-            </p>
-          </div>
-
-          <div
-            style={{
-              width: "85%",
-              paddingLeft: "10px",
-             }}
-          >
-          <p
-             style={{
-              fontWeight:"500",
-              margin:"0",
-             }}
-          >{item?.value}</p>
-          </div>
-        </div>
+        <tr key={index}>
+          <td style={{ border: '1px solid #dddddd', textAlign: 'left', padding: '8px' }}>{item.key}:</td>
+          <td style={{ border: '1px solid #dddddd', textAlign: 'left', padding: '8px' }}>{item.value}</td>
+        </tr>
       );
     }
-
     if (item.key_type === 2) {
       return (
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            alignItems: "start",
-            justifyContent: "flex-start",
-            margin: "10px 0",
-            wordBreak: "break-all",
-          }}
-          key={index}
-        >
-          <div
-            style={{
-              width: "15%",
-              borderRight:"solid 1px #cccccc",
-             }}
-            >
-              <p
-               style={{
-              fontWeight:"500",
-              margin:"0",
-             }}
-              >{item?.key}:</p>
-            </div>
-             
-            <div
-            style={{
-              width: "85%",
-              paddingLeft: "10px",
-             }}
-            >
-
-<img
-            style={{ height: "50px", width: "50px" }}
-            src={item?.value}
-            alt=""
-          />
-            </div>
-
-         
-        </div>
+        <tr key={index}>
+          <td style={{ border: '1px solid #dddddd', textAlign: 'left', padding: '8px' }}>{item.key}:</td>
+          <td style={{ border: '1px solid #dddddd', textAlign: 'left', padding: '8px' }}>
+            <img
+              src={item.value}
+              alt=""
+              style={{ height: "50px", width: "50px" }}
+            />
+          </td>
+        </tr>
       );
     }
     if (item.key_type === 3) {
       return (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "start",
-            justifyContent: "flex-start",
-            margin: "10px 0",
-            width: "100%",
-            wordBreak: "break-all",
-          }}
-          key={index}
-        >
-          <div 
-             style={{
-              width: "15%",
-              borderRight:"solid 1px #cccccc",
-             }}
-            >
-              <p
-               style={{
-              fontWeight:"500",
-              margin:"0",
-             }}
-              >{item?.key}:</p>
-            </div>
-          
-            <div
-            style={{
-              width: "85%",
-              paddingLeft: "10px",
-             }}
-            >
-          <p dangerouslySetInnerHTML={{ __html: item?.value }} />
-          </div>
-        </div>
+        <tr key={index}>
+          <td style={{ border: '1px solid #dddddd', textAlign: 'left', padding: '8px' }}>{item.key}:</td>
+          <td style={{ border: '1px solid #dddddd', textAlign: 'left', padding: '8px' }} dangerouslySetInnerHTML={{ __html: item.value }}></td>
+        </tr>
       );
     }
+  };
+  
+
+  const TableView = ({ data }) => {
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>{data.map((item, index) => renderViewData(item, index))}</tbody>
+      </table>
+    );
   };
 
   return (
@@ -7225,24 +7143,21 @@ export default function CurriculumoLessonPlans() {
             className="fas fa-cut"
             style={{ cursor: "pointer" }}
             onClick={() => {
-              if (
-                window.confirm(
-                  "Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!"
-                )
-              ) {
-                setViewModel(false);
-              }
+              setViewModel(false);
             }}
           ></i>
         </Modal.Header>
         <Modal.Body>
-          <>
-            {ViewData &&
-              ViewData?.data?.length > 0 &&
-              ViewData?.data?.map((item, index) => {
-                return renderViewData(item, index);
-              })}
-          </>
+          <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            
+            <tbody>
+              {ViewData &&
+                ViewData.data &&
+                ViewData.data.map((item, index) => {
+                  return renderViewData(item, index);
+                })}
+            </tbody>
+          </table>
         </Modal.Body>
       </Modal>
       <Footer />

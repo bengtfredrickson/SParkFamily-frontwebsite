@@ -77,6 +77,15 @@ const css = `
     .curriculum_format .card-header.d-Fle a:hover {
         background: #eef4fc !important;
     }
+
+    // .curriculum_format .MuiBox-root .MuiTablePagination-root{
+    //   position:fixed ;
+    //   bottom:0;
+    //   }
+    .curriculum_format .MuiBox-root .MuiTablePagination-root p{
+      margin:0;
+      font-weight:400;
+    }
     `;
 export default function Curriculum() {
   const navigate = useNavigate();

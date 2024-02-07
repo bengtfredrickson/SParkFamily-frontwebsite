@@ -135,7 +135,9 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
 
   return (
     <>
-      <MRT_TableContainer table={table} />
+      <MRT_TableContainer table={table} 
+        // style={{minHeight: "93%",}}
+      />
       <TablePagination
         rowsPerPageOptions={itemsPerPageOptions}
         component="div"
@@ -144,7 +146,7 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
+        // style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
       />
     </>
   );
