@@ -56,7 +56,9 @@ const AddFieldDialog = ({
       position: editData?.position || "",
     },
     validationSchema: Yup.object({
+      type: Yup.string().required("Required"),
       label: Yup.string().required("Required"),
+      position: Yup.string().required("Required"),
     }),
 
     onSubmit: (values) => {
@@ -128,8 +130,10 @@ const AddFieldDialog = ({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.label && Boolean(formik.errors.label)}
-              helperText={formik.touched.label && formik.errors.label}
             />
+            {formik.touched.label && (
+              <p style={{ color: "red" }}>{formik.errors.label}</p>
+            )}
           </div>
           <div
             style={{
@@ -151,6 +155,8 @@ const AddFieldDialog = ({
                 value={formik.values.type}
                 label="Type"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.type && Boolean(formik.errors.type)}
               >
                 {fieldTypes.map((option, index) => (
                   <MenuItem key={index} value={option.value}>
@@ -158,6 +164,9 @@ const AddFieldDialog = ({
                   </MenuItem>
                 ))}
               </Select>
+              {formik.touched.type && (
+                <p style={{ color: "red" }}>{formik.errors.type}</p>
+              )}
             </div>
             <div
               style={{
@@ -175,6 +184,10 @@ const AddFieldDialog = ({
                 value={formik.values.position}
                 label="Position"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.position && Boolean(formik.errors.position)
+                }
               >
                 {names.map((option, index) => (
                   <MenuItem key={index} value={option.value}>
@@ -182,6 +195,9 @@ const AddFieldDialog = ({
                   </MenuItem>
                 ))}
               </Select>
+              {formik.touched.position && (
+                <p style={{ color: "red" }}>{formik.errors.position}</p>
+              )}
             </div>
           </div>
 
@@ -191,7 +207,7 @@ const AddFieldDialog = ({
             variant="contained"
             fullWidth
             type="submit"
-            disabled={!formik.isValid && !lessonTitle}
+            disabled={formik.isValid === false || !lessonTitle}
           >
             Submit
           </Button>

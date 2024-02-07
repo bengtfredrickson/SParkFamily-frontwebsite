@@ -471,7 +471,6 @@ const DynamicForm = ({
     return null;
   };
 
-  console.log(isImageError, "isImageError");
   return (
     <div>
       <style>{css}</style>
@@ -496,9 +495,12 @@ const DynamicForm = ({
             error={
               formik.touched.lessonTitle && Boolean(formik.errors.lessonTitle)
             }
-            helperText={formik.touched.lessonTitle && formik.errors.lessonTitle}
+            // helperText={formik.touched.lessonTitle && formik.errors.lessonTitle}
           />
         </>
+        {formik.touched.lessonTitle && (
+          <p style={{ color: "red" }}>{formik.errors.lessonTitle}</p>
+        )}
       </div>
 
       <Button
