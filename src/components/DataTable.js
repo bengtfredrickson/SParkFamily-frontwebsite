@@ -146,7 +146,7 @@ const DataTable = ({ tableData, onDelete, handleShow }) => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        // style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
+        style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
       />
     </>
   );
