@@ -865,16 +865,46 @@ export default function CurriculumoLessonPlans() {
     if (item.key_type === 1) {
       return (
         <tr key={index}>
-          <td style={{ border: '2px solid #dddddd', textAlign: 'left', padding: '8px',  }}><span style={{fontWeight:'500'}}>{item.key}:</span></td>
-          <td style={{ border: '2px solid #dddddd', textAlign: 'left', padding: '8px' }}>{item.value}</td>
+          <td
+            style={{
+              border: "2px solid #dddddd",
+              textAlign: "left",
+              padding: "8px",
+            }}
+          >
+            <span style={{ fontWeight: "500" }}>{item.key}:</span>
+          </td>
+          <td
+            style={{
+              border: "2px solid #dddddd",
+              textAlign: "left",
+              padding: "8px",
+            }}
+          >
+            {item.value}
+          </td>
         </tr>
       );
     }
     if (item.key_type === 2) {
       return (
         <tr key={index}>
-          <td style={{ border: '2px solid #dddddd', textAlign: 'left', padding: '8px', }}><span style={{fontWeight:'500'}}>{item.key}:</span></td>
-          <td style={{ border: '2px solid #dddddd', textAlign: 'left', padding: '8px' }}>
+          <td
+            style={{
+              border: "2px solid #dddddd",
+              textAlign: "left",
+              padding: "8px",
+            }}
+          >
+            <span style={{ fontWeight: "500" }}>{item.key}:</span>
+          </td>
+          <td
+            style={{
+              border: "2px solid #dddddd",
+              textAlign: "left",
+              padding: "8px",
+            }}
+          >
             <img
               src={item.value}
               alt=""
@@ -887,13 +917,27 @@ export default function CurriculumoLessonPlans() {
     if (item.key_type === 3) {
       return (
         <tr key={index}>
-          <td style={{ border: '2px solid #dddddd', textAlign: 'left', padding: '8px', }}><span style={{fontWeight:'500'}}>{item.key}:</span></td>
-          <td style={{ border: '2px solid #dddddd', textAlign: 'left', padding: '8px' }} dangerouslySetInnerHTML={{ __html: item.value }}></td>
+          <td
+            style={{
+              border: "2px solid #dddddd",
+              textAlign: "left",
+              padding: "8px",
+            }}
+          >
+            <span style={{ fontWeight: "500" }}>{item.key}:</span>
+          </td>
+          <td
+            style={{
+              border: "2px solid #dddddd",
+              textAlign: "left",
+              padding: "8px",
+            }}
+            dangerouslySetInnerHTML={{ __html: item.value }}
+          ></td>
         </tr>
       );
     }
   };
-  
 
   const TableView = ({ data }) => {
     return (
@@ -7149,7 +7193,6 @@ export default function CurriculumoLessonPlans() {
         </Modal.Header>
         <Modal.Body>
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
-            
             <tbody>
               {ViewData &&
                 ViewData.data &&
