@@ -94,10 +94,12 @@ const DynamicForm = ({
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
   const [imageAsFile, setImageAsFile] = useState({});
-  // const [lessonTitle, setLessonTitle] = useState(dynamicFormEditData?.title);
   const [editorHtml, setEditorHtml] = useState();
   const [fieldPosition, setFieldPosition] = useState("");
-  // const [isError, setIsError] = useState(false);
+  const [isImageError, setIsImageError] = useState(false);
+  const [imageErrorMsg, setImageErrorMsg] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [positionCounts, setPositionCounts] = useState({});
 
   const formik = useFormik({
     validateOnMount: true,
@@ -116,8 +118,16 @@ const DynamicForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (formFields?.length > 0) {
+      const counts = getPositionCount(formFields);
+      setPositionCounts(counts);
+    }
+  }, [formFields]);
+
   const openAddFieldDialog = () => {
     setOpenDialog(true);
+    // window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const closeAddFieldDialog = () => {
@@ -126,10 +136,12 @@ const DynamicForm = ({
     setEditData({});
     setFieldPosition("");
     // setIsError(false);
+    setEditKey();
   };
 
   const onEditField = (index) => {
-    let data = formFields?.[index];
+    let data = [...formFields];
+    data = data?.[index];
 
     setEditData(data);
     setEditKey(index);
@@ -138,7 +150,7 @@ const DynamicForm = ({
   };
 
   const onEditSave = (values) => {
-    const { type, label } = values;
+    const { type, label, position } = values;
 
     let addData = [...formFields];
 
@@ -146,7 +158,8 @@ const DynamicForm = ({
       fieldType: type,
       fieldLabel: label,
       value: formFields?.[editKey]?.value,
-      position: formFields?.[editKey]?.position,
+      position: position,
+      // position: formFields?.[editKey]?.position,
     };
 
     setFormFields([...addData]);
@@ -222,13 +235,26 @@ const DynamicForm = ({
 
       setFormFields(newItems);
     }
+    e.preventDefault();
   };
 
-  // const onChangeTitle = (e, p) => {
-  //   console.log(p, "onChangeTitle");
-  //   setLessonTitle(e.target.value);
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    // setIsSuccess(false);
 
-  // };
+    // Checking if the file type is allowed or not
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedTypes.includes(selectedFile?.type)) {
+      setIsImageError(true);
+      setImageErrorMsg("Only images are allowed.");
+      return;
+    }
+
+    setIsImageError(false);
+    // setIsSuccess(true);
+    setImageAsFile({ imageAsFile: selectedFile });
+    // updateFormField(URL?.createObjectURL(event?.target?.files?.[0]));
+  };
 
   const showNotification = (message, type, title) => {
     Store.addNotification({
@@ -260,6 +286,8 @@ const DynamicForm = ({
   };
 
   const uploadImage = async (formData, formType) => {
+    if (isImageError) return;
+
     await uploadAddLessonPlanImage(formData)
       .then(async (res) => {
         if (res?.data?.message) {
@@ -333,13 +361,94 @@ const DynamicForm = ({
       });
   };
 
+  // const submitForm = async () => {
+  //   if (imageAsFile?.imageAsFile) {
+  //     if (isImageError) return;
+
+  //     let formData = new FormData();
+  //     formData.append("image_url", imageAsFile?.imageAsFile);
+
+  //     await uploadImage(formData, "addForm");
+  //   } else {
+  //     if (isImageError) return;
+
+  //     let data = {
+  //       curriculum_id: location.state.curriculum_id,
+  //       suboption_id: location.state.suboption_id,
+  //       title: formik?.values?.lessonTitle,
+
+  //       data: formFields.map((item, i) => ({
+  //         key: item?.fieldLabel,
+  //         value:
+  //           item?.fieldType === "text"
+  //             ? item.value
+  //             : item?.fieldType === "textArea"
+  //             ? item.value
+  //             : item.value,
+  //         key_type:
+  //           item?.fieldType === "text"
+  //             ? 1
+  //             : item?.fieldType === "image"
+  //             ? 2
+  //             : 3,
+  //         order: i + 1,
+  //         position: item.position,
+  //       })),
+  //     };
+
+  //     let updateData = {
+  //       id: lessonPlanData?.id,
+  //       lesson_id: dynamicFormEditData?.id,
+  //       title: formik?.values?.lessonTitle,
+
+  //       lesson_data: formFields?.map((item, i) => ({
+  //         key: item?.fieldLabel,
+  //         value: item.value,
+  //         key_type:
+  //           item?.fieldType === "text"
+  //             ? 1
+  //             : item?.fieldType === "image"
+  //             ? 2
+  //             : 3,
+  //         order: i + 1,
+  //         position: item.position,
+  //       })),
+  //     };
+
+  //     dynamicFormEditData?.id
+  //       ? await updateCustomLessonPlan(updateData)
+  //           .then(async (res) => {
+  //             await getCustomLessons();
+  //             showNotification(res?.data?.message, "success", "success");
+  //             await closeModal();
+  //           })
+  //           .catch((err) => {
+  //             console.log(err);
+  //           })
+  //       : await addCustomLesson(data);
+  //   }
+  // };
+
   const submitForm = async () => {
+    // Disable the button to prevent multiple submissions
+    setIsButtonDisabled(true);
+
     if (imageAsFile?.imageAsFile) {
+      if (isImageError) {
+        setIsButtonDisabled(false); // Enable the button
+        return;
+      }
+
       let formData = new FormData();
       formData.append("image_url", imageAsFile?.imageAsFile);
 
       await uploadImage(formData, "addForm");
     } else {
+      if (isImageError) {
+        setIsButtonDisabled(false); // Enable the button
+        return;
+      }
+
       let data = {
         curriculum_id: location.state.curriculum_id,
         suboption_id: location.state.suboption_id,
@@ -383,45 +492,94 @@ const DynamicForm = ({
         })),
       };
 
-      dynamicFormEditData?.id
-        ? await updateCustomLessonPlan(updateData)
-            .then(async (res) => {
-              await getCustomLessons();
-              showNotification(res?.data?.message, "success", "success");
-              await closeModal();
-            })
-            .catch((err) => {
-              console.log(err);
-            })
-        : await addCustomLesson(data);
+      try {
+        if (dynamicFormEditData?.id) {
+          const res = await updateCustomLessonPlan(updateData);
+          await getCustomLessons();
+          showNotification(res?.data?.message, "success", "success");
+          await closeModal();
+        } else {
+          await addCustomLesson(data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
+
+    // Enable the button after 3 seconds
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 3000);
+  };
+
+  const getPositionCount = (array) => {
+    // Initialize an object to store counts for each position
+    const positionCounts = {};
+
+    // Loop through the array of objects
+    array.forEach((item) => {
+      // Extract the position value
+      const position = item.position;
+
+      // If the position is already in the counts object, increment its count
+      if (positionCounts[position]) {
+        positionCounts[position]++;
+      } else {
+        // Otherwise, initialize its count to 1
+        positionCounts[position] = 1;
+      }
+    });
+
+    return positionCounts;
   };
 
   const renderAddFormFields = () => {
-    return formFields?.map((field, index) => (
-      <div
-        key={index}
-        className={`item ${field === draggingItem ? "dragging" : ""}`}
-        draggable="true"
-        onDragStart={(e) => handleDragStart(e, field)}
-        onDragEnd={handleDragEnd}
-        onDragOver={handleDragOver}
-        onDrop={(e) => handleDrop(e, field)}
-      >
-        <RenderFormField
-          onEditField={() => onEditField(index)}
-          onDeleteField={onDeleteField}
-          field={field}
-          index={index}
-          setImageAsFile={setImageAsFile}
-          editorHtml={editorHtml}
-          setEditorHtml={setEditorHtml}
-          formFields={formFields}
-          setFormFields={setFormFields}
-          fieldValue={field?.value}
-        />
-      </div>
-    ));
+    return formFields?.map((field, index) => {
+      if (index === editKey) {
+        return (
+          <AddFieldPopper
+            open={openDialog}
+            onClose={closeAddFieldDialog}
+            addNewField={addNewField}
+            isEdit={isEdit}
+            onEditSave={onEditSave}
+            editData={editData}
+            setFieldPosition={setFieldPosition}
+            fieldPosition={fieldPosition}
+            lessonTitle={formik?.values?.lessonTitle}
+            positionCounts={positionCounts}
+          />
+        );
+      } else {
+        return (
+          <div
+            key={index}
+            className={`item ${field === draggingItem ? "dragging" : ""}`}
+            draggable="true"
+            onDragStart={(e) => handleDragStart(e, field)}
+            onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, field)}
+          >
+            <RenderFormField
+              onEditField={() => onEditField(index)}
+              onDeleteField={onDeleteField}
+              field={field}
+              index={index}
+              setImageAsFile={setImageAsFile}
+              editorHtml={editorHtml}
+              setEditorHtml={setEditorHtml}
+              formFields={formFields}
+              setFormFields={setFormFields}
+              fieldValue={field?.value}
+              handleFileChange={handleFileChange}
+              isImageError={isImageError}
+              imageErrorMsg={imageErrorMsg}
+            />
+          </div>
+        );
+      }
+    });
   };
 
   const renderSubmitFormButton = () => {
@@ -431,8 +589,9 @@ const DynamicForm = ({
           className="btn-primary-blue"
           sx={{ mt: 2 }}
           onClick={submitForm}
+          disabled={isButtonDisabled || isImageError}
         >
-          Submit Form
+          {isButtonDisabled ? "Please Wait..." : "Submit Form"}
         </Button>
       );
     }
@@ -447,7 +606,7 @@ const DynamicForm = ({
 
     return null;
   };
-
+  console.log(formFields, "formFields");
   return (
     <div>
       <style>{css}</style>
@@ -472,9 +631,12 @@ const DynamicForm = ({
             error={
               formik.touched.lessonTitle && Boolean(formik.errors.lessonTitle)
             }
-            helperText={formik.touched.lessonTitle && formik.errors.lessonTitle}
+            // helperText={formik.touched.lessonTitle && formik.errors.lessonTitle}
           />
         </>
+        {formik.touched.lessonTitle && (
+          <p style={{ color: "red" }}>{formik.errors.lessonTitle}</p>
+        )}
       </div>
 
       <Button
@@ -485,7 +647,7 @@ const DynamicForm = ({
         {isEdit ? "Edit Item" : "Add New Item"}
       </Button>
 
-      {openDialog && (
+      {!isEdit && openDialog && (
         <AddFieldPopper
           open={openDialog}
           onClose={closeAddFieldDialog}
@@ -496,6 +658,7 @@ const DynamicForm = ({
           setFieldPosition={setFieldPosition}
           fieldPosition={fieldPosition}
           lessonTitle={formik?.values?.lessonTitle}
+          positionCounts={positionCounts}
         />
       )}
 

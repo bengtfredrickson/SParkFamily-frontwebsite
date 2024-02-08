@@ -7,7 +7,7 @@ import {
   Select,
 } from "@mui/material";
 import * as Yup from "yup";
-import React from "react";
+import React, { useMemo } from "react";
 import { useFormik } from "formik";
 
 const AddFieldDialog = ({
@@ -17,6 +17,7 @@ const AddFieldDialog = ({
   onEditSave,
   editData,
   lessonTitle,
+  positionCounts,
 }) => {
   const fieldTypes = [
     {
@@ -33,30 +34,25 @@ const AddFieldDialog = ({
     },
   ];
 
-  const names = [
-    {
-      value: "top",
-      label: "top",
-    },
-    {
-      value: "middle",
-      label: "middle",
-    },
-    {
-      value: "bottom",
-      label: "bottom",
-    },
-  ];
-
-  const formik = useFormik({
-    validateOnMount: true,
-    initialValues: {
+  const initialValue = useMemo(() => {
+    return {
       type: editData?.fieldType || "",
       label: editData?.fieldLabel || "",
-      position: editData?.position || "",
-    },
+      position:
+        (editData?.fieldType === "image" ? "middle" : editData?.position) || "",
+    };
+  }, [editData]);
+
+  console.log(editData, "editData");
+
+  console.log(initialValue, "initialValue");
+  const formik = useFormik({
+    validateOnMount: true,
+    initialValues: { ...initialValue },
     validationSchema: Yup.object({
+      type: Yup.string().required("Required"),
       label: Yup.string().required("Required"),
+      position: Yup.string().required("Required"),
     }),
 
     onSubmit: (values) => {
@@ -65,6 +61,30 @@ const AddFieldDialog = ({
     },
     enableReinitialize: true,
   });
+
+  const positionNames = useMemo(() => {
+    let data = [
+      {
+        value: "top",
+        label: "top",
+        disabled: positionCounts?.top === 3,
+      },
+      {
+        value: "middle",
+        label: "middle",
+        disabled: false,
+      },
+      {
+        value: "bottom",
+        label: "bottom",
+        disabled: positionCounts?.bottom === 3,
+      },
+    ];
+
+    return data;
+  }, [positionCounts]);
+
+  // console.log(positionNames, "positionNames");
 
   return (
     <Box
@@ -91,26 +111,6 @@ const AddFieldDialog = ({
         }}
       >
         <form onSubmit={formik.handleSubmit}>
-          {/* <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-            }}
-          >
-            <InputLabel id="name">Add Title of the field</InputLabel>
-            <TextField
-              sx={{ marginTop: 1, marginBottom: 1 }}
-              fullWidth
-              id="title"
-              name="title"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.title && Boolean(formik.errors.title)}
-              helperText={formik.touched.title && formik.errors.title}
-            />
-          </div> */}
           <div
             style={{
               display: "flex",
@@ -128,8 +128,10 @@ const AddFieldDialog = ({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.label && Boolean(formik.errors.label)}
-              helperText={formik.touched.label && formik.errors.label}
             />
+            {formik.touched.label && (
+              <p style={{ color: "red" }}>{formik.errors.label}</p>
+            )}
           </div>
           <div
             style={{
@@ -151,6 +153,8 @@ const AddFieldDialog = ({
                 value={formik.values.type}
                 label="Type"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.type && Boolean(formik.errors.type)}
               >
                 {fieldTypes.map((option, index) => (
                   <MenuItem key={index} value={option.value}>
@@ -158,6 +162,9 @@ const AddFieldDialog = ({
                   </MenuItem>
                 ))}
               </Select>
+              {formik.touched.type && (
+                <p style={{ color: "red" }}>{formik.errors.type}</p>
+              )}
             </div>
             <div
               style={{
@@ -175,13 +182,28 @@ const AddFieldDialog = ({
                 value={formik.values.position}
                 label="Position"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.position && Boolean(formik.errors.position)
+                }
               >
-                {names.map((option, index) => (
-                  <MenuItem key={index} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
+                {formik.values.type == "image" ? (
+                  <MenuItem value={"middle"}>{"middle"}</MenuItem>
+                ) : (
+                  positionNames.map((option, index) => (
+                    <MenuItem
+                      key={index}
+                      value={option.value}
+                      disabled={option?.disabled}
+                    >
+                      {option.label}
+                    </MenuItem>
+                  ))
+                )}
               </Select>
+              {formik.touched.position && (
+                <p style={{ color: "red" }}>{formik.errors.position}</p>
+              )}
             </div>
           </div>
 
@@ -191,7 +213,7 @@ const AddFieldDialog = ({
             variant="contained"
             fullWidth
             type="submit"
-            disabled={!formik.isValid && !lessonTitle}
+            disabled={formik.isValid === false || !lessonTitle}
           >
             Submit
           </Button>
@@ -201,4 +223,4 @@ const AddFieldDialog = ({
   );
 };
 
-export default AddFieldDialog;
+export default React.memo(AddFieldDialog);
