@@ -89,7 +89,7 @@ export default function CurriculumSubUnits() {
     const handleClose = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setShowEditSubunits(false);
+            setShowEditSubunits(false);
         }
     };
     const handleShow = (e) => {
@@ -112,7 +112,7 @@ export default function CurriculumSubUnits() {
     const handleClose1 = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setShowAddSubunits(false);
+            setShowAddSubunits(false);
         }
     };
     const handleShow1 = (value) => {
@@ -311,7 +311,7 @@ export default function CurriculumSubUnits() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditSubunits}  keyboard={false}>
+            <Modal show={showEditSubunits} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -333,7 +333,10 @@ export default function CurriculumSubUnits() {
 
                         validationSchema={Yup.object({
                             subunit_name: Yup.string().required("Required"),
-                            title: Yup.string().required("Required")
+                            title: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                            )
 
                         })}
                         onSubmit={(values, { resetForm }) => {
@@ -440,7 +443,7 @@ export default function CurriculumSubUnits() {
 
 
             {/* Modal Add Subunits */}
-            <Modal show={showAddSubunits}  keyboard={false}>
+            <Modal show={showAddSubunits} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Sub Section</Modal.Title>
                     <i
@@ -461,7 +464,10 @@ export default function CurriculumSubUnits() {
 
                         validationSchema={Yup.object({
                             subunit_name: Yup.string().required("Required"),
-                            title: Yup.string().required("Required")
+                            title: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                              )
                         })}
 
                         onSubmit={(values, { resetForm }) => {

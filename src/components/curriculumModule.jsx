@@ -37,7 +37,7 @@ export default function CurriculumModules() {
     const handleClose = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setShowEditModules(false);
+            setShowEditModules(false);
         }
     };
     const handleShow = (e) => {
@@ -60,7 +60,7 @@ export default function CurriculumModules() {
     const handleClose1 = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setShowAddModules(false);
+            setShowAddModules(false);
         }
     };
     const handleShow1 = () => {
@@ -247,7 +247,7 @@ export default function CurriculumModules() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditModules}  keyboard={false}>
+            <Modal show={showEditModules} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -266,7 +266,10 @@ export default function CurriculumModules() {
                         }}
 
                         validationSchema={Yup.object({
-                            module_name: Yup.string().required("Required")
+                            module_name: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                            )
 
                         })}
                         onSubmit={(values, { resetForm }) => {
@@ -365,7 +368,7 @@ export default function CurriculumModules() {
 
 
             {/* Modal Add Modules */}
-            <Modal show={showAddModules}  keyboard={false}>
+            <Modal show={showAddModules} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Section</Modal.Title>
                     <i
@@ -383,7 +386,10 @@ export default function CurriculumModules() {
                         }}
 
                         validationSchema={Yup.object({
-                            module_name: Yup.string().required("Required")
+                            module_name: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                            )
                         })}
 
                         onSubmit={(values, { resetForm }) => {

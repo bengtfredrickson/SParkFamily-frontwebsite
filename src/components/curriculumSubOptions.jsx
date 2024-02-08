@@ -48,14 +48,14 @@ export default function CurriculumoSubOptions() {
     const handleClose = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setShowEditSubOptions(false);
-        setPdfUrl("")
-        setPdf({})
-        setAudio({})
-        setVideo({})
-        setAudioUrl("")
-        setVideoUrl("")
-        setState(false)
+            setShowEditSubOptions(false);
+            setPdfUrl("")
+            setPdf({})
+            setAudio({})
+            setVideo({})
+            setAudioUrl("")
+            setVideoUrl("")
+            setState(false)
         }
 
     };
@@ -118,16 +118,16 @@ export default function CurriculumoSubOptions() {
     const handleClose1 = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setShowAddSubOptions(false);
-        setPdfUrl("")
-        setPdf({})
-        setAudio({})
-        setVideo({})
-        setAudioUrl("")
-        setVideoUrl("")
-        setState(false)
-        setState1(false)
-        setState2(false)
+            setShowAddSubOptions(false);
+            setPdfUrl("")
+            setPdf({})
+            setAudio({})
+            setVideo({})
+            setAudioUrl("")
+            setVideoUrl("")
+            setState(false)
+            setState1(false)
+            setState2(false)
         }
     };
     const handleShow1 = () => {
@@ -137,10 +137,10 @@ export default function CurriculumoSubOptions() {
     const handleClose2 = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setshowPreview(false);
-        setState(false)
-        setState1(false)
-        setState2(false)
+            setshowPreview(false);
+            setState(false)
+            setState1(false)
+            setState2(false)
         }
     };
     const handleShow2 = (e, flag) => {
@@ -373,7 +373,7 @@ export default function CurriculumoSubOptions() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditSubOptions}  keyboard={false}>
+            <Modal show={showEditSubOptions} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -400,7 +400,10 @@ export default function CurriculumoSubOptions() {
                         }}
 
                         validationSchema={Yup.object({
-                            suboption_name: Yup.string().required("Required"),
+                            suboption_name: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                            ),
                             audio_title: Yup.string(),
                             video_title: Yup.string(),
                             pdf_title: Yup.string()
@@ -656,7 +659,7 @@ export default function CurriculumoSubOptions() {
 
 
             {/* Modal Add SubOptions */}
-            <Modal show={showAddSubOptions}  keyboard={false}>
+            <Modal show={showAddSubOptions} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Lesson Material</Modal.Title>
                     <i
@@ -684,7 +687,10 @@ export default function CurriculumoSubOptions() {
                         }}
 
                         validationSchema={Yup.object({
-                            suboption_name: Yup.string().required("Required"),
+                            suboption_name: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                            ),
                             audio_title: Yup.string(),
                             video_title: Yup.string(),
                             pdf_title: Yup.string()
@@ -740,69 +746,41 @@ export default function CurriculumoSubOptions() {
 
                                 } else {
                                     add_suboption(formData)
-                                    .then((res) => {
-                                        Store.addNotification({
-                                            title: "Success",
-                                            message: res?.data?.message,
-                                            type: "success",
-                                            insert: "top",
-                                            container: "top-right",
-                                            className: "rnc__notification-container--top-right",
-                                            animationIn: ["animate__animated", "animate__fadeIn"],
-                                            animationOut: [
-                                                "animate__animated",
-                                                "animate__fadeOut",
-                                            ],
-                                            dismiss: {
-                                                duration: 5000,
-                                                onScreen: true,
-                                            },
-                                        });
-                                        resetForm({ values: "" });
-
-                                        get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
-                                            then((res) => {
-                                                console.log("=======>", res.data.result)
-
-                                                setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
-                                                setLoader(false);
-
-                                            }).catch((err) => {
-                                                console.log(err);
-                                            })
-
-                                        setShowAddSubOptions(false);
-                                        setbutton(false);
-                                        setPdfUrl("")
-                                        setPdf({})
-                                        setAudio({})
-                                        setVideo({})
-                                        setAudioUrl("")
-                                        setVideoUrl("")
-                                        setState(false)
-                                        setState1(false)
-                                        setState2(false)
-                                    })
-                                    .catch((err) => {
-
-                                        if (err) {
+                                        .then((res) => {
                                             Store.addNotification({
-                                                title: "Error!",
-                                                message: err?.result?.data?.message,
-                                                type: "danger",
+                                                title: "Success",
+                                                message: res?.data?.message,
+                                                type: "success",
                                                 insert: "top",
                                                 container: "top-right",
                                                 className: "rnc__notification-container--top-right",
                                                 animationIn: ["animate__animated", "animate__fadeIn"],
-                                                animationOut: ["animate__animated", "animate__fadeOut"],
+                                                animationOut: [
+                                                    "animate__animated",
+                                                    "animate__fadeOut",
+                                                ],
                                                 dismiss: {
                                                     duration: 5000,
                                                     onScreen: true,
                                                 },
                                             });
+                                            resetForm({ values: "" });
+
+                                            get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
+                                                then((res) => {
+                                                    console.log("=======>", res.data.result)
+
+                                                    setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                                    setLoader(false);
+
+                                                }).catch((err) => {
+                                                    console.log(err);
+                                                })
+
+                                            setShowAddSubOptions(false);
                                             setbutton(false);
-                                            setPdf({})
                                             setPdfUrl("")
+                                            setPdf({})
                                             setAudio({})
                                             setVideo({})
                                             setAudioUrl("")
@@ -810,8 +788,36 @@ export default function CurriculumoSubOptions() {
                                             setState(false)
                                             setState1(false)
                                             setState2(false)
-                                        }
-                                    });
+                                        })
+                                        .catch((err) => {
+
+                                            if (err) {
+                                                Store.addNotification({
+                                                    title: "Error!",
+                                                    message: err?.result?.data?.message,
+                                                    type: "danger",
+                                                    insert: "top",
+                                                    container: "top-right",
+                                                    className: "rnc__notification-container--top-right",
+                                                    animationIn: ["animate__animated", "animate__fadeIn"],
+                                                    animationOut: ["animate__animated", "animate__fadeOut"],
+                                                    dismiss: {
+                                                        duration: 5000,
+                                                        onScreen: true,
+                                                    },
+                                                });
+                                                setbutton(false);
+                                                setPdf({})
+                                                setPdfUrl("")
+                                                setAudio({})
+                                                setVideo({})
+                                                setAudioUrl("")
+                                                setVideoUrl("")
+                                                setState(false)
+                                                setState1(false)
+                                                setState2(false)
+                                            }
+                                        });
                                 }
 
 
@@ -1001,7 +1007,7 @@ export default function CurriculumoSubOptions() {
             </Modal>
             {/* Ends Add SubOptions */}
             {/* Modal Add Options */}
-            <Modal show={showPreview}  keyboard={false}>
+            <Modal show={showPreview} keyboard={false}>
                 <Modal.Header>
                     <i
                         className="fas fa-cut"

@@ -416,7 +416,7 @@ export default function CurriculumUnits() {
                 .required("Required")
                 .matches(
                   /\S+/,
-                  "Name must contain at least one non-space character"
+                  "Field must contain at least one non-space character"
                 ),
             })}
             onSubmit={(values, { resetForm }) => {

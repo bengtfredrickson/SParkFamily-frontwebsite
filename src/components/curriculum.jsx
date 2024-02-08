@@ -436,10 +436,22 @@ export default function Curriculum() {
                   /\S+/,
                   "Name must contain at least one non-space character"
                 ),
-              nav_text: Yup.string().required("Required"),
-              body_text: Yup.string().required("Required"),
-              primary_color: Yup.string().required("Required"),
-              secondary_color: Yup.string().required("Required"),
+              nav_text: Yup.string().required("Required").matches(
+                /\S+/,
+                "Field should contain at least one non-space character"
+              ),
+              body_text: Yup.string().required("Required").matches(
+                /\S+/,
+                "Field should contain at least one non-space character"
+              ),
+              primary_color: Yup.string().required("Required").matches(
+                /\S+/,
+                "Field should contain at least one non-space character"
+              ),
+              secondary_color: Yup.string().required("Required").matches(
+                /\S+/,
+                "Field should contain at least one non-space character"
+              ),
             })}
             onSubmit={(values, { resetForm }) => {
               setbutton(true);
@@ -633,10 +645,22 @@ export default function Curriculum() {
               module_id: "",
             }}
             validationSchema={Yup.object({
-              name: Yup.string().required("Required"),
-              body_text: Yup.string().required("Required"),
-              primary_color: Yup.string().required("Required"),
-              secondary_color: Yup.string().required("Required"),
+              name: Yup.string().required("Required") .matches(
+                /\S+/,
+                "Field should contain at least one non-space character"
+              ),
+              body_text: Yup.string().required("Required") .matches(
+                /\S+/,
+                "Field should contain at least one non-space character"
+              ),
+              primary_color: Yup.string().required("Required").matches(
+                /\S+/,
+                "Field should contain at least one non-space character"
+              ),
+              secondary_color: Yup.string().required("Required").matches(
+                /\S+/,
+                "Field should contain at least one non-space character"
+              )
             })}
             onSubmit={(values, { resetForm }) => {
               let formData = new FormData();

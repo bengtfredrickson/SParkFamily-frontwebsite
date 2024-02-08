@@ -49,16 +49,16 @@ export default function CurriculumoOptions() {
     const handleClose = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setShowEditOptions(false);
-        setAudio({})
-        setVideo({})
-        setPdf({})
-        setAudioUrl("")
-        setVideoUrl("")
-        setPdfUrl("")
-        setState(false)
-        setState1(false)
-        setState2(false)
+            setShowEditOptions(false);
+            setAudio({})
+            setVideo({})
+            setPdf({})
+            setAudioUrl("")
+            setVideoUrl("")
+            setPdfUrl("")
+            setState(false)
+            setState1(false)
+            setState2(false)
         }
     };
     const handleShow = (e) => {
@@ -123,10 +123,10 @@ export default function CurriculumoOptions() {
     const handleClose2 = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setshowPreview(false);
-        setState(false)
-        setState1(false)
-        setState2(false)
+            setshowPreview(false);
+            setState(false)
+            setState1(false)
+            setState2(false)
         }
 
     };
@@ -147,16 +147,16 @@ export default function CurriculumoOptions() {
     const handleClose1 = () => {
         if (window.confirm("Are you sure you want to leave the current page?\nChanges will not be saved until you submit the form!")) {
 
-        setShowAddOptions(false);
-        setAudio({})
-        setVideo({})
-        setPdf({})
-        setAudioUrl("")
-        setVideoUrl("")
-        setPdfUrl("")
-        setState(false)
-        setState1(false)
-        setState2(false)
+            setShowAddOptions(false);
+            setAudio({})
+            setVideo({})
+            setPdf({})
+            setAudioUrl("")
+            setVideoUrl("")
+            setPdfUrl("")
+            setState(false)
+            setState1(false)
+            setState2(false)
         }
     };
     const handleShow1 = () => {
@@ -382,7 +382,7 @@ export default function CurriculumoOptions() {
             {/*  Modal Edit*/}
 
 
-            <Modal show={showEditOptions}  keyboard={false}>
+            <Modal show={showEditOptions} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Edit</Modal.Title>
                     <i
@@ -407,7 +407,10 @@ export default function CurriculumoOptions() {
                         }}
 
                         validationSchema={Yup.object({
-                            option_name: Yup.string().required("Required"),
+                            option_name: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                              ),
                             audio_title: Yup.string(),
                             video_title: Yup.string(),
                             pdf_title: Yup.string()
@@ -635,7 +638,7 @@ export default function CurriculumoOptions() {
 
 
             {/* Modal Add Options */}
-            <Modal show={showAddOptions}  keyboard={false}>
+            <Modal show={showAddOptions} keyboard={false}>
                 <Modal.Header>
                     <Modal.Title>Add Resources</Modal.Title>
                     <i
@@ -662,7 +665,10 @@ export default function CurriculumoOptions() {
                         }}
 
                         validationSchema={Yup.object({
-                            option_name: Yup.string().required("Required"),
+                            option_name: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                            ),
                             audio_title: Yup.string(),
                             video_title: Yup.string(),
                             pdf_title: Yup.string()
@@ -878,7 +884,7 @@ export default function CurriculumoOptions() {
             </Modal >
             {/* Ends Add Options */}
 
-            <Modal Modal show={showPreview}  keyboard={false} >
+            <Modal Modal show={showPreview} keyboard={false} >
                 <Modal.Header>
                     <i
                         className="fas fa-cut"
