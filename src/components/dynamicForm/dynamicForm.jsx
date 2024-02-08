@@ -223,6 +223,7 @@ const DynamicForm = ({
   };
 
   const handleDrop = (e, targetItem) => {
+    e.preventDefault();
     if (!draggingItem) return;
 
     const currentIndex = formFields.indexOf(draggingItem);
@@ -235,7 +236,6 @@ const DynamicForm = ({
 
       setFormFields(newItems);
     }
-    e.preventDefault();
   };
 
   const handleFileChange = (event) => {
