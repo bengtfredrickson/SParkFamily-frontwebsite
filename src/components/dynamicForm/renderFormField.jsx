@@ -53,7 +53,7 @@ const RenderFormField = ({
       const data = convertHtmlToDraft(fieldValue);
 
       let prevData = [...formFields];
-      prevData[index].value = `<p>${fieldValue}</p>`;
+      prevData[index].value = `${fieldValue}`;
 
       setFormFields(prevData);
       setEditor(data);
