@@ -6,6 +6,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
+import { uploadAddLessonPlanImage } from "../../services/web/webServices";
 
 const RenderFormField = ({
   onDeleteField,
@@ -19,12 +20,16 @@ const RenderFormField = ({
   setImageAsFile,
   editFormFields,
   setEditFormFields,
-  handleFileChange,
-  imageErrorMsg,
-  isImageError,
+  imageAsFile,
+  setIsButtonDisabled,
+  // handleFileChange,
+  // imageErrorMsg,
+  // isImageError,
 }) => {
   // const [getState, setState] = useState(false);
   const [editorData, setEditor] = useState("");
+  const [isImageError, setIsImageError] = useState(false);
+  const [imageErrorMsg, setImageErrorMsg] = useState("");
 
   const convertHtmlToDraft = (data) => {
     if (data) {
@@ -94,9 +99,48 @@ const RenderFormField = ({
     updateFormField(html);
   };
 
-  const onChangeImg = (e) => {
-    handleFileChange(e);
-    updateFormField(URL?.createObjectURL(e?.target?.files?.[0]));
+  const onChangeImg = async (e) => {
+    const res = await handleFileChange(e);
+
+    if (res?.code === 200) {
+      updateFormField(res?.data);
+    }
+  };
+
+  const handleFileChange = async (event) => {
+    setIsButtonDisabled(true);
+
+    const selectedFile = event.target.files[0];
+    // setIsSuccess(false);
+
+    // Checking if the file type is allowed or not
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedTypes.includes(selectedFile?.type)) {
+      setIsImageError(true);
+      setImageErrorMsg("Only images are allowed.");
+      return;
+    }
+
+    setIsImageError(false);
+
+    let formData = new FormData();
+    formData.append("image_url", selectedFile);
+    const res = await uploadAddLessonPlanImage(formData);
+
+    if (res?.data?.result?.code === 200) {
+      setIsButtonDisabled(false);
+
+      let prevData = [...imageAsFile];
+      prevData.push(selectedFile);
+      setImageAsFile(prevData);
+
+      return res?.data?.result;
+    }
+
+    setIsButtonDisabled(false);
+    // setIsSuccess(true);
+
+    // updateFormField(URL?.createObjectURL(event?.target?.files?.[0]));
   };
 
   const renderFormField = (field, i) => {

@@ -93,11 +93,11 @@ const DynamicForm = ({
   const [editKey, setEditKey] = useState();
   const [isEdit, setIsEdit] = useState(false);
   const [draggingItem, setDraggingItem] = useState(null);
-  const [imageAsFile, setImageAsFile] = useState({});
+  const [imageAsFile, setImageAsFile] = useState([]);
   const [editorHtml, setEditorHtml] = useState();
   const [fieldPosition, setFieldPosition] = useState("");
-  const [isImageError, setIsImageError] = useState(false);
-  const [imageErrorMsg, setImageErrorMsg] = useState("");
+  // const [isImageError, setIsImageError] = useState(false);
+  // const [imageErrorMsg, setImageErrorMsg] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [positionCounts, setPositionCounts] = useState({});
 
@@ -238,23 +238,33 @@ const DynamicForm = ({
     }
   };
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    // setIsSuccess(false);
+  // const handleFileChange = async (event) => {
+  //   const selectedFile = event.target.files[0];
+  //   // setIsSuccess(false);
 
-    // Checking if the file type is allowed or not
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    if (!allowedTypes.includes(selectedFile?.type)) {
-      setIsImageError(true);
-      setImageErrorMsg("Only images are allowed.");
-      return;
-    }
+  //   // Checking if the file type is allowed or not
+  //   const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  //   if (!allowedTypes.includes(selectedFile?.type)) {
+  //     setIsImageError(true);
+  //     setImageErrorMsg("Only images are allowed.");
+  //     return;
+  //   }
 
-    setIsImageError(false);
-    // setIsSuccess(true);
-    setImageAsFile({ imageAsFile: selectedFile });
-    // updateFormField(URL?.createObjectURL(event?.target?.files?.[0]));
-  };
+  //   setIsImageError(false);
+  //   let formData = new FormData();
+  //   formData.append("image_url", selectedFile);
+  //   const res = await uploadAddLessonPlanImage(formData);
+  //   if (res?.data?.result?.code === 200) {
+  //     let prevData = [...imageAsFile];
+  //     prevData.push(selectedFile);
+  //     setImageAsFile(prevData);
+
+  //     return res?.data?.result;
+  //   }
+  //   // setIsSuccess(true);
+
+  //   // updateFormField(URL?.createObjectURL(event?.target?.files?.[0]));
+  // };
 
   const showNotification = (message, type, title) => {
     Store.addNotification({
@@ -273,93 +283,93 @@ const DynamicForm = ({
     });
   };
 
-  const addCustomLesson = async (data) => {
-    await addCustomLessonPlan(data)
-      .then(async (res) => {
-        await getCustomLessons();
-        await closeModal();
-        showNotification(res.data.message, "success", "success");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const addCustomLesson = async (data) => {
+  //   await addCustomLessonPlan(data)
+  //     .then(async (res) => {
+  //       await getCustomLessons();
+  //       await closeModal();
+  //       showNotification(res.data.message, "success", "success");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
-  const uploadImage = async (formData, formType) => {
-    if (isImageError) return;
+  // const uploadImage = async (formData, formType) => {
+  //   if (isImageError) return;
 
-    await uploadAddLessonPlanImage(formData)
-      .then(async (res) => {
-        if (res?.data?.message) {
-          if (formType === "addForm") {
-            if (dynamicFormEditData?.id) {
-              let data = {
-                id: lessonPlanData?.id,
-                lesson_id: dynamicFormEditData?.id,
-                title: formik?.values?.lessonTitle,
+  //   await uploadAddLessonPlanImage(formData)
+  //     .then(async (res) => {
+  //       if (res?.data?.message) {
+  //         if (formType === "addForm") {
+  //           if (dynamicFormEditData?.id) {
+  //             let data = {
+  //               id: lessonPlanData?.id,
+  //               lesson_id: dynamicFormEditData?.id,
+  //               title: formik?.values?.lessonTitle,
 
-                lesson_data: formFields?.map((item, i) => ({
-                  key: item?.fieldLabel,
-                  value:
-                    item?.fieldType === "text"
-                      ? item.value
-                      : item?.fieldType === "textArea"
-                      ? item.value
-                      : res?.data?.result?.data,
-                  key_type:
-                    item?.fieldType === "text"
-                      ? 1
-                      : item?.fieldType === "image"
-                      ? 2
-                      : 3,
-                  order: i + 1,
-                  position: item.position,
-                })),
-              };
+  //               lesson_data: formFields?.map((item, i) => ({
+  //                 key: item?.fieldLabel,
+  //                 value:
+  //                   item?.fieldType === "text"
+  //                     ? item.value
+  //                     : item?.fieldType === "textArea"
+  //                     ? item.value
+  //                     : res?.data?.result?.data,
+  //                 key_type:
+  //                   item?.fieldType === "text"
+  //                     ? 1
+  //                     : item?.fieldType === "image"
+  //                     ? 2
+  //                     : 3,
+  //                 order: i + 1,
+  //                 position: item.position,
+  //               })),
+  //             };
 
-              await updateCustomLessonPlan(data)
-                .then(async (res) => {
-                  await getCustomLessons();
-                  showNotification(res?.data?.message, "success", "success");
-                  await closeModal();
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            } else {
-              let data = {
-                curriculum_id: location.state.curriculum_id,
-                suboption_id: location.state.suboption_id,
-                title: formik?.values?.lessonTitle,
+  //             await updateCustomLessonPlan(data)
+  //               .then(async (res) => {
+  //                 await getCustomLessons();
+  //                 showNotification(res?.data?.message, "success", "success");
+  //                 await closeModal();
+  //               })
+  //               .catch((err) => {
+  //                 console.log(err);
+  //               });
+  //           } else {
+  //             let data = {
+  //               curriculum_id: location.state.curriculum_id,
+  //               suboption_id: location.state.suboption_id,
+  //               title: formik?.values?.lessonTitle,
 
-                data: formFields.map((item, i) => ({
-                  key: item?.fieldLabel,
-                  value:
-                    item?.fieldType === "text"
-                      ? item.value
-                      : item?.fieldType === "textArea"
-                      ? item.value
-                      : res?.data?.result?.data,
-                  key_type:
-                    item?.fieldType === "text"
-                      ? 1
-                      : item?.fieldType === "image"
-                      ? 2
-                      : 3,
-                  order: i + 1,
-                  position: item.position,
-                })),
-              };
+  //               data: formFields.map((item, i) => ({
+  //                 key: item?.fieldLabel,
+  //                 value:
+  //                   item?.fieldType === "text"
+  //                     ? item.value
+  //                     : item?.fieldType === "textArea"
+  //                     ? item.value
+  //                     : res?.data?.result?.data,
+  //                 key_type:
+  //                   item?.fieldType === "text"
+  //                     ? 1
+  //                     : item?.fieldType === "image"
+  //                     ? 2
+  //                     : 3,
+  //                 order: i + 1,
+  //                 position: item.position,
+  //               })),
+  //             };
 
-              await addCustomLesson(data);
-            }
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err, "err");
-      });
-  };
+  //             await addCustomLesson(data);
+  //           }
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err, "err");
+  //     });
+  // };
 
   // const submitForm = async () => {
   //   if (imageAsFile?.imageAsFile) {
@@ -431,85 +441,94 @@ const DynamicForm = ({
 
   const submitForm = async () => {
     // Disable the button to prevent multiple submissions
-    setIsButtonDisabled(true);
+    // setIsButtonDisabled(true);
 
-    if (imageAsFile?.imageAsFile) {
-      if (isImageError) {
-        setIsButtonDisabled(false); // Enable the button
-        return;
+    // if (imageAsFile?.length > 0) {
+    //   if (isImageError) {
+    //     setIsButtonDisabled(false); // Enable the button
+    //     return;
+    //   }
+    //   console.log(imageAsFile);
+    //   let formData = new FormData();
+    //   formData.append("image_url", imageAsFile?.imageAsFile);
+
+    //   // await uploadImage(formData, "addForm");
+    // } else {
+    // if (isImageError) {
+    //   setIsButtonDisabled(false); // Enable the button
+    //   return;
+    // }
+
+    let data = {
+      curriculum_id: location.state.curriculum_id,
+      suboption_id: location.state.suboption_id,
+      title: formik?.values?.lessonTitle,
+
+      data: formFields.map((item, i) => ({
+        key: item?.fieldLabel,
+        value: item.value,
+        key_type:
+          item?.fieldType === "text" ? 1 : item?.fieldType === "image" ? 2 : 3,
+        order: i + 1,
+        position: item.position,
+      })),
+    };
+
+    let updateData = {
+      id: lessonPlanData?.id,
+      lesson_id: dynamicFormEditData?.id,
+      title: formik?.values?.lessonTitle,
+
+      lesson_data: formFields?.map((item, i) => ({
+        key: item?.fieldLabel,
+        value: item.value,
+        key_type:
+          item?.fieldType === "text" ? 1 : item?.fieldType === "image" ? 2 : 3,
+        order: i + 1,
+        position: item.position,
+      })),
+    };
+
+    try {
+      setIsButtonDisabled(true);
+
+      if (dynamicFormEditData?.id) {
+        await updateCustomLessonPlan(updateData)
+          .then(async (res) => {
+            setIsButtonDisabled(false);
+            await getCustomLessons();
+            await closeModal();
+            showNotification(res?.data?.message, "success", "success");
+          })
+          .catch((err) => {
+            setIsButtonDisabled(false);
+
+            console.log(err);
+          });
+      } else {
+        // await addCustomLesson(data);
+        await addCustomLessonPlan(data)
+          .then(async (res) => {
+            setIsButtonDisabled(false);
+            await getCustomLessons();
+            await closeModal();
+            showNotification(res.data.message, "success", "success");
+          })
+          .catch((err) => {
+            setIsButtonDisabled(false);
+            console.log(err);
+          });
       }
-
-      let formData = new FormData();
-      formData.append("image_url", imageAsFile?.imageAsFile);
-
-      await uploadImage(formData, "addForm");
-    } else {
-      if (isImageError) {
-        setIsButtonDisabled(false); // Enable the button
-        return;
-      }
-
-      let data = {
-        curriculum_id: location.state.curriculum_id,
-        suboption_id: location.state.suboption_id,
-        title: formik?.values?.lessonTitle,
-
-        data: formFields.map((item, i) => ({
-          key: item?.fieldLabel,
-          value:
-            item?.fieldType === "text"
-              ? item.value
-              : item?.fieldType === "textArea"
-              ? item.value
-              : item.value,
-          key_type:
-            item?.fieldType === "text"
-              ? 1
-              : item?.fieldType === "image"
-              ? 2
-              : 3,
-          order: i + 1,
-          position: item.position,
-        })),
-      };
-
-      let updateData = {
-        id: lessonPlanData?.id,
-        lesson_id: dynamicFormEditData?.id,
-        title: formik?.values?.lessonTitle,
-
-        lesson_data: formFields?.map((item, i) => ({
-          key: item?.fieldLabel,
-          value: item.value,
-          key_type:
-            item?.fieldType === "text"
-              ? 1
-              : item?.fieldType === "image"
-              ? 2
-              : 3,
-          order: i + 1,
-          position: item.position,
-        })),
-      };
-
-      try {
-        if (dynamicFormEditData?.id) {
-          const res = await updateCustomLessonPlan(updateData);
-          await getCustomLessons();
-          showNotification(res?.data?.message, "success", "success");
-          await closeModal();
-        } else {
-          await addCustomLesson(data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
+    } catch (err) {
+      setIsButtonDisabled(false);
+      console.log(err);
     }
+    // }
 
-    // Enable the button after 3 seconds
+    // Enable the button after 1 seconds
     setTimeout(() => {
       setIsButtonDisabled(false);
-    }, 3000);
+    }, 1000);
   };
 
   const getPositionCount = (array) => {
@@ -572,9 +591,11 @@ const DynamicForm = ({
               formFields={formFields}
               setFormFields={setFormFields}
               fieldValue={field?.value}
-              handleFileChange={handleFileChange}
-              isImageError={isImageError}
-              imageErrorMsg={imageErrorMsg}
+              // handleFileChange={handleFileChange}
+              // isImageError={isImageError}
+              // imageErrorMsg={imageErrorMsg}
+              imageAsFile={imageAsFile}
+              setIsButtonDisabled={setIsButtonDisabled}
             />
           </div>
         );
@@ -589,7 +610,7 @@ const DynamicForm = ({
           className="btn-primary-blue"
           sx={{ mt: 2 }}
           onClick={submitForm}
-          disabled={isButtonDisabled || isImageError}
+          disabled={isButtonDisabled}
         >
           {isButtonDisabled ? "Please Wait..." : "Submit Form"}
         </Button>
@@ -606,7 +627,7 @@ const DynamicForm = ({
 
     return null;
   };
-  console.log(formFields, "formFields");
+
   return (
     <div>
       <style>{css}</style>
