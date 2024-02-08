@@ -102,7 +102,11 @@ const RenderFormField = ({
   const renderFormField = (field, i) => {
     if (field.fieldType === "text") {
       return (
-        <div>
+        <div 
+           style={{
+              width: "100%",
+              }}
+        >
           <div
             style={{
               display: "flex",
@@ -121,26 +125,43 @@ const RenderFormField = ({
                 display: "flex",
                 width: "100%",
                 justifyContent: "center",
+                alignItems:"start",
                 flexDirection: "row",
-                margin: "10px",
+                margin: "10px 0",
               }}
             >
-              <div>
-                <InputLabel className="label-text">
+              <div 
+                style={{
+                  marginRight: "10px",}}
+                  >
+                <InputLabel className="label-text" 
+                 style={{
+                    whiteSpace: "pre-wrap",
+                    color: "#727077",
+                    fontWeight: "400",
+                    letterSpacing: "normal",
+                    marginRight: "10px;"
+                  }}
+                  >
                   {field?.fieldLabel}
                 </InputLabel>
               </div>
               <div
                 style={{
+                 
                   display: "flex",
                   marginRight: "0",
                   marginLeft: "auto",
-                  justifyContent: "center",
+                  
                 }}
               >
                 <Button
                   color="primary"
                   className="custom_hyperlink"
+                  style={{
+                    height: "auto",
+                    backgroundColor: "none",
+                  }}
                   sx={{ mr: 1 }}
                   onClick={() => onEditField(i)}
                 >
@@ -163,7 +184,10 @@ const RenderFormField = ({
               </div>
             </div>
 
-            <div>
+            <div 
+              style={{width:'100%',
+              }}
+            >
               <TextField
                 className="text-feild-input"
                 sx={{ marginTop: 1, marginBottom: 1 }}
@@ -172,6 +196,8 @@ const RenderFormField = ({
                 defaultValue={fieldValue}
                 value={fieldValue}
                 onChange={onChangeText}
+                style={{ 
+                  maxWidth: "unset" }}
               />
             </div>
           </div>
@@ -193,6 +219,7 @@ const RenderFormField = ({
               borderBottom: "solid 1px #ccc",
               paddingBottom: "15px",
               paddingTop: "15px",
+
             }}
           >
             <div
@@ -200,13 +227,20 @@ const RenderFormField = ({
                 display: "flex",
                 width: "100%",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems:"start",
                 flexDirection: "row",
-                margin: "10px",
+                margin: "10px 0",
               }}
             >
               <div>
-                <InputLabel className="label-text">
+                <InputLabel className="label-text"
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    color: "#727077",
+                    fontWeight: "400",
+                    letterSpacing: "normal",
+                  }}
+                >
                   {field?.fieldLabel}
                 </InputLabel>
               </div>
@@ -286,12 +320,20 @@ const RenderFormField = ({
                 display: "flex",
                 width: "100%",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems:"start",
                 flexDirection: "row",
+                margin: "10px 0",
               }}
             >
               <div>
-                <InputLabel className="label-text">
+                <InputLabel className="label-text"
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    color: "#727077",
+                    fontWeight: "400",
+                    letterSpacing: "normal",
+                  }}
+                >
                   {field?.fieldLabel}
                 </InputLabel>
               </div>
