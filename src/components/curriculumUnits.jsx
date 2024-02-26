@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Side_Navigation from "./Side_Navigation";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
@@ -6,11 +6,12 @@ import {
   add_units,
   delete_units,
   get_units,
+  reOrder,
   update_units,
 } from "../services/web/webServices";
 import { Store } from "react-notifications-component";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, TablePagination } from "@mui/material";
 import { Form, Formik, Field } from "formik";
 import Modal from "react-bootstrap/Modal";
 import { MyTextArea, MyTextInput } from "../services/web/inputServices";
@@ -18,6 +19,10 @@ import * as Yup from "yup";
 import { Loader } from "./Helper/Loader";
 import Footer from "./Footer";
 import moment from "moment/moment";
+import {
+  MRT_TableContainer,
+  useMaterialReactTable,
+} from "material-react-table";
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
@@ -49,7 +54,7 @@ export default function CurriculumUnits() {
     }
   };
   const handleShow = (e) => {
-    setDetail(e.row);
+    setDetail(e);
     setShowEditUnits(true);
   };
   const onHandle = (e) => {
@@ -92,7 +97,7 @@ export default function CurriculumUnits() {
   const onDelete = (params) => () => {
     if (window.confirm("Are your sure? You want to delete this unit?")) {
       let data = {
-        unit_id: params.row.unit_id,
+        unit_id: params.unit_id,
       };
       delete_units(data)
         .then((res) => {
@@ -153,6 +158,13 @@ export default function CurriculumUnits() {
               i: index,
             }))
           );
+          setData(
+            res.data.result.map((el, index) => ({
+              ...el,
+              id: el.unit_id,
+              i: index,
+            }))
+          );
           setLoader(false);
         })
         .catch((err) => {
@@ -161,32 +173,53 @@ export default function CurriculumUnits() {
         });
     }
   }, []);
-  const columns = [
+  const columns = useMemo(() => [
     {
-      field: "sno",
-      headerName: "S.NO.",
-      filterable: false,
-      width: 70,
-      renderCell: (index) => `${index.row.i + 1}`,
+      accessorKey: "sno",
+      header: "S.NO.",
+      size: 5,
+      muiTableHeadCellProps: {
+        align: "left",
+      },
+      muiTableBodyCellProps: {
+        align: "left",
+      },
+      accessorFn: (index) => `${index.i + 1}`,
     },
     {
-      field: "unit_name",
-      headerName: "Name",
-      width: 500,
+      accessorKey: "unit_name",
+      header: "Name",
+      size: 20,
+      muiTableHeadCellProps: {
+        align: "left",
+      },
+      muiTableBodyCellProps: {
+        align: "left",
+      },
     },
     {
-      field: "action",
-      headerName: "Action",
-      width: 450,
-      renderCell: (params) => {
+      header: "Action",
+      muiTableHeadCellProps: {
+        align: "left",
+      },
+      muiTableBodyCellProps: {
+        align: "left",
+      },
+      accessorKey: "actions",
+      sx: { minWidth: 0, width: "auto", padding: 0 },
+      accessorFn: (params) => {
         return (
-          <>
-            <Button
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "left",
+              alignItems: "left",
+            }}>          <Button
               onClick={() =>
                 navigate("/curriculum_sub_units", {
                   state: {
                     curriculum_id: location.state.id,
-                    unit_id: params.row.unit_id,
+                    unit_id: params.unit_id,
                   },
                 })
               }
@@ -199,12 +232,84 @@ export default function CurriculumUnits() {
             <Button color="error" onClick={onDelete(params)}>
               <i className="fa fa-trash" aria-hidden="true"></i>
             </Button>
-          </>
-        );
+          </div>);
       },
     },
-  ];
+  ], []);
   console.log(location, "location");
+  const itemsPerPageOptions = [10, 25, 50, 100];
+
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(itemsPerPageOptions[0]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = useMemo(() => {
+    const startIndex = page * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    return data.slice(startIndex, endIndex);
+  }, [data, page, rowsPerPage]);
+
+  const table = useMaterialReactTable({
+    autoResetPageIndex: false,
+    columns,
+    data: paginatedData,
+    enableRowOrdering: true,
+    enableSorting: false,
+    enablePagination: false,
+    muiRowDragHandleProps: ({ table }) => ({
+      onDragEnd: () => {
+        const { draggingRow, hoveredRow } = table.getState();
+        if (hoveredRow && draggingRow) {
+          let data = {
+            id1: draggingRow.original.order_id,
+            id2: hoveredRow.original.order_id,
+            tableName: "unit",
+          };
+          console.log("🚀 ~ CurriculumUnits ~ data:", data)
+          reOrder(data)
+            .then((res) => {
+              get_units({
+                curriculum_id: location.state.id,
+                module_id: location.state.module_id,
+              })
+                .then((res) => {
+                  setUnits(
+                    res.data.result.map((el, index) => ({
+                      ...el,
+                      id: el.unit_id,
+                      i: index,
+                    }))
+                  );
+                  setData(
+                    res.data.result.map((el, index) => ({
+                      ...el,
+                      id: el.unit_id,
+                      i: index,
+                    }))
+                  );
+                  setLoader(false);
+                })
+                .catch((err) => {
+                  setLoader(false);
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      },
+    }),
+  });
   return (
     <>
       <style>{css}</style>
@@ -239,7 +344,7 @@ export default function CurriculumUnits() {
                                 <>
                                   <h2>{select.map((val) => val._id)}</h2>
 
-                                  <DataGrid
+                                  {/* <DataGrid
                                     rows={Units}
                                     columns={columns}
                                     pageSize={10}
@@ -247,6 +352,17 @@ export default function CurriculumUnits() {
                                     onSelectionChange={(newSelection) => {
                                       setSelection(newSelection.rows);
                                     }}
+                                  /> */}
+                                  <MRT_TableContainer table={table} />
+                                  <TablePagination
+                                    rowsPerPageOptions={itemsPerPageOptions}
+                                    component="div"
+                                    count={data.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
                                   />
                                 </>
                               )}

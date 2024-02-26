@@ -145,7 +145,6 @@ export default function Curriculum() {
     }
   };
   const handleShow1 = (selectedOption) => {
-    console.log("=========>", selectedOption);
     setModule(selectedOption);
     setShowAddCurriculum(true);
   };

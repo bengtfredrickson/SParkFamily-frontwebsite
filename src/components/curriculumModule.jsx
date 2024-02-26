@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { add_module, delete_module, edit_module, get_module } from '../services/web/webServices';
+import { add_module, delete_module, edit_module, get_module, reOrder } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from '@mui/material';
 import { Form, Formik, Field } from 'formik';
 import Modal from "react-bootstrap/Modal";
 import { MyTextArea, MyTextInput } from '../services/web/inputServices';
@@ -13,6 +12,12 @@ import * as Yup from 'yup';
 import { Loader } from './Helper/Loader';
 import Footer from './Footer';
 import moment from 'moment/moment';
+import {
+    MRT_TableContainer,
+    useMaterialReactTable,
+} from "material-react-table";
+import { Button, TablePagination } from "@mui/material";
+
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
@@ -41,7 +46,7 @@ export default function CurriculumModules() {
         }
     };
     const handleShow = (e) => {
-        setDetail(e.row)
+        setDetail(e)
         setShowEditModules(true);
     };
     const onHandle = (e) => {
@@ -82,7 +87,7 @@ export default function CurriculumModules() {
     const onDelete = (params) => () => {
         if (window.confirm("Are your sure? You want to delete this unit?")) {
             let data = {
-                module_id: params.row.module_id,
+                module_id: params.module_id,
             }
             delete_module(data).then((res) => {
 
@@ -105,7 +110,6 @@ export default function CurriculumModules() {
                 });
                 get_module(location.state.id).
                     then((res) => {
-                        console.log(res.data.result)
 
                         setModules(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
 
@@ -127,9 +131,9 @@ export default function CurriculumModules() {
         if (Modules.length === 0 || location?.state?.reloadModules) {
             get_module(location.state.id).
                 then((res) => {
-                    console.log("=======>", res.data.result)
 
                     setModules(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
+                    setData(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
                     setLoader(false);
 
                 }).catch((err) => {
@@ -138,28 +142,40 @@ export default function CurriculumModules() {
                 })
         }
     }, []);
-    const columns = [
+    const columns = useMemo(() => [
         {
-            field: 'sno',
-            headerName: 'S.NO.',
+            // accessorKey: 'order_id',
+            header: 'S.NO.',
             filterable: false,
-            width: 70,
-            renderCell: (index) => `${(index.row.i) + 1}`
-        },
-        {
-            field: 'module_name',
-            headerName: 'Name',
-            width: 500,
+            size: 5, //increase the width of this column
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
+            accessorFn: (index) => `${index.i + 1}`,
 
         },
         {
-            field: 'action',
-            headerName: "Action",
+            accessorKey: 'module_name',
+            header: 'Name',
+            size: 20,
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
+
+        },
+        {
+            header: "Action",
             width: 450,
-            renderCell: (params) => {
+            accessorFn: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_units', { state: { id: location.state.id, module_id: params.row.module_id } })}>Units</Button>
+                        <Button onClick={() => navigate('/curriculum_units', { state: { id: location.state.id, module_id: params.module_id } })}>Units</Button>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -172,7 +188,66 @@ export default function CurriculumModules() {
                 );
             },
         }
-    ];
+    ], []);
+    const itemsPerPageOptions = [10, 25, 50, 100]; // Define your desired options
+
+    const [data, setData] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(itemsPerPageOptions[0]);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const paginatedData = useMemo(() => {
+        const startIndex = page * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        return data.slice(startIndex, endIndex);
+    }, [data, page, rowsPerPage]);
+
+    const table = useMaterialReactTable({
+        autoResetPageIndex: false,
+        columns,
+        data: paginatedData,
+        enableRowOrdering: true,
+        enableSorting: false,
+        enablePagination: false, // Disable internal pagination, as we will use external TablePagination
+        muiRowDragHandleProps: ({ table }) => ({
+            onDragEnd: () => {
+                const { draggingRow, hoveredRow } = table.getState();
+                if (hoveredRow && draggingRow) {
+                    let data = {
+                        id1: draggingRow.original.order_id,
+                        id2: hoveredRow.original.order_id,
+                        tableName: "module",
+                    };
+                    console.log("🚀 ~ CurriculumModules ~ data:", data)
+                    reOrder(data)
+                        .then((res) => {
+                            get_module(location.state.id).
+                                then((res) => {
+
+                                    setModules(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
+                                    setData(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
+                                    setLoader(false);
+
+                                }).catch((err) => {
+                                    setLoader(false);
+                                    console.log(err);
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            },
+        }),
+    });
 
 
 
@@ -210,9 +285,9 @@ export default function CurriculumModules() {
                                                         {!Modules.length ? <h3>No Data Found!</h3> : null}
                                                         {Modules.length > 0 && (
                                                             <>
-                                                                <h2>{select.map((val) => val._id)}</h2>
+                                                                {/* <h2>{select.map((val) => val._id)}</h2> */}
 
-                                                                <DataGrid
+                                                                {/* <DataGrid
 
                                                                     rows={Modules}
 
@@ -224,6 +299,17 @@ export default function CurriculumModules() {
 
                                                                         setSelection(newSelection.rows);
                                                                     }}
+                                                                /> */}
+                                                                <MRT_TableContainer table={table} />
+                                                                <TablePagination
+                                                                    rowsPerPageOptions={itemsPerPageOptions}
+                                                                    component="div"
+                                                                    count={data.length}
+                                                                    rowsPerPage={rowsPerPage}
+                                                                    page={page}
+                                                                    onPageChange={handleChangePage}
+                                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                                    style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
                                                                 />
                                                             </>
                                                         )
@@ -274,7 +360,6 @@ export default function CurriculumModules() {
                         })}
                         onSubmit={(values, { resetForm }) => {
                             setbutton(true);
-                            console.log(values);
 
                             edit_module(values)
                                 .then((res) => {
@@ -295,7 +380,6 @@ export default function CurriculumModules() {
                                     });
                                     get_module(location.state.id).
                                         then((res) => {
-                                            console.log(res.data.result)
 
                                             setModules(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
 
@@ -394,7 +478,6 @@ export default function CurriculumModules() {
 
                         onSubmit={(values, { resetForm }) => {
 
-                            console.log(values);
                             setbutton(true);
 
 
@@ -421,7 +504,6 @@ export default function CurriculumModules() {
 
                                     get_module(location.state.id).
                                         then((res) => {
-                                            console.log(res.data.result)
 
                                             setModules(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
 

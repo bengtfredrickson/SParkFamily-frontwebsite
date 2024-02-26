@@ -503,3 +503,15 @@ export const deleteCustomLessonPlan = (data) => {
     data,
   });
 };
+export const reOrder = (data, endpoint) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: "post",
+    url: `${base_uri.base_uri_admin}/admin/swapOrdering`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  });
+};
