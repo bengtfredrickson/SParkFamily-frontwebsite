@@ -238,8 +238,14 @@ export default function CurriculumoSubOptions() {
         },
         {
             field: 'suboption_name',
+            headerName: 'Category',
+            width: 250,
+
+        },
+        {
+            field: 'title',
             headerName: 'Name',
-            width: 500,
+            width: 250,
 
         },
         {
@@ -395,12 +401,13 @@ export default function CurriculumoSubOptions() {
                             video_title: getDetail.video_title,
                             suboption_name: getDetail.suboption_name,
                             option_id: getDetail.option_id,
-                            suboption_id: getDetail.suboption_id
+                            suboption_id: getDetail.suboption_id,
+                            title: getDetail.title,
 
                         }}
 
                         validationSchema={Yup.object({
-                            suboption_name: Yup.string().required("Required").matches(
+                            title: Yup.string().required("Required").matches(
                                 /\S+/,
                                 "Field must contain at least one non-space character"
                             ),
@@ -422,6 +429,7 @@ export default function CurriculumoSubOptions() {
                             formData.append("suboption_name", values.suboption_name)
                             formData.append("suboption_id", values.suboption_id)
                             formData.append("option_id", values.option_id)
+                            formData.append("title", values.title)
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
                                 formData.append("audio_url", "")
@@ -446,7 +454,7 @@ export default function CurriculumoSubOptions() {
                             }
                             setbutton(true);
                             const isFound = SubOptions.some(element => {
-                                if (element.suboption_name.toLowerCase().includes("lesson")) {
+                                if (element.suboption_name.toLowerCase().includes("lesson") && element.subunit_id !== values.subunit_id) {
                                     return true;
                                 }
 
@@ -557,8 +565,14 @@ export default function CurriculumoSubOptions() {
                                     <div className="col-lg-12 col-md-12 col-sm-12">
                                         <div className="col-lg-4 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Name</label>
-                                                <MyTextInput type="text" className="form-control" name="suboption_name" />
+                                                <label>Category</label>
+                                                <MyTextInput type="text" className="form-control" name="suboption_name" readOnly={true} />
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Title</label>
+                                                <MyTextInput type="text" className="form-control" name="title" />
                                             </div>
 
 
@@ -683,11 +697,16 @@ export default function CurriculumoSubOptions() {
                             video_title: "",
                             pdf_url: "",
                             suboption_name: "",
+                            title: "",
                             option_id: location.state.option_id
                         }}
 
                         validationSchema={Yup.object({
                             suboption_name: Yup.string().required("Required").matches(
+                                /\S+/,
+                                "Field must contain at least one non-space character"
+                            ),
+                            title: Yup.string().required("Required").matches(
                                 /\S+/,
                                 "Field must contain at least one non-space character"
                             ),
@@ -708,6 +727,7 @@ export default function CurriculumoSubOptions() {
                             formData.append("video_title", values.video_title)
                             formData.append("pdf_title", values.pdf_title)
                             formData.append("suboption_name", values.suboption_name)
+                            formData.append("title", values.title)
                             formData.append("option_id", values.option_id)
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
@@ -910,8 +930,16 @@ export default function CurriculumoSubOptions() {
 
                                         <div className="col-lg-4 col-md-12 col-sm-12">
                                             <div className="form-group">
-                                                <label>Name</label>
+                                                <label>Category</label>
                                                 <MyTextInput type="text" className="form-control" name="suboption_name" />
+                                            </div>
+
+
+                                        </div>
+                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                            <div className="form-group">
+                                                <label>Name</label>
+                                                <MyTextInput type="text" className="form-control" name="title" />
                                             </div>
 
 
