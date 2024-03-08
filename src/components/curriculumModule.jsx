@@ -112,6 +112,8 @@ export default function CurriculumModules() {
                     then((res) => {
 
                         setModules(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
+                        setData(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
+
 
 
                     }).catch((err) => {
@@ -382,6 +384,7 @@ export default function CurriculumModules() {
                                         then((res) => {
 
                                             setModules(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
+                                            setData(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
 
 
                                         }).catch((err) => {
@@ -501,11 +504,11 @@ export default function CurriculumModules() {
                                         },
                                     });
                                     resetForm({ values: "" });
-
                                     get_module(location.state.id).
                                         then((res) => {
-
+                                            console.log("=====")
                                             setModules(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
+                                            setData(res.data.result.map((el, index) => ({ ...el, id: el.module_id, i: index })))
 
 
                                         }).catch((err) => {

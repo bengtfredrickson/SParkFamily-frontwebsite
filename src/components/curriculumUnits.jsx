@@ -129,6 +129,13 @@ export default function CurriculumUnits() {
                   i: index,
                 }))
               );
+              setData(
+                res.data.result.map((el, index) => ({
+                  ...el,
+                  id: el.unit_id,
+                  i: index,
+                }))
+              );
               setLoader(false);
             })
             .catch((err) => {
@@ -442,6 +449,13 @@ export default function CurriculumUnits() {
                           i: index,
                         }))
                       );
+                      setData(
+                        res.data.result.map((el, index) => ({
+                          ...el,
+                          id: el.unit_id,
+                          i: index,
+                        }))
+                      );
                       setLoader(false);
                     })
                     .catch((err) => {
@@ -565,6 +579,13 @@ export default function CurriculumUnits() {
                       console.log("=======>", res.data.result);
 
                       setUnits(
+                        res.data.result.map((el, index) => ({
+                          ...el,
+                          id: el.unit_id,
+                          i: index,
+                        }))
+                      );
+                      setData(
                         res.data.result.map((el, index) => ({
                           ...el,
                           id: el.unit_id,
