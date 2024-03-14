@@ -38,7 +38,7 @@ export default function CurriculumoOptions() {
     const [getPdf, setPdf] = useState({});
     const [getVideo, setVideo] = useState({});
     const [getAudio, setAudio] = useState({});
-    const [getDetail, setDetail] = useState([]);
+    const [getDetail, setDetail] = useState({});
     const [getPdfUrl, setPdfUrl] = useState("");
     const [getVideoUrl, setVideoUrl] = useState("");
     const [getAudioUrl, setAudioUrl] = useState("");
@@ -67,11 +67,11 @@ export default function CurriculumoOptions() {
         }
     };
     const handleShow = (e) => {
-        setDetail(e.row)
+        setDetail(e)
         setShowEditOptions(true);
-        setPdfUrl(e.row.pdf_url);
-        setAudioUrl(e.row.audio_url);
-        setVideoUrl(e.row.video_url)
+        setPdfUrl(e?.pdf_url);
+        setAudioUrl(e?.audio_url);
+        setVideoUrl(e?.video_url)
 
     };
     const onHandle = (e, type) => {
@@ -139,12 +139,12 @@ export default function CurriculumoOptions() {
         setshowPreview(true);
         setPreviewFlag(flag.flag)
         if (flag.flag === 0) {
-            setPreview(e.row.pdf_url)
+            setPreview(e?.pdf_url)
         }
         else if (flag.flag === 1) {
-            setPreview(e.row.video_url)
+            setPreview(e?.video_url)
         } else {
-            setPreview(e.row.audio_url)
+            setPreview(e?.audio_url)
         }
 
 
@@ -183,7 +183,7 @@ export default function CurriculumoOptions() {
     const onDelete = (params) => () => {
         if (window.confirm("Are your sure? You want to delete this?")) {
             let data = {
-                option_id: params?.row?.option_id,
+                option_id: params?.option_id,
             }
             delete_option(data).then((res) => {
 
@@ -270,11 +270,10 @@ export default function CurriculumoOptions() {
             accessorKey: 'pdf_url',
             header: "Pdf",
             width: 200,
-            hide: location.state.page_key === 1 ? false : true,
             accessorFn: (params) => {
                 return (
                     <>
-                        {params?.row?.pdf_url === "" || params?.row?.pdf_url === null ? <Button><i className="fas fa-file-pdf" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.pdf_url === "" || params?.pdf_url === null ? <Button><i className="fas fa-file-pdf" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -283,11 +282,10 @@ export default function CurriculumoOptions() {
             accessorKey: 'video_url',
             header: "Video",
             width: 200,
-            hide: location.state.page_key === 1 ? false : true,
             accessorFn: (params) => {
                 return (
                     <>
-                        {params?.row?.video_url === "" || params?.row?.video_url === null ? <Button ><i className="fas fa-file-video" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.video_url === "" || params?.video_url === null ? <Button ><i className="fas fa-file-video" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -296,11 +294,10 @@ export default function CurriculumoOptions() {
             accessorKey: 'audio_url',
             header: "Audio",
             width: 200,
-            hide: location.state.page_key === 1 ? false : true,
             accessorFn: (params) => {
                 return (
                     <>
-                        {params?.row?.audio_url === "" || params?.row?.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.audio_url === "" || params?.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
@@ -310,9 +307,11 @@ export default function CurriculumoOptions() {
             header: "Action",
             width: 450,
             accessorFn: (params) => {
+                console.log(params)
+
                 return (
                     <>
-                        {location.state.page_key === 1 ? null : <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params?.row?.option_id } })}>Lessons Materials</Button>}
+                        {location.state.page_key === 1 ? null : <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params?.option_id } })}>Lessons Materials</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -358,7 +357,7 @@ export default function CurriculumoOptions() {
                 accessorFn: (params) => {
                     return (
                         <>
-                            {location.state.page_key === 1 ? null : <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params?.row?.option_id } })}>Lessons Materials</Button>}
+                            {location.state.page_key === 1 ? null : <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params?.option_id } })}>Lessons Materials</Button>}
                             <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                             <Button color="error"
                                 onClick={onDelete(params)}
@@ -510,18 +509,20 @@ export default function CurriculumoOptions() {
                     ></i>
                 </Modal.Header>
                 <Modal.Body>
+                    {console.log("===getDetail===", getDetail)
+                    }
                     <Formik
                         enableReinitialize={true}
                         initialValues={{
-                            curriculum_id: getDetail.curriculum_id,
-                            unit_id: getDetail.unit_id,
-                            subunit_id: getDetail.subunit_id,
-                            is_files: getDetail.is_files,
-                            audio_title: getDetail.audio_title,
-                            video_title: getDetail.video_title,
-                            pdf_title: getDetail.pdf_title,
-                            option_name: getDetail.option_name,
-                            option_id: getDetail.option_id
+                            curriculum_id: getDetail?.curriculum_id,
+                            unit_id: getDetail?.unit_id,
+                            subunit_id: getDetail?.subunit_id,
+                            is_files: getDetail?.is_files,
+                            audio_title: getDetail?.audio_title,
+                            video_title: getDetail?.video_title,
+                            pdf_title: getDetail?.pdf_title,
+                            option_name: getDetail?.option_name,
+                            option_id: getDetail?.option_id
                         }}
 
                         validationSchema={Yup.object({
