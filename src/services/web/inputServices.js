@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import { Editor } from 'react-draft-wysiwyg';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import {EditorState, convertToRaw} from 'draft-js'
+import { EditorState, convertToRaw } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
 import { useState } from 'react';
 
@@ -49,13 +49,29 @@ export const MyCheckbox = ({ children, ...props }) => {
   );
 };
 
+
+// MySelect component
 export const MySelect = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
+  const [field, meta, helpers] = useField(props);
+
   return (
     <div>
-      <select {...field} {...props} />
+      <select
+        {...field}
+        {...props}
+        onChange={(e) => {
+          helpers.setValue(e.target.value);
+          if (props.onChange) {
+            props.onChange(e);
+          }
+        }}
+      >
+        {props.children}
+      </select>
       {meta.touched && meta.error ? (
-        <div className="error" style={{ color: "red" }}>{meta.error}</div>
+        <div className="error" style={{ color: "red" }}>
+          {meta.error}
+        </div>
       ) : null}
     </div>
   );
@@ -78,7 +94,7 @@ export const MyTextArea = ({ label, ...props }) => {
 
 export const MyTextEditor = ({ label, ...props }) => {
   const [field, meta, helpers] = useField(props);
-  const [editorData,setEditorData] = useState()
+  const [editorData, setEditorData] = useState()
 
   const handelChange = (value) => {
     setEditorData(value)
@@ -87,7 +103,7 @@ export const MyTextEditor = ({ label, ...props }) => {
 
   return (
     <>
-      
+
       <Editor
         toolbarClassName="toolbarClassName"
         wrapperClassName="wrapperClassName"

@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
 import { Form, Formik, Field } from 'formik';
 import Modal from "react-bootstrap/Modal";
-import { MyTextArea, MyTextInput } from '../services/web/inputServices';
+import { MyTextArea, MyTextInput, MySelect } from '../services/web/inputServices';
 import * as Yup from 'yup';
 import { Loader } from './Helper/Loader';
 import Footer from './Footer';
@@ -40,7 +40,9 @@ export default function CurriculumoSubOptions() {
     const [getAudio, setAudio] = useState({});
     const [getVideoUrl, setVideoUrl] = useState("");
     const [getAudioUrl, setAudioUrl] = useState("");
-    const [PreviewFlag, setPreviewFlag] = useState(0)
+    const [PreviewFlag, setPreviewFlag] = useState(0);
+    const [selectedOption, setSelectedOption] = useState('');
+
 
 
     // Edit SubOptions Model
@@ -59,12 +61,18 @@ export default function CurriculumoSubOptions() {
         }
 
     };
+    const handleDropdownChange = (event) => {
+        console.log("=----=-=-=", event.target.value)
+
+        setSelectedOption(event.target.value);
+    };
     const handleShow = (e) => {
         setDetail(e.row)
         setShowEditSubOptions(true);
         setPdfUrl(e.row.pdf_url);
         setAudioUrl(e.row.audio_url);
         setVideoUrl(e.row.video_url)
+        
     };
     const onHandle = (e, type) => {
         if (type === "p") {
@@ -128,6 +136,7 @@ export default function CurriculumoSubOptions() {
             setState(false)
             setState1(false)
             setState2(false)
+            setSelectedOption("")
         }
     };
     const handleShow1 = () => {
@@ -291,7 +300,7 @@ export default function CurriculumoSubOptions() {
             renderCell: (params) => {
                 return (
                     <>
-                        {params.row.suboption_name.toLowerCase().includes("lesson") ? <Button onClick={() => navigate('/curriculum_lessons', { state: { curriculum_id: location.state.curriculum_id, suboption_id: params.row.suboption_id } })}>Lesson Plans</Button> : <Button style={{ "color": "grey" }}>Lesson Plans</Button>}
+                        {params?.row?.suboption_name?.toLowerCase().includes("lesson") ? <Button onClick={() => navigate('/curriculum_lessons', { state: { curriculum_id: location.state.curriculum_id, suboption_id: params.row.suboption_id } })}>Lesson Plans</Button> : <Button style={{ "color": "grey" }}>Lesson Plans</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -718,7 +727,9 @@ export default function CurriculumoSubOptions() {
                         })}
 
                         onSubmit={(values, { resetForm }) => {
+
                             let formData = new FormData();
+
                             formData.append("curriculum_id", values.curriculum_id)
                             formData.append("unit_id", values.unit_id)
                             formData.append("subunit_id", values.subunit_id)
@@ -726,7 +737,7 @@ export default function CurriculumoSubOptions() {
                             formData.append("audio_title", values.audio_title)
                             formData.append("video_title", values.video_title)
                             formData.append("pdf_title", values.pdf_title)
-                            formData.append("suboption_name", values.suboption_name)
+                            formData.append("suboption_name", selectedOption)
                             formData.append("title", values.title)
                             formData.append("option_id", values.option_id)
                             if (getPdf.pictureAsFile) {
@@ -808,6 +819,7 @@ export default function CurriculumoSubOptions() {
                                             setState(false)
                                             setState1(false)
                                             setState2(false)
+                                            setSelectedOption("")
                                         })
                                         .catch((err) => {
 
@@ -836,6 +848,7 @@ export default function CurriculumoSubOptions() {
                                                 setState(false)
                                                 setState1(false)
                                                 setState2(false)
+                                                setSelectedOption("")
                                             }
                                         });
                                 }
@@ -931,7 +944,18 @@ export default function CurriculumoSubOptions() {
                                         <div className="col-lg-4 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Category</label>
-                                                <MyTextInput type="text" className="form-control" name="suboption_name" />
+                                                <MySelect className="form-control"
+                                                    name="suboption_name"
+                                                    value={selectedOption}
+                                                    onChange={handleDropdownChange}>
+                                                    <option value="" disabled>Select a category</option>
+                                                    <option value="Lesson Plan">Lesson Plan</option>
+                                                    <option value="Audio">Audio</option>
+                                                    <option value="Video">Video</option>
+                                                    <option value="Pdf">Pdf</option>
+
+                                                    {/* Add more options as needed */}
+                                                </MySelect>
                                             </div>
 
 
@@ -944,13 +968,13 @@ export default function CurriculumoSubOptions() {
 
 
                                         </div>
-                                        {getVideoUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
+                                        {selectedOption == "Audio" ? <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group spo">
                                                 <label>Audio Title</label>
                                                 <MyTextInput type="text" className="form-control" name="audio_title" />
                                             </div>
-                                        </div>}
-                                        {getVideoUrl != "" || getPdfUrl != "" ? null : <div div className="col-lg-6 col-md-12 col-sm-12">
+                                        </div> : null}
+                                        {selectedOption == "Audio" ? <div div className="col-lg-6 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Audio File</label>
 
@@ -968,14 +992,14 @@ export default function CurriculumoSubOptions() {
                                                 controls
                                             /> : null}
                                             {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
-                                        </div>}
-                                        {getAudioUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
+                                        </div> : null}
+                                        {selectedOption == "Video" ? <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Video Title</label>
                                                 <MyTextInput type="text" className="form-control" name="video_title" />
                                             </div>
-                                        </div>}
-                                        {getAudioUrl != "" || getPdfUrl != "" ? null : <div className="col-lg-6 col-md-12 col-sm-12">
+                                        </div> : null}
+                                        {selectedOption == "Video" ? <div className="col-lg-6 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Video File</label>
 
@@ -989,14 +1013,14 @@ export default function CurriculumoSubOptions() {
                                             </div>
                                             {getVideoUrl != "" ? <ReactPlayer width="100%" height="100" url={getVideoUrl} controls={true} /> : null}
                                             {/* {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null} */}
-                                        </div>}
-                                        {getVideoUrl != "" || getAudioUrl != "" ? null : <div className="col-lg-12 col-md-12 col-sm-12">
+                                        </div> : null}
+                                        {selectedOption == "Pdf" ? <div className="col-lg-12 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>Pdf Title</label>
                                                 <MyTextInput type="text" className="form-control" name="pdf_title" />
                                             </div>
-                                        </div>}
-                                        {getAudioUrl != "" || getVideoUrl != "" ? null : <div className="col-lg-6 col-md-12 col-sm-12">
+                                        </div> : null}
+                                        {selectedOption == "Pdf" ? <div className="col-lg-6 col-md-12 col-sm-12">
                                             <div className="form-group">
                                                 <label>PDF</label>
 
@@ -1010,7 +1034,7 @@ export default function CurriculumoSubOptions() {
                                             </div>
                                             {getPdfUrl != "" ? <object width="100%" height="400" data={getPdfUrl} type="application/pdf" alt="" /> : null}
 
-                                        </div>}
+                                        </div> : null}
                                         <div style={{ 'width': '100%' }}>
                                             {getState ? <p style={{ color: "red" }}>Only PDF is allowed !</p> : null}
                                             {getState1 ? <p style={{ color: "red" }}>Only Mp3 Audio is allowed !</p> : null}

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { add_option, delete_option, edit_option, get_options } from '../services/web/webServices';
+import { add_option, delete_option, edit_option, get_options, reOrder } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -15,6 +15,11 @@ import Footer from './Footer';
 import moment from 'moment/moment';
 import ReactPlayer from 'react-player/lazy'
 import ReactAudioPlayer from 'react-audio-player';
+import {
+    MRT_TableContainer,
+    useMaterialReactTable,
+} from "material-react-table";
+import { TablePagination } from "@mui/material";
 
 
 
@@ -178,7 +183,7 @@ export default function CurriculumoOptions() {
     const onDelete = (params) => () => {
         if (window.confirm("Are your sure? You want to delete this?")) {
             let data = {
-                option_id: params.row.option_id,
+                option_id: params?.row?.option_id,
             }
             delete_option(data).then((res) => {
 
@@ -204,6 +209,7 @@ export default function CurriculumoOptions() {
                         console.log(res.data.result)
 
                         setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
+                        setData(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
 
 
                     }).catch((err) => {
@@ -226,6 +232,7 @@ export default function CurriculumoOptions() {
                     console.log("=======>", res.data.result)
 
                     setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
+                    setData(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
                     setLoader(false);
 
                 }).catch((err) => {
@@ -234,67 +241,78 @@ export default function CurriculumoOptions() {
                 })
         }
     }, []);
-    const columns = [
+    const columns = useMemo(() => location.state.page_key === 1 ? [
         {
-            field: 'sno',
-            headerName: 'S.NO.',
+            header: 'S.NO.',
             filterable: false,
-            width: 70,
-            renderCell: (index) => `${(index.row.i) + 1}`
+            size: 5, //increase the width of this column
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
+            accessorFn: (index) => `${index.i + 1}`,
         },
         {
-            field: 'option_name',
-            headerName: 'Name',
-            width: 500,
+            accessorKey: 'option_name',
+            header: 'Name',
+            size: 20,
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
 
         },
         {
-            field: 'pdf_url',
-            headerName: "Pdf",
+            accessorKey: 'pdf_url',
+            header: "Pdf",
             width: 200,
             hide: location.state.page_key === 1 ? false : true,
-            renderCell: (params) => {
+            accessorFn: (params) => {
                 return (
                     <>
-                        {params.row.pdf_url === "" || params.row.pdf_url === null ? <Button><i className="fas fa-file-pdf" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.row?.pdf_url === "" || params?.row?.pdf_url === null ? <Button><i className="fas fa-file-pdf" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
         },
         {
-            field: 'video_url',
-            headerName: "Video",
+            accessorKey: 'video_url',
+            header: "Video",
             width: 200,
             hide: location.state.page_key === 1 ? false : true,
-            renderCell: (params) => {
+            accessorFn: (params) => {
                 return (
                     <>
-                        {params.row.video_url === "" || params.row.video_url === null ? <Button ><i className="fas fa-file-video" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.row?.video_url === "" || params?.row?.video_url === null ? <Button ><i className="fas fa-file-video" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
         },
         {
-            field: 'audio_url',
-            headerName: "Audio",
+            accessorKey: 'audio_url',
+            header: "Audio",
             width: 200,
             hide: location.state.page_key === 1 ? false : true,
-            renderCell: (params) => {
+            accessorFn: (params) => {
                 return (
                     <>
-                        {params.row.audio_url === "" || params.row.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.row?.audio_url === "" || params?.row?.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
         },
         {
-            field: 'action',
-            headerName: "Action",
+            accessorKey: 'action',
+            header: "Action",
             width: 450,
-            renderCell: (params) => {
+            accessorFn: (params) => {
                 return (
                     <>
-                        {location.state.page_key === 1 ? null : <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params.row.option_id } })}>Lessons Materials</Button>}
+                        {location.state.page_key === 1 ? null : <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params?.row?.option_id } })}>Lessons Materials</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -307,8 +325,112 @@ export default function CurriculumoOptions() {
                 );
             },
         }
-    ];
+    ] :
+        [
+            {
+                header: 'S.NO.',
+                filterable: false,
+                size: 5, //increase the width of this column
+                muiTableHeadCellProps: {
+                    align: "left",
+                },
+                muiTableBodyCellProps: {
+                    align: "left",
+                },
+                accessorFn: (index) => `${index.i + 1}`,
+            },
+            {
+                accessorKey: 'option_name',
+                header: 'Name',
+                size: 20,
+                muiTableHeadCellProps: {
+                    align: "left",
+                },
+                muiTableBodyCellProps: {
+                    align: "left",
+                },
 
+            },
+            {
+                accessorKey: 'action',
+                header: "Action",
+                width: 450,
+                accessorFn: (params) => {
+                    return (
+                        <>
+                            {location.state.page_key === 1 ? null : <Button onClick={() => navigate('/curriculum_suboptions', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: params?.row?.option_id } })}>Lessons Materials</Button>}
+                            <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
+                            <Button color="error"
+                                onClick={onDelete(params)}
+                            >
+                                <i className="fa fa-trash" aria-hidden="true"></i>
+                            </Button>
+
+
+                        </>
+                    );
+                },
+            }
+        ],
+        []);
+    const itemsPerPageOptions = [10, 25, 50, 100]; // Define your desired options
+    const [data, setData] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(itemsPerPageOptions[0]);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const paginatedData = useMemo(() => {
+        const startIndex = page * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        return data.slice(startIndex, endIndex);
+    }, [data, page, rowsPerPage]);
+
+    const table = useMaterialReactTable({
+        autoResetPageIndex: false,
+        columns,
+        data: paginatedData,
+        enableRowOrdering: true,
+        enableSorting: false,
+        enablePagination: false, // Disable internal pagination, as we will use external TablePagination
+        muiRowDragHandleProps: ({ table }) => ({
+            onDragEnd: () => {
+                const { draggingRow, hoveredRow } = table.getState();
+                if (hoveredRow && draggingRow) {
+                    let data = {
+                        id1: draggingRow.original.order_id,
+                        id2: hoveredRow.original.order_id,
+                        tableName: "options",
+                    };
+                    console.log("🚀 ~ CurriculumModules ~ data:", data)
+                    reOrder(data)
+                        .then((res) => {
+                            get_options({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id }).
+                                then((res) => {
+                                    console.log(res.data.result)
+
+                                    setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
+                                    setData(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
+
+
+                                }).catch((err) => {
+                                    console.log(err);
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            },
+        }),
+    });
 
 
 
@@ -345,20 +467,16 @@ export default function CurriculumoOptions() {
                                                         {!Options.length ? <h3>No Data Found!</h3> : null}
                                                         {Options.length > 0 && (
                                                             <>
-                                                                <h2>{select.map((val) => val._id)}</h2>
-
-                                                                <DataGrid
-
-                                                                    rows={Options}
-
-                                                                    columns={columns}
-                                                                    pageSize={10}
-                                                                    rowsPerPageOptions={[10]}
-
-                                                                    onSelectionChange={(newSelection) => {
-
-                                                                        setSelection(newSelection.rows);
-                                                                    }}
+                                                                <MRT_TableContainer table={table} />
+                                                                <TablePagination
+                                                                    rowsPerPageOptions={itemsPerPageOptions}
+                                                                    component="div"
+                                                                    count={data.length}
+                                                                    rowsPerPage={rowsPerPage}
+                                                                    page={page}
+                                                                    onPageChange={handleChangePage}
+                                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                                    style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
                                                                 />
                                                             </>
                                                         )
@@ -410,7 +528,7 @@ export default function CurriculumoOptions() {
                             option_name: Yup.string().required("Required").matches(
                                 /\S+/,
                                 "Field must contain at least one non-space character"
-                              ),
+                            ),
                             audio_title: Yup.string(),
                             video_title: Yup.string(),
                             pdf_title: Yup.string()
@@ -472,6 +590,7 @@ export default function CurriculumoOptions() {
                                             console.log(res.data.result)
 
                                             setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
+                                            setData(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
 
 
                                         }).catch((err) => {
@@ -722,6 +841,7 @@ export default function CurriculumoOptions() {
                                             console.log(res.data.result)
 
                                             setOptions(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
+                                            setData(res.data.result.map((el, index) => ({ ...el, id: el.option_id, i: index })))
 
 
                                         }).catch((err) => {
