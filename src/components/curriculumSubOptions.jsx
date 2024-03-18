@@ -72,7 +72,7 @@ export default function CurriculumoSubOptions() {
         setPdfUrl(e.row.pdf_url);
         setAudioUrl(e.row.audio_url);
         setVideoUrl(e.row.video_url)
-        
+
     };
     const onHandle = (e, type) => {
         if (type === "p") {
@@ -441,6 +441,9 @@ export default function CurriculumoSubOptions() {
                             formData.append("title", values.title)
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
+                                formData.append("pdf_title", values.pdf_title)
+                                formData.append("audio_title", "")
+                                formData.append("video_title", "")
                                 formData.append("audio_url", "")
                                 formData.append("video_url", "")
 
@@ -449,13 +452,22 @@ export default function CurriculumoSubOptions() {
                                 formData.append("audio_url", getAudio.pictureAsFile)
                                 formData.append("pdf_url", "")
                                 formData.append("video_url", "")
+                                formData.append("pdf_title", "")
+                                formData.append("audio_title", values.audio_title)
+                                formData.append("video_title", "")
                             }
                             if (getVideo.pictureAsFile) {
                                 formData.append("video_url", getVideo.pictureAsFile)
                                 formData.append("pdf_url", "")
                                 formData.append("audio_url", "")
+                                formData.append("pdf_title", "")
+                                formData.append("audio_title", "")
+                                formData.append("video_title", values.video_title)
                             }
                             if (!getPdf.pictureAsFile && !getAudio.pictureAsFile && !getVideo.pictureAsFile) {
+                                formData.append("pdf_title",  getDetail.pdf_title)
+                                formData.append("audio_title", getDetail.audio_title)
+                                formData.append("video_title", getDetail.video_title)
                                 formData.append("pdf_url", getPdfUrl)
                                 formData.append("audio_url", getAudioUrl)
                                 formData.append("video_url", getVideoUrl)
