@@ -515,3 +515,15 @@ export const reOrder = (data, endpoint) => {
     data,
   });
 };
+export const LessonReOrder = (data, endpoint) => {
+  const token = localStorage.getItem("auth_token");
+  return axios({
+    method: "post",
+    url: `${base_uri.base_uri_admin}/admin/reordering`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  });
+};

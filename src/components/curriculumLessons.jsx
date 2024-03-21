@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Side_Navigation from "./Side_Navigation";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
@@ -15,6 +15,8 @@ import {
   edit_lesson,
   get_lessons,
   getCustomLessonPlan,
+  LessonReOrder,
+  reOrder
 } from "../services/web/webServices";
 import { Store } from "react-notifications-component";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -43,6 +45,11 @@ import htmlToDraft from "html-to-draftjs";
 import { DropdownButton, Dropdown } from "react-bootstrap";
 import DynamicForm from "./dynamicForm/dynamicForm";
 import { isImage } from "../utils/checkImage";
+import {
+  MRT_TableContainer,
+  useMaterialReactTable,
+} from "material-react-table";
+import { TablePagination } from "@mui/material";
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
@@ -249,126 +256,126 @@ export default function CurriculumoLessonPlans() {
       setLessonFormat("");
     }
   };
-
+console.log("deleteLessonId",deleteLessonId)
   const handleShow = (e, t) => {
     if (t === 1) {
-      setDetail(e.row);
+      setDetail(e);
       setShowEditLessonPlans(true);
-      setImageUrl(e.row.image_url);
-      setLessonFormat(e.row.format);
-      setEditorData1(convertHtmlToDraft(e.row.integration));
-      setIntegration(e.row.integration);
-      setEditorData2(convertHtmlToDraft(e.row.lesson_objective));
-      setObjective(e.row.lesson_objective);
-      setEditorData3(convertHtmlToDraft(e.row.lesson_target));
-      setTarget(e.row.lesson_target);
-      setEditorData4(convertHtmlToDraft(e.row.prep));
-      setPrep(e.row.prep);
-      setEditorData5(convertHtmlToDraft(e.row.reflection_question));
-      setQuestions(e.row.reflection_question);
-      setEditorData6(convertHtmlToDraft(e.row.sel_compentencies));
-      setCompetencies(e.row.sel_compentencies);
-      setEditorData7(convertHtmlToDraft(e.row.lesson_set));
-      setSet(e.row.lesson_set);
-      setEditorData8(convertHtmlToDraft(e.row.spark_it_up));
-      setSparkItUp(e.row.spark_it_up);
-      setEditorData9(convertHtmlToDraft(e.row.standards_alignment));
-      setAlignment(e.row.standards_alignment);
-      setEditorData10(convertHtmlToDraft(e.row.teach));
-      setTeach(e.row.teach);
-      setEditorData11(convertHtmlToDraft(e.row.teaching_cues));
-      setCues(e.row.teaching_cues);
-      setEditorData12(convertHtmlToDraft(e.row.teaching_suggestions));
-      setSuggestion(e.row.teaching_suggestions);
+      setImageUrl(e.image_url);
+      setLessonFormat(e.format);
+      setEditorData1(convertHtmlToDraft(e.integration));
+      setIntegration(e.integration);
+      setEditorData2(convertHtmlToDraft(e.lesson_objective));
+      setObjective(e.lesson_objective);
+      setEditorData3(convertHtmlToDraft(e.lesson_target));
+      setTarget(e.lesson_target);
+      setEditorData4(convertHtmlToDraft(e.prep));
+      setPrep(e.prep);
+      setEditorData5(convertHtmlToDraft(e.reflection_question));
+      setQuestions(e.reflection_question);
+      setEditorData6(convertHtmlToDraft(e.sel_compentencies));
+      setCompetencies(e.sel_compentencies);
+      setEditorData7(convertHtmlToDraft(e.lesson_set));
+      setSet(e.lesson_set);
+      setEditorData8(convertHtmlToDraft(e.spark_it_up));
+      setSparkItUp(e.spark_it_up);
+      setEditorData9(convertHtmlToDraft(e.standards_alignment));
+      setAlignment(e.standards_alignment);
+      setEditorData10(convertHtmlToDraft(e.teach));
+      setTeach(e.teach);
+      setEditorData11(convertHtmlToDraft(e.teaching_cues));
+      setCues(e.teaching_cues);
+      setEditorData12(convertHtmlToDraft(e.teaching_suggestions));
+      setSuggestion(e.teaching_suggestions);
       setEditorData13(
-        convertHtmlToDraft(e.row.vocabulary ? e.row.vocabulary : "")
+        convertHtmlToDraft(e.vocabulary ? e.vocabulary : "")
       );
-      setVocabulary(e.row.vocabulary ? e.row.vocabulary : "");
+      setVocabulary(e.vocabulary ? e.vocabulary : "");
     } else if (t === 2) {
-      setDetail(e.row);
+      setDetail(e);
       setShowEditLessonPlans(true);
-      setImageUrl(e.row.image_url);
-      setLessonFormat(e.row.format);
-      setEditorData1(convertHtmlToDraft(e.row.ready));
-      setReady(e.row.ready);
-      setEditorData2(convertHtmlToDraft(e.row.lesson_set));
-      setSet(e.row.lesson_set);
-      setEditorData3(convertHtmlToDraft(e.row.go));
-      setGo(e.row.go);
-      setEditorData4(convertHtmlToDraft(e.row.adaptations));
-      setAdaptation(e.row.adaptations);
-      setEditorData5(convertHtmlToDraft(e.row.objectives));
-      setObjective(e.row.objectives);
-      setEditorData6(convertHtmlToDraft(e.row.academics));
-      setAcademics(e.row.academics);
-      setEditorData7(convertHtmlToDraft(e.row.teacher_tips));
-      setTeacherTips(e.row.teacher_tips);
-      setEditorData8(convertHtmlToDraft(e.row.family_fun));
-      setFamilyFun(e.row.family_fun);
-      setEditorData9(convertHtmlToDraft(e.row.lyrics));
-      setLyrics(e.row.lyrics);
-      setEditorData10(convertHtmlToDraft(e.row.music_credits));
-      setMusicCredits(e.row.music_credits);
+      setImageUrl(e.image_url);
+      setLessonFormat(e.format);
+      setEditorData1(convertHtmlToDraft(e.ready));
+      setReady(e.ready);
+      setEditorData2(convertHtmlToDraft(e.lesson_set));
+      setSet(e.lesson_set);
+      setEditorData3(convertHtmlToDraft(e.go));
+      setGo(e.go);
+      setEditorData4(convertHtmlToDraft(e.adaptations));
+      setAdaptation(e.adaptations);
+      setEditorData5(convertHtmlToDraft(e.objectives));
+      setObjective(e.objectives);
+      setEditorData6(convertHtmlToDraft(e.academics));
+      setAcademics(e.academics);
+      setEditorData7(convertHtmlToDraft(e.teacher_tips));
+      setTeacherTips(e.teacher_tips);
+      setEditorData8(convertHtmlToDraft(e.family_fun));
+      setFamilyFun(e.family_fun);
+      setEditorData9(convertHtmlToDraft(e.lyrics));
+      setLyrics(e.lyrics);
+      setEditorData10(convertHtmlToDraft(e.music_credits));
+      setMusicCredits(e.music_credits);
     } else if (t === 3) {
-      setDetail(e.row);
+      setDetail(e);
       setShowEditLessonPlans(true);
-      setImageUrl(e.row.image_url);
-      setLessonFormat(e.row.format);
-      setEditorData1(convertHtmlToDraft(e.row.ready));
-      setReady(e.row.ready);
-      setEditorData2(convertHtmlToDraft(e.row.lesson_set));
-      setSet(e.row.lesson_set);
-      setEditorData3(convertHtmlToDraft(e.row.go));
-      setGo(e.row.go);
-      setEditorData4(convertHtmlToDraft(e.row.safety_first));
-      setSafetyFirst(e.row.safety_first);
-      setEditorData5(convertHtmlToDraft(e.row.game_reset));
-      setGameReset(e.row.game_reset);
-      setEditorData6(convertHtmlToDraft(e.row.home_play));
-      setHomePlay(e.row.home_play);
-      setEditorData7(convertHtmlToDraft(e.row.the_right_fit));
-      setTheRightFit(e.row.the_right_fit);
-      setEditorData8(convertHtmlToDraft(e.row.guideline_addressed));
-      setGuideline(e.row.guideline_addressed);
+      setImageUrl(e.image_url);
+      setLessonFormat(e.format);
+      setEditorData1(convertHtmlToDraft(e.ready));
+      setReady(e.ready);
+      setEditorData2(convertHtmlToDraft(e.lesson_set));
+      setSet(e.lesson_set);
+      setEditorData3(convertHtmlToDraft(e.go));
+      setGo(e.go);
+      setEditorData4(convertHtmlToDraft(e.safety_first));
+      setSafetyFirst(e.safety_first);
+      setEditorData5(convertHtmlToDraft(e.game_reset));
+      setGameReset(e.game_reset);
+      setEditorData6(convertHtmlToDraft(e.home_play));
+      setHomePlay(e.home_play);
+      setEditorData7(convertHtmlToDraft(e.the_right_fit));
+      setTheRightFit(e.the_right_fit);
+      setEditorData8(convertHtmlToDraft(e.guideline_addressed));
+      setGuideline(e.guideline_addressed);
     }
 
     if (t === 4) {
-      setDetail(e.row);
+      setDetail(e);
       setShowEditLessonPlans(true);
-      setImageUrl(e.row.image_url);
-      setLessonFormat(e.row.format);
-      setEditorData1(convertHtmlToDraft(e.row.integration));
-      setIntegration(e.row.integration);
-      setEditorData2(convertHtmlToDraft(e.row.lesson_objective));
-      setObjective(e.row.lesson_objective);
-      setEditorData3(convertHtmlToDraft(e.row.lesson_target));
-      setTarget(e.row.lesson_target);
-      setEditorData4(convertHtmlToDraft(e.row.prep));
-      setPrep(e.row.prep);
-      setEditorData5(convertHtmlToDraft(e.row.reflection_question));
-      setQuestions(e.row.reflection_question);
-      setEditorData6(convertHtmlToDraft(e.row.sel_compentencies));
-      setCompetencies(e.row.sel_compentencies);
-      setEditorData7(convertHtmlToDraft(e.row.lesson_set));
-      setSet(e.row.lesson_set);
-      setEditorData8(convertHtmlToDraft(e.row.spark_it_up));
-      setSparkItUp(e.row.spark_it_up);
-      setEditorData9(convertHtmlToDraft(e.row.standards_alignment));
-      setAlignment(e.row.standards_alignment);
-      setEditorData10(convertHtmlToDraft(e.row.teach));
-      setTeach(e.row.teach);
-      setEditorData11(convertHtmlToDraft(e.row.teaching_cues));
-      setCues(e.row.teaching_cues);
-      setEditorData12(convertHtmlToDraft(e.row.teaching_suggestions));
-      setSuggestion(e.row.teaching_suggestions);
-      setEditorData13(convertHtmlToDraft(e.row.integration_icon));
-      setIntegrationIcon(e.row.integration_icon);
-      setEditorData13(convertHtmlToDraft(e.row.key_words));
-      setKeyWords(e.row.key_words);
+      setImageUrl(e.image_url);
+      setLessonFormat(e.format);
+      setEditorData1(convertHtmlToDraft(e.integration));
+      setIntegration(e.integration);
+      setEditorData2(convertHtmlToDraft(e.lesson_objective));
+      setObjective(e.lesson_objective);
+      setEditorData3(convertHtmlToDraft(e.lesson_target));
+      setTarget(e.lesson_target);
+      setEditorData4(convertHtmlToDraft(e.prep));
+      setPrep(e.prep);
+      setEditorData5(convertHtmlToDraft(e.reflection_question));
+      setQuestions(e.reflection_question);
+      setEditorData6(convertHtmlToDraft(e.sel_compentencies));
+      setCompetencies(e.sel_compentencies);
+      setEditorData7(convertHtmlToDraft(e.lesson_set));
+      setSet(e.lesson_set);
+      setEditorData8(convertHtmlToDraft(e.spark_it_up));
+      setSparkItUp(e.spark_it_up);
+      setEditorData9(convertHtmlToDraft(e.standards_alignment));
+      setAlignment(e.standards_alignment);
+      setEditorData10(convertHtmlToDraft(e.teach));
+      setTeach(e.teach);
+      setEditorData11(convertHtmlToDraft(e.teaching_cues));
+      setCues(e.teaching_cues);
+      setEditorData12(convertHtmlToDraft(e.teaching_suggestions));
+      setSuggestion(e.teaching_suggestions);
+      setEditorData13(convertHtmlToDraft(e.integration_icon));
+      setIntegrationIcon(e.integration_icon);
+      setEditorData13(convertHtmlToDraft(e.key_words));
+      setKeyWords(e.key_words);
     }
 
     if (t === 5) {
-      setDynamicFormEditData(e.row);
+      setDynamicFormEditData(e);
       setOpenEditFormModal(true);
     }
   };
@@ -460,61 +467,46 @@ export default function CurriculumoLessonPlans() {
   //   }
   // }
 
-  const onDelete = (params) => () => {
-    console.log(params, "onDelete params");
+  
+  const getCustomLessons = async () => {
+    await getCustomLessonPlan({
+      curriculum_id: location.state.curriculum_id,
+      suboption_id: location.state.suboption_id,
+    })
+      .then((res) => {
+
+        setDeleteLessonId(res?.data?.result?.[0]?.id);
+
+        let data = JSON.parse(res?.data?.result?.[0]?.lesson_data);
+        let resData = {
+          ...res?.data?.result?.[0],
+          lesson_data: data,
+        };
+
+        setLessonPlanData(resData);
+
+        const re = data.map((el, index) => ({
+          ...el,
+          id: el.id,
+          i: index,
+        }));
+        console.log(re, "====> re getCustomLessons");
+        setLessonPlans(re);
+        setData(re)
+        setLoader(false);
+      })
+      .catch((err) => {
+        setLoader(false);
+        console.log("custom lesson err", err);
+      });
+  };
+  const onDelete = (params) => {
+    console.log(params, "onDelete params",deleteLessonId );
     if (window.confirm("Are your sure? You want to delete this?")) {
       let data = {
         id: deleteLessonId,
-        lesson_id: params?.row?.id,
+        lesson_id: params?.id,
       };
-      // delete_lesson(data)
-      //   .then((res) => {
-      //     Store.addNotification({
-      //       title: "Success",
-      //       message: "Record Deleted Successfully",
-      //       type: "success",
-      //       insert: "top",
-      //       container: "top-right",
-      //       className: "rnc__notification-container--top-right",
-      //       animationIn: ["animate__animated", "animate__fadeIn"],
-      //       animationOut: ["animate__animated", "animate__fadeOut"],
-      //       dismiss: {
-      //         duration: 5000,
-      //         onScreen: true,
-      //       },
-      //     });
-      //     // get_lessons({
-      //     //   curriculum_id: location.state.curriculum_id,
-      //     //   suboption_id: location.state.suboption_id,
-      //     // })
-      //     //   .then((res) => {
-      //     //     console.log("=======>", res.data.result);
-      //     //     if (res.data.result !== null) {
-      //     //       console.log(res.data.result, "res.data.result");
-      //     //       setLessonPlans(
-      //     //         res.data.result.map((el, index) => {
-      //     //           return {
-      //     //             ...el,
-      //     //             id: el.lesson_id,
-      //     //             i: index,
-      //     //           };
-      //     //         })
-      //     //       );
-      //     //     } else {
-      //     //       setLessonPlans([]);
-      //     //     }
-      //     //     setLoader(false);
-      //     //   })
-      //     //   .catch((err) => {
-      //     //     setLoader(false);
-      //     //     console.log(err);
-      //     //   });
-      //     getCustomLessons();
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-
       deleteCustomLessonPlan(data)
         .then((res) => {
           getCustomLessons();
@@ -544,124 +536,72 @@ export default function CurriculumoLessonPlans() {
     if (LessonPlans?.length === 0 || location?.state?.reloadLessonPlans) {
       getCustomLessons();
 
-      // getCustomLessonPlan({
-      //   curriculum_id: location.state.curriculum_id,
-      //   suboption_id: location.state.suboption_id,
-      // })
-      //   .then((res) => {
-      //     console.log("get_lessons", res.data.result);
-      //     let data = JSON.parse(
-      //       res.data.result[0].lesson_data.replace(/\\"/g, '"')
-      //     );
-      //     let resData = {
-      //       ...res.data.result[0],
-      //       lesson_data: data,
-      //     };
-      //     setLessonPlanData(resData);
-      //     console.log(resData, "resData");
-
-      //     console.log(data, "get_lessons data");
-      //     const re = data.map((el, index) => ({
-      //       ...el,
-      //       id: el.id,
-      //       i: index,
-      //     }));
-      //     setLessonPlans(re);
-
-      //     setLoader(false);
-      //   })
-      //   .catch((err) => {
-      //     setLoader(false);
-      //     console.log(err);
-      //   });
+     
     }
   }, []);
 
-  const getCustomLessons = async () => {
-    await getCustomLessonPlan({
-      curriculum_id: location.state.curriculum_id,
-      suboption_id: location.state.suboption_id,
-    })
-      .then((res) => {
-        console.log(res, "========> res");
-        setDeleteLessonId(res?.data?.result?.[0]?.id);
-
-        let data = JSON.parse(res?.data?.result?.[0]?.lesson_data);
-        console.log(data, "=========> data");
-        let resData = {
-          ...res?.data?.result?.[0],
-          lesson_data: data,
-        };
-
-        setLessonPlanData(resData);
-
-        const re = data.map((el, index) => ({
-          ...el,
-          id: el.id,
-          i: index,
-        }));
-        console.log(re, "====> re getCustomLessons");
-        setLessonPlans(re);
-        setLoader(false);
-      })
-      .catch((err) => {
-        setLoader(false);
-        console.log("custom lesson err", err);
-      });
-  };
+  
 
   const handleView = (data) => {
-    setViewData(data.row);
+    setViewData(data);
     setViewModel(true);
   };
 
-  const columns = [
+  const columns =  [
     {
-      field: "sno",
-      headerName: "S.NO.",
+      header: "S.NO.",
       filterable: false,
-      width: 70,
-      renderCell: (index) => `${index.row.i + 1}`,
+      size: 5, //increase the width of this column
+      muiTableHeadCellProps: {
+        align: "left",
+      },
+      muiTableBodyCellProps: {
+        align: "left",
+      },
+      accessorFn: (index) => `${index.i + 1}`,
     },
     {
-      field: "title",
-      headerName: "Name",
-      width: 220,
-      // renderCell: (params) => {
-      //   return `Lesson ${params.row.i + 1}`;
-      // },
+      accessorKey: "title",
+      header: "Name",
+      size: 15,
+      muiTableHeadCellProps: {
+        align: "left",
+      },
+      muiTableBodyCellProps: {
+        align: "left",
+      },
     },
     {
-      field: "action",
-      headerName: "Action",
+      header: "Action",
       width: 450,
-      renderCell: (params) => {
+      accessorFn: (params) => {
         return (
           <>
             <Button onClick={() => handleView(params)}>
               <i className="fas fa-eye"></i>
             </Button>
+            {console.log("====format")}
             <Button
               onClick={() =>
                 handleShow(
                   params,
-                  params?.row?.format === "A"
+                  params?.format === "A"
                     ? 1
-                    : params?.row?.format === "B"
-                    ? 2
-                    : params?.row?.format === "C"
-                    ? 3
-                    : params?.row?.format === "D"
-                    ? 4
-                    : lessonPlanData?.format === "E"
-                    ? 5
-                    : null
+                    : params?.format === "B"
+                      ? 2
+                      : params?.format === "C"
+                        ? 3
+                        : params?.format === "D"
+                          ? 4
+                          : lessonPlanData?.format === "E"
+                            ? 5
+                            : null
                 )
               }
             >
               <i className="fas fa-edit"></i>
             </Button>
-            <Button color="error" onClick={onDelete(params)}>
+            <Button color="error" onClick={()=>onDelete(params)}>
               <i className="fa fa-trash" aria-hidden="true"></i>
             </Button>
           </>
@@ -669,6 +609,83 @@ export default function CurriculumoLessonPlans() {
       },
     },
   ];
+  const itemsPerPageOptions = [10, 25, 50, 100]; // Define your desired options
+
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(itemsPerPageOptions[0]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = useMemo(() => {
+    const startIndex = page * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    return data.slice(startIndex, endIndex);
+  }, [data, page, rowsPerPage]);
+
+  const table = useMaterialReactTable({
+    autoResetPageIndex: false,
+    columns,
+    data: paginatedData,
+    enableRowOrdering: true,
+    enableSorting: false,
+    enablePagination: false, // Disable internal pagination, as we will use external TablePagination
+    muiRowDragHandleProps: ({ table }) => ({
+      onDragEnd: () => {
+        const { draggingRow, hoveredRow } = table.getState();
+        if (hoveredRow && draggingRow) {
+          let data = {
+            id1: draggingRow.original.order_id,
+            id2: hoveredRow.original.order_id,
+            curriculum_id: location.state.curriculum_id,
+            suboption_id: location.state.suboption_id,          
+          };
+          console.log("🚀 ~ CurriculumModules ~ data:", data)
+          LessonReOrder(data)
+            .then((res) => {
+              getCustomLessonPlan({
+                curriculum_id: location.state.curriculum_id,
+                suboption_id: location.state.suboption_id,
+              })
+                .then((res) => {
+                  setDeleteLessonId(res?.data?.result?.[0]?.id);
+
+                  let data = JSON.parse(res?.data?.result?.[0]?.lesson_data);
+                  let resData = {
+                    ...res?.data?.result?.[0],
+                    lesson_data: data,
+                  };
+
+                  setLessonPlanData(resData);
+
+                  const re = data.map((el, index) => ({
+                    ...el,
+                    id: el.id,
+                    i: index,
+                  }));
+                  setLessonPlans(re);
+                  setData(re)
+                  setLoader(false);
+
+                }).catch((err) => {
+                  setLoader(false);
+                  console.log(err);
+                })
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      },
+    }),
+  });
 
   const [editorData1, setEditorData1] = useState("");
   const [editorData2, setEditorData2] = useState("");
@@ -1066,16 +1083,17 @@ export default function CurriculumoLessonPlans() {
                               {LessonPlans.length > 0 && (
                                 <>
                                   <h2>{select.map((val) => val._id)}</h2>
-
-                                  <DataGrid
-                                    rows={LessonPlans}
-                                    // rows={rows}
-                                    columns={columns}
-                                    pageSize={10}
-                                    rowsPerPageLessonPlans={[10]}
-                                    onSelectionChange={(newSelection) => {
-                                      setSelection(newSelection.rows);
-                                    }}
+{                                  console.log("======data>", data)
+}                                  <MRT_TableContainer table={table} />
+                                  <TablePagination
+                                    rowsPerPageOptions={itemsPerPageOptions}
+                                    component="div"
+                                    count={data.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
                                   />
                                 </>
                               )}
@@ -1207,6 +1225,7 @@ export default function CurriculumoLessonPlans() {
                           i: index,
                         }));
                         setLessonPlans(re);
+                        setData(re)
                         setLoader(false);
                       })
                       .catch((err) => {
@@ -1381,7 +1400,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 1, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                       </div>
@@ -1423,7 +1442,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 2, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                       </div>
@@ -1465,7 +1484,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 3, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                       </div>
@@ -1507,7 +1526,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 4, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                       </div>
@@ -1549,7 +1568,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 5, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                       </div>
@@ -1591,7 +1610,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 6, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                       </div>
@@ -1633,7 +1652,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 7, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                       </div>
@@ -1675,7 +1694,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 8, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                       </div>
@@ -1717,7 +1736,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 9, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="standards_alignment" /> */}
                       </div>
@@ -1759,7 +1778,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 10, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teach" /> */}
                       </div>
@@ -1801,7 +1820,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 11, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teaching_cues" /> */}
                       </div>
@@ -1843,7 +1862,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 12, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teaching_suggestions" /> */}
                       </div>
@@ -1885,7 +1904,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 13, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="vocabulary" /> */}
                       </div>
@@ -2201,7 +2220,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 1, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                       </div>
@@ -2243,7 +2262,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 2, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                       </div>
@@ -2285,7 +2304,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 3, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                       </div>
@@ -2327,7 +2346,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 4, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                       </div>
@@ -2369,7 +2388,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 5, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                       </div>
@@ -2411,7 +2430,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 6, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                       </div>
@@ -2453,7 +2472,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 7, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                       </div>
@@ -2495,7 +2514,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 8, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                       </div>
@@ -2537,7 +2556,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 9, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="standards_alignment" /> */}
                       </div>
@@ -2579,7 +2598,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 10, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teach" /> */}
                       </div>
@@ -2890,7 +2909,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 1, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                       </div>
@@ -2932,7 +2951,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 2, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                       </div>
@@ -2974,7 +2993,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 3, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                       </div>
@@ -3016,7 +3035,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 4, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                       </div>
@@ -3058,7 +3077,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 5, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                       </div>
@@ -3100,7 +3119,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 6, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                       </div>
@@ -3142,7 +3161,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 7, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                       </div>
@@ -3184,7 +3203,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 8, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                       </div>
@@ -3510,7 +3529,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 1, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                       </div>
@@ -3552,7 +3571,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 2, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                       </div>
@@ -3594,7 +3613,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 3, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                       </div>
@@ -3636,7 +3655,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 4, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                       </div>
@@ -3678,7 +3697,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 5, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                       </div>
@@ -3720,7 +3739,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 6, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                       </div>
@@ -3762,7 +3781,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 7, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                       </div>
@@ -3804,7 +3823,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 8, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                       </div>
@@ -3846,7 +3865,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 9, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="standards_alignment" /> */}
                       </div>
@@ -3888,7 +3907,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 10, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teach" /> */}
                       </div>
@@ -3930,7 +3949,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 11, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teaching_cues" /> */}
                       </div>
@@ -3972,7 +3991,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 12, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teaching_suggestions" /> */}
                       </div>
@@ -4014,7 +4033,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 13, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="vocabulary" /> */}
                       </div>
@@ -4056,7 +4075,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 14, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="vocabulary" /> */}
                       </div>
@@ -4388,7 +4407,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 1, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                       </div>
@@ -4430,7 +4449,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 2, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                       </div>
@@ -4472,7 +4491,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 3, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                       </div>
@@ -4514,7 +4533,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 4, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                       </div>
@@ -4556,7 +4575,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 5, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                       </div>
@@ -4598,7 +4617,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 6, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                       </div>
@@ -4640,7 +4659,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 7, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                       </div>
@@ -4682,7 +4701,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 8, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                       </div>
@@ -4724,7 +4743,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 9, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="standards_alignment" /> */}
                       </div>
@@ -4766,7 +4785,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 10, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teach" /> */}
                       </div>
@@ -4808,7 +4827,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 11, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teaching_cues" /> */}
                       </div>
@@ -4850,7 +4869,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 12, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teaching_suggestions" /> */}
                       </div>
@@ -4892,7 +4911,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 13, 1)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="vocabulary" /> */}
                       </div>
@@ -5205,7 +5224,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 1, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                       </div>
@@ -5247,7 +5266,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 2, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                       </div>
@@ -5289,7 +5308,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 3, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                       </div>
@@ -5331,7 +5350,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 4, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                       </div>
@@ -5373,7 +5392,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 5, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                       </div>
@@ -5415,7 +5434,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 6, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                       </div>
@@ -5457,7 +5476,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 7, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                       </div>
@@ -5499,7 +5518,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 8, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                       </div>
@@ -5541,7 +5560,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 9, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="standards_alignment" /> */}
                       </div>
@@ -5583,7 +5602,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 10, 2)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teach" /> */}
                       </div>
@@ -5898,7 +5917,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 1, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                       </div>
@@ -5940,7 +5959,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 2, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                       </div>
@@ -5982,7 +6001,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 3, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                       </div>
@@ -6024,7 +6043,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 4, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                       </div>
@@ -6066,7 +6085,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 5, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                       </div>
@@ -6108,7 +6127,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 6, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                       </div>
@@ -6150,7 +6169,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 7, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                       </div>
@@ -6192,7 +6211,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 8, 3)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                       </div>
@@ -6513,7 +6532,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 1, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextEditor type="text" className="form-control" name="integration" />                                                 */}
                       </div>
@@ -6555,7 +6574,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 2, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_objective" /> */}
                       </div>
@@ -6597,7 +6616,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 3, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_target" /> */}
                       </div>
@@ -6639,7 +6658,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 4, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="prep" /> */}
                       </div>
@@ -6681,7 +6700,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 5, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="reflection_question" /> */}
                       </div>
@@ -6723,7 +6742,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 6, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="sel_compentencies" /> */}
                       </div>
@@ -6765,7 +6784,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 7, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="lesson_set" /> */}
                       </div>
@@ -6807,7 +6826,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 8, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="spark_it_up" /> */}
                       </div>
@@ -6849,7 +6868,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 9, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="standards_alignment" /> */}
                       </div>
@@ -6891,7 +6910,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 10, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teach" /> */}
                       </div>
@@ -6933,7 +6952,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 11, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teaching_cues" /> */}
                       </div>
@@ -6975,7 +6994,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 12, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="teaching_suggestions" /> */}
                       </div>
@@ -7017,7 +7036,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 13, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="vocabulary" /> */}
                       </div>
@@ -7059,7 +7078,7 @@ export default function CurriculumoLessonPlans() {
                           onEditorStateChange={(value) =>
                             handelChange(value, 14, 4)
                           }
-                          // onBlur={() => helpers.setTouched(true)}
+                        // onBlur={() => helpers.setTouched(true)}
                         />
                         {/* <MyTextArea type="text" className="form-control" name="vocabulary" /> */}
                       </div>
