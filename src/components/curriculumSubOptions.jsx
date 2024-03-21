@@ -73,11 +73,11 @@ export default function CurriculumoSubOptions() {
         setSelectedOption(event.target.value);
     };
     const handleShow = (e) => {
-        setDetail(e.row)
+        setDetail(e)
         setShowEditSubOptions(true);
-        setPdfUrl(e.row.pdf_url);
-        setAudioUrl(e.row.audio_url);
-        setVideoUrl(e.row.video_url)
+        setPdfUrl(e.pdf_url);
+        setAudioUrl(e.audio_url);
+        setVideoUrl(e.video_url)
 
     };
     const onHandle = (e, type) => {
@@ -162,12 +162,12 @@ export default function CurriculumoSubOptions() {
         setshowPreview(true);
         setPreviewFlag(flag.flag)
         if (flag.flag === 0) {
-            setPreview(e.row.pdf_url)
+            setPreview(e?.pdf_url)
         }
         else if (flag.flag === 1) {
-            setPreview(e.row.video_url)
+            setPreview(e?.video_url)
         } else {
-            setPreview(e.row.audio_url)
+            setPreview(e?.audio_url)
         }
 
 
@@ -247,7 +247,7 @@ export default function CurriculumoSubOptions() {
                 })
         }
     }, []);
-    const columns = useMemo(() =>[
+    const columns = useMemo(() => [
         {
             header: 'S.NO.',
             filterable: false,
@@ -258,7 +258,8 @@ export default function CurriculumoSubOptions() {
             muiTableBodyCellProps: {
                 align: "left",
             },
-            accessorFn: (index) => `${index.i + 1}`,        },
+            accessorFn: (index) => `${index.i + 1}`,
+        },
         {
             accessorKey: 'suboption_name',
             header: 'Category',
@@ -312,6 +313,7 @@ export default function CurriculumoSubOptions() {
             accessorFn: (params) => {
                 return (
                     <>
+                        {console.log("==11==>", params)}
                         {params?.audio_url === "" || params?.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
@@ -379,7 +381,7 @@ export default function CurriculumoSubOptions() {
                     reOrder(data)
                         .then((res) => {
                             get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
-                            then((res) => {
+                                then((res) => {
 
                                     setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
                                     setData(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
@@ -449,7 +451,7 @@ export default function CurriculumoSubOptions() {
                                                                         setSelection(newSelection.rows);
                                                                     }}
                                                                 /> */}
-                                                                 <MRT_TableContainer table={table} />
+                                                                <MRT_TableContainer table={table} />
                                                                 <TablePagination
                                                                     rowsPerPageOptions={itemsPerPageOptions}
                                                                     component="div"
@@ -506,6 +508,7 @@ export default function CurriculumoSubOptions() {
                             option_id: getDetail.option_id,
                             suboption_id: getDetail.suboption_id,
                             title: getDetail.title,
+                            order_id: getDetail.order_id
 
                         }}
 
@@ -526,13 +529,14 @@ export default function CurriculumoSubOptions() {
                             formData.append("unit_id", values.unit_id)
                             formData.append("subunit_id", values.subunit_id)
                             formData.append("is_files", values.is_files)
-                            formData.append("audio_title", values.audio_title)
-                            formData.append("video_title", values.video_title)
-                            formData.append("pdf_title", values.pdf_title)
+                            // formData.append("audio_title", values.audio_title)
+                            // formData.append("video_title", values.video_title)
+                            // formData.append("pdf_title", values.pdf_title)
                             formData.append("suboption_name", values.suboption_name)
                             formData.append("suboption_id", values.suboption_id)
                             formData.append("option_id", values.option_id)
                             formData.append("title", values.title)
+                            formData.append("order_id", getDetail.order_id)
                             if (getPdf.pictureAsFile) {
                                 formData.append("pdf_url", getPdf.pictureAsFile)
                                 formData.append("pdf_title", values.pdf_title)
@@ -559,7 +563,7 @@ export default function CurriculumoSubOptions() {
                                 formData.append("video_title", values.video_title)
                             }
                             if (!getPdf.pictureAsFile && !getAudio.pictureAsFile && !getVideo.pictureAsFile) {
-                                formData.append("pdf_title",  getDetail.pdf_title)
+                                formData.append("pdf_title", getDetail.pdf_title)
                                 formData.append("audio_title", getDetail.audio_title)
                                 formData.append("video_title", getDetail.video_title)
                                 formData.append("pdf_url", getPdfUrl)

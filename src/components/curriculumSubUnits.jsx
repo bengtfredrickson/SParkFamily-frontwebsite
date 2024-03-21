@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { add_subunits, add_Subunits, delete_subunits, delete_Subunits, get_subunits, get_Subunits, update_subunits, update_Subunits } from '../services/web/webServices';
+import { add_subunits, add_Subunits, delete_subunits, delete_Subunits, get_subunits, get_Subunits, update_subunits, update_Subunits, reOrder } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -14,6 +14,13 @@ import { Loader } from './Helper/Loader';
 import Footer from './Footer';
 import moment from 'moment/moment';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
+import {
+    MRT_TableContainer,
+    useMaterialReactTable,
+} from "material-react-table";
+import { TablePagination } from "@mui/material";
+
+
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
@@ -93,7 +100,7 @@ export default function CurriculumSubUnits() {
         }
     };
     const handleShow = (e) => {
-        setDetail(e.row)
+        setDetail(e)
         setShowEditSubunits(true);
     };
     const onHandle = (e) => {
@@ -131,7 +138,7 @@ export default function CurriculumSubUnits() {
     const onDelete = (params) => () => {
         if (window.confirm("Are your sure? You want to delete this?")) {
             let data = {
-                subunit_id: params.row.subunit_id,
+                subunit_id: params?.subunit_id,
             }
             delete_subunits(data).then((res) => {
 
@@ -157,6 +164,7 @@ export default function CurriculumSubUnits() {
                         console.log(res.data.result)
 
                         setSubunits(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+                        setData(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
 
 
                     }).catch((err) => {
@@ -179,6 +187,7 @@ export default function CurriculumSubUnits() {
                     console.log("=======>", res.data.result)
 
                     setSubunits(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+                    setData(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
                     setLoader(false);
 
                 }).catch((err) => {
@@ -187,34 +196,48 @@ export default function CurriculumSubUnits() {
                 })
         }
     }, []);
-    const columns = [
+    const columns = useMemo(() => [
         {
-            field: 'sno',
-            headerName: 'S.NO.',
+            header: 'S.NO.',
             filterable: false,
-            width: 70,
-            renderCell: (index) => `${(index.row.i) + 1}`
+            size: 5, //increase the width of this column
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
+            accessorFn: (index) => `${index.i + 1}`,
         },
         {
-            field: 'subunit_name',
-            headerName: 'Category',
-            width: 500,
-
+            accessorKey: 'subunit_name',
+            header: 'Category',
+            size: 20,
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
         },
         {
-            field: 'title',
-            headerName: 'Name',
-            width: 500,
-
+            accessorKey: 'title',
+            header: 'Name',
+            size: 20,
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
         },
         {
-            field: 'action',
-            headerName: "Action",
+            header: "Action",
             width: 450,
-            renderCell: (params) => {
+            accessorFn: (params) => {
                 return (
                     <>
-                        <Button onClick={() => navigate('/curriculum_options', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: params.row.subunit_id, page_key: params.row.key } })}>Resources</Button>
+                        <Button onClick={() => navigate('/curriculum_options', { state: { curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: params?.subunit_id, page_key: params?.key } })}>Resources</Button>
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -227,9 +250,67 @@ export default function CurriculumSubUnits() {
                 );
             },
         }
-    ];
+    ], []);
 
+    const itemsPerPageOptions = [10, 25, 50, 100]; // Define your desired options
 
+    const [data, setData] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(itemsPerPageOptions[0]);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const paginatedData = useMemo(() => {
+        const startIndex = page * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        return data.slice(startIndex, endIndex);
+    }, [data, page, rowsPerPage]);
+
+    const table = useMaterialReactTable({
+        autoResetPageIndex: false,
+        columns,
+        data: paginatedData,
+        enableRowOrdering: true,
+        enableSorting: false,
+        enablePagination: false, // Disable internal pagination, as we will use external TablePagination
+        muiRowDragHandleProps: ({ table }) => ({
+            onDragEnd: () => {
+                const { draggingRow, hoveredRow } = table.getState();
+                if (hoveredRow && draggingRow) {
+                    let data = {
+                        id1: draggingRow.original.order_id,
+                        id2: hoveredRow.original.order_id,
+                        tableName: "subunits",
+                    };
+                    console.log("🚀 ~ CurriculumModules ~ data:", data)
+                    reOrder(data)
+                        .then((res) => {
+                            get_subunits({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id }).
+                                then((res) => {
+
+                                    setSubunits(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+                                    setData(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+                                    setLoader(false);
+
+                                }).catch((err) => {
+                                    setLoader(false);
+                                    console.log(err);
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            },
+        }),
+    });
 
 
 
@@ -276,7 +357,7 @@ export default function CurriculumSubUnits() {
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
 
-                                                                <DataGrid
+                                                                {/* <DataGrid
 
                                                                     rows={Subunits}
 
@@ -288,6 +369,17 @@ export default function CurriculumSubUnits() {
 
                                                                         setSelection(newSelection.rows);
                                                                     }}
+                                                                /> */}
+                                                                 <MRT_TableContainer table={table} />
+                                                                <TablePagination
+                                                                    rowsPerPageOptions={itemsPerPageOptions}
+                                                                    component="div"
+                                                                    count={data.length}
+                                                                    rowsPerPage={rowsPerPage}
+                                                                    page={page}
+                                                                    onPageChange={handleChangePage}
+                                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                                    style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
                                                                 />
                                                             </>
                                                         )
@@ -365,6 +457,8 @@ export default function CurriculumSubUnits() {
                                             console.log(res.data.result)
 
                                             setSubunits(res.data.result.map((el, index) => ({ ...el, id: el.subunit_name, i: index })))
+                                            setData(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+
 
 
                                         }).catch((err) => {
@@ -467,7 +561,7 @@ export default function CurriculumSubUnits() {
                             title: Yup.string().required("Required").matches(
                                 /\S+/,
                                 "Field must contain at least one non-space character"
-                              )
+                            )
                         })}
 
                         onSubmit={(values, { resetForm }) => {
@@ -502,6 +596,7 @@ export default function CurriculumSubUnits() {
                                             console.log(res.data.result)
 
                                             setSubunits(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
+                                            setData(res.data.result.map((el, index) => ({ ...el, id: el.subunit_id, i: index })))
 
 
                                         }).catch((err) => {
