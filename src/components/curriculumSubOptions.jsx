@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Side_Navigation from './Side_Navigation'
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { add_suboption, delete_suboption, edit_suboption, get_suboptions, get_SubOptions } from '../services/web/webServices';
+import { add_suboption, delete_suboption, edit_suboption, get_suboptions, get_SubOptions, reOrder } from '../services/web/webServices';
 import { Store } from 'react-notifications-component';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -15,6 +15,12 @@ import Footer from './Footer';
 import moment from 'moment/moment';
 import ReactPlayer from 'react-player/lazy'
 import ReactAudioPlayer from 'react-audio-player';
+import {
+    MRT_TableContainer,
+    useMaterialReactTable,
+} from "material-react-table";
+import { TablePagination } from "@mui/material";
+
 
 const css = `
     .sidebar-menu li:nth-child(3) a {
@@ -182,7 +188,7 @@ export default function CurriculumoSubOptions() {
     const onDelete = (params) => () => {
         if (window.confirm("Are your sure? You want to delete this?")) {
             let data = {
-                suboption_id: params.row.suboption_id,
+                suboption_id: params?.suboption_id,
             }
             delete_suboption(data).then((res) => {
 
@@ -207,7 +213,9 @@ export default function CurriculumoSubOptions() {
                     then((res) => {
                         console.log("=======>", res.data.result)
 
-                        setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                        setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })));
+                        setData(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })));
+
                         setLoader(false);
                     }).catch((err) => {
                         console.log(err);
@@ -228,7 +236,9 @@ export default function CurriculumoSubOptions() {
                 then((res) => {
                     console.log("=======>", res.data.result)
 
-                    setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                    setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })));
+                    setData(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })));
+
                     setLoader(false);
 
                 }).catch((err) => {
@@ -237,70 +247,84 @@ export default function CurriculumoSubOptions() {
                 })
         }
     }, []);
-    const columns = [
+    const columns = useMemo(() =>[
         {
-            field: 'sno',
-            headerName: 'S.NO.',
+            header: 'S.NO.',
             filterable: false,
-            width: 70,
-            renderCell: (index) => `${(index.row.i) + 1}`
+            size: 5, //increase the width of this column
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
+            accessorFn: (index) => `${index.i + 1}`,        },
+        {
+            accessorKey: 'suboption_name',
+            header: 'Category',
+            size: 15,
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
         },
         {
-            field: 'suboption_name',
-            headerName: 'Category',
-            width: 250,
-
+            accessorKey: 'title',
+            header: 'Name',
+            size: 15,
+            muiTableHeadCellProps: {
+                align: "left",
+            },
+            muiTableBodyCellProps: {
+                align: "left",
+            },
         },
         {
-            field: 'title',
-            headerName: 'Name',
-            width: 250,
-
-        },
-        {
-            field: 'pdf_url',
-            headerName: "Pdf",
-            width: 200,
-            renderCell: (params) => {
+            accessorKey: 'pdf_url',
+            header: "Pdf",
+            size: 10,
+            accessorFn: (params) => {
                 return (
                     <>
-                        {params.row.pdf_url === "" || params.row.pdf_url === null ? <Button><i className="fas fa-file-pdf" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.pdf_url === "" || params?.pdf_url === null ? <Button><i className="fas fa-file-pdf" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 0 })}><i className="fas fa-file-pdf" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
         },
         {
-            field: 'video_url',
-            headerName: "Video",
-            width: 200,
-            renderCell: (params) => {
+            accessorKey: 'video_url',
+            header: "Video",
+            size: 10,
+            accessorFn: (params) => {
                 return (
                     <>
-                        {params.row.video_url === "" || params.row.video_url === null ? <Button ><i className="fas fa-file-video" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.video_url === "" || params?.video_url === null ? <Button ><i className="fas fa-file-video" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 1 })}><i className="fas fa-file-video" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
         },
         {
-            field: 'audio_url',
-            headerName: "Audio",
-            width: 200,
-            renderCell: (params) => {
+            accessorKey: 'audio_url',
+            header: "Audio",
+            size: 10,
+            accessorFn: (params) => {
                 return (
                     <>
-                        {params.row.audio_url === "" || params.row.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
+                        {params?.audio_url === "" || params?.audio_url === null ? <Button ><i className="fas fa-file-audio" style={{ fontSize: '20px', color: "grey" }}></i></Button> : <Button onClick={() => handleShow2(params, { flag: 2 })}><i className="fas fa-file-audio" style={{ fontSize: '20px' }}></i></Button>}
                     </>
                 );
             },
         },
         {
-            field: 'action',
-            headerName: "Action",
+            accessorKey: 'action',
+            header: "Action",
             width: 450,
-            renderCell: (params) => {
+            accessorFn: (params) => {
                 return (
                     <>
-                        {params?.row?.suboption_name?.toLowerCase().includes("lesson") ? <Button onClick={() => navigate('/curriculum_lessons', { state: { curriculum_id: location.state.curriculum_id, suboption_id: params.row.suboption_id } })}>Lesson Plans</Button> : <Button style={{ "color": "grey" }}>Lesson Plans</Button>}
+                        {params?.suboption_name?.toLowerCase().includes("lesson") ? <Button onClick={() => navigate('/curriculum_lessons', { state: { curriculum_id: location?.state?.curriculum_id, suboption_id: params?.suboption_id } })}>Lesson Plans</Button> : <Button style={{ "color": "grey" }}>Lesson Plans</Button>}
                         <Button onClick={() => handleShow(params)}><i className="fas fa-edit"></i></Button>
                         <Button color="error"
                             onClick={onDelete(params)}
@@ -313,7 +337,66 @@ export default function CurriculumoSubOptions() {
                 );
             },
         }
-    ];
+    ], []);
+    const itemsPerPageOptions = [10, 25, 50, 100]; // Define your desired options
+
+    const [data, setData] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(itemsPerPageOptions[0]);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const paginatedData = useMemo(() => {
+        const startIndex = page * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        return data.slice(startIndex, endIndex);
+    }, [data, page, rowsPerPage]);
+
+    const table = useMaterialReactTable({
+        autoResetPageIndex: false,
+        columns,
+        data: paginatedData,
+        enableRowOrdering: true,
+        enableSorting: false,
+        enablePagination: false, // Disable internal pagination, as we will use external TablePagination
+        muiRowDragHandleProps: ({ table }) => ({
+            onDragEnd: () => {
+                const { draggingRow, hoveredRow } = table.getState();
+                if (hoveredRow && draggingRow) {
+                    let data = {
+                        id1: draggingRow.original.order_id,
+                        id2: hoveredRow.original.order_id,
+                        tableName: "suboptions",
+                    };
+                    console.log("🚀 ~ CurriculumModules ~ data:", data)
+                    reOrder(data)
+                        .then((res) => {
+                            get_suboptions({ curriculum_id: location.state.curriculum_id, unit_id: location.state.unit_id, subunit_id: location.state.subunit_id, option_id: location.state.option_id }).
+                            then((res) => {
+
+                                    setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                    setData(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                    setLoader(false);
+
+                                }).catch((err) => {
+                                    setLoader(false);
+                                    console.log(err);
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            },
+        }),
+    });
 
 
 
@@ -353,7 +436,7 @@ export default function CurriculumoSubOptions() {
                                                             <>
                                                                 <h2>{select.map((val) => val._id)}</h2>
 
-                                                                <DataGrid
+                                                                {/* <DataGrid
 
                                                                     rows={SubOptions}
 
@@ -365,6 +448,17 @@ export default function CurriculumoSubOptions() {
 
                                                                         setSelection(newSelection.rows);
                                                                     }}
+                                                                /> */}
+                                                                 <MRT_TableContainer table={table} />
+                                                                <TablePagination
+                                                                    rowsPerPageOptions={itemsPerPageOptions}
+                                                                    component="div"
+                                                                    count={data.length}
+                                                                    rowsPerPage={rowsPerPage}
+                                                                    page={page}
+                                                                    onPageChange={handleChangePage}
+                                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                                    style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}
                                                                 />
                                                             </>
                                                         )
@@ -523,6 +617,8 @@ export default function CurriculumoSubOptions() {
                                                 console.log("=======>", res.data.result)
 
                                                 setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                                setData(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+
                                                 setLoader(false);
 
 
@@ -813,7 +909,9 @@ export default function CurriculumoSubOptions() {
                                                 then((res) => {
                                                     console.log("=======>", res.data.result)
 
-                                                    setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                                    setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })));
+                                                    setData(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })));
+
                                                     setLoader(false);
 
                                                 }).catch((err) => {
@@ -893,7 +991,9 @@ export default function CurriculumoSubOptions() {
                                             then((res) => {
                                                 console.log("=======>", res.data.result)
 
-                                                setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })))
+                                                setSubOptions(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })));
+                                                setData(res.data.result.map((el, index) => ({ ...el, id: el.suboption_id, i: index })));
+
                                                 setLoader(false);
 
                                             }).catch((err) => {
